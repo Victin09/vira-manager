@@ -1,2 +1,2 @@
 # vira-manager
-A project manager with a kanban board, documentation, chat and many more...
+A project manager with, for the moment, a kanban board, documentation and chat.
