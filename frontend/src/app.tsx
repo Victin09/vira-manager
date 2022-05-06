@@ -5,6 +5,7 @@ import { PrivateRoute } from "@vira/common/routes/private.route";
 import { LandingTemplate } from "@vira/components/templates/landing.template";
 import Landing from "@vira/views/landing.view";
 import Login from "@vira/views/login.view";
+import Register from "@vira/views/register.view";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route element={<LandingTemplate />}>
             <Route path="/welcome" element={<Landing />} />
             <Route path="/sign-in" element={<Login />} />
+            <Route path="/sign-up" element={<Register />} />
           </Route>
         </Route>
         <Route element={<PrivateRoute />}>

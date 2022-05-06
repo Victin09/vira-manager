@@ -42,7 +42,7 @@ const useProviderAuth = () => {
 
   const signin = async (data: SignIn): Promise<void> => {
     const result: Response<User> = await (
-      await fetch("http://localhost:3000/auth/signin", {
+      await fetch("http://localhost:3000/auth/sign-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email, password: data.password }),
@@ -51,8 +51,8 @@ const useProviderAuth = () => {
     ).json();
     console.log(result);
     if (result.status === "success") {
-      setUser(result.data!);
-      localStorage.setItem("user", btoa(JSON.stringify(result.data!)));
+      setUser(result.data);
+      localStorage.setItem("user", btoa(JSON.stringify(result.data)));
       navigate("/");
     } else {
       setError(
@@ -65,19 +65,21 @@ const useProviderAuth = () => {
 
   const signup = async (data: SignUp) => {
     const result: Response<User> = await (
-      await fetch("http://localhost:3000/auth/signup", {
+      await fetch("http://localhost:3000/auth/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: data.email,
           fullname: data.fullname,
-          password: data.password
+          password: data.password,
+          avatar: data.avatar
         }),
         credentials: "include"
       })
     ).json();
+    console.log("result", result);
     if (result.status === "success") {
-      setUser(result.data!);
+      setUser(result.data);
       navigate("/");
     } else {
       console.log("result", result);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, RegisterField, Error, Validation } from "@vira/common/types/form.type";
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const useForm = <T extends Record<keyof T, any> = {}>(): Form<T> => {
   const [values, setValues] = useState<T>({} as T);
   const [errors, setErrors] = useState<Error<T>>({} as T);

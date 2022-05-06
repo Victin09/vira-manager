@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import path from "path";
-import webpack, {Configuration as WebpackConfiguration} from "webpack";
+import webpack, { Configuration as WebpackConfiguration } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
-import {TsconfigPathsPlugin} from "tsconfig-paths-webpack-plugin";
-import {Configuration as WebpackDevServerConfiguration} from "webpack-dev-server";
+import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
+import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -12,7 +12,7 @@ interface Configuration extends WebpackConfiguration {
 
 const webpackConfig = (env): Configuration => ({
   entry: "./src/index.tsx",
-  ...(env.production || !env.development ? {} : {devtool: "eval-source-map"}),
+  ...(env.production || !env.development ? {} : { devtool: "eval-source-map" }),
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
     //TODO waiting on https://github.com/dividab/tsconfig-paths-webpack-plugin/issues/61

@@ -28,9 +28,9 @@ export const LandingTemplate = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link btn btn-primary" to="/sign-up">
                   Registrarse
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
