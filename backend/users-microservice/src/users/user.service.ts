@@ -6,6 +6,8 @@ import { CreateUserDto } from '@vira/users/dtos/create-user.dto';
 import { UpdateUserDto } from '@vira/users/dtos/update-user.dto';
 import { ValidateUserDto } from '@vira/users/dtos/validate-user.dto';
 import { User, UserDocument } from '@vira/users/entities/user.entity';
+import { Response } from '@vira/common/types/response.type';
+import { UserDto } from '@vira/users/dtos/user.dto';
 
 @Injectable()
 export class UserService {
@@ -30,30 +32,51 @@ export class UserService {
     }
   }
 
-  async findUserByEmail(email: string): Promise<any> {
+  async findUserByEmail(userEmail: string): Promise<Response<UserDto>> {
     try {
-      return await this.userModel.findOne({ email }).select('-password -__v');
+      const { _id, email, fullname, role, createdAt, updatedAt } =
+        await this.userModel
+          .findOne({ email: userEmail })
+          .select('-password -__v');
+      return {
+        status: HttpStatus.OK,
+        message: 'User created',
+        data: { id: _id, email, fullname, role, createdAt, updatedAt },
+      };
     } catch (error) {
-      throw new HttpException(
-        'Error: Cannot find user',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      return {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error: Cannot find user',
+      };
     }
   }
 
-  async create(createUserDto: CreateUserDto): Promise<{ fullname: string }> {
+  async create(createUserDto: CreateUserDto): Promise<Response<UserDto>> {
     try {
-      const userDocument = new this.userModel({
+      const user = await this.userModel.findOne({ email: createUserDto.email });
+      if (user) {
+        return {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'User already exists',
+        };
+      }
+      const newUser = new this.userModel({
         ...createUserDto,
         role: 'USER',
+        status: 'ACTIVE',
       });
-      await userDocument.save();
-      return { fullname: createUserDto.fullname };
+      const { _id, email, fullname, role, createdAt, updatedAt } =
+        await newUser.save();
+      return {
+        status: HttpStatus.OK,
+        message: 'User created',
+        data: { id: _id, email, fullname, role, createdAt, updatedAt },
+      };
     } catch (error) {
-      throw new HttpException(
-        'Error: Cannot create user',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      return {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error: Cannot create user',
+      };
     }
   }
 

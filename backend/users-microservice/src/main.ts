@@ -10,11 +10,11 @@ async function bootstrap() {
       transport: Transport.TCP,
       options: {
         host: 'localhost',
-        port: 8080,
+        port: 1209,
       },
     },
   );
-  app.useGlobalFilters(new ExceptionFilter());
+  // app.useGlobalFilters(new ExceptionFilter());
   app.listen();
 }
 bootstrap();

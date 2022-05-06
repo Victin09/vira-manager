@@ -6,8 +6,8 @@ export type Action<T> =
   | { type: "error"; payload: Error };
 
 export type Response<T> = {
-  status: string;
-  message?: string;
+  status: number;
+  message: string;
   data?: T;
 };
 

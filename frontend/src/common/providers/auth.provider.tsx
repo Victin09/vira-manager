@@ -4,10 +4,11 @@ import { AuthContextProps } from "@vira/common/types/auth-provider.type";
 import { User } from "@vira/models/user.model";
 import { SignIn, SignUp } from "@vira/models/auth.model";
 import { Response } from "@vira/common/types/fetch.type";
+import { getApiUrl } from "@vira/common/utils/api.util";
 
 const defaultState: AuthContextProps = {
   error: "",
-  getUser: (): User | void => {},
+  getUser: (): User => null,
   signin: async (): Promise<void> => {},
   signup: async (): Promise<void> => {}
 };
@@ -28,7 +29,7 @@ const useProviderAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState("");
 
-  const getUser = (): User | void => {
+  const getUser = (): User => {
     if (user) {
       return user;
     }
@@ -42,7 +43,7 @@ const useProviderAuth = () => {
 
   const signin = async (data: SignIn): Promise<void> => {
     const result: Response<User> = await (
-      await fetch("http://localhost:3000/auth/sign-in", {
+      await fetch(`${getApiUrl()}/auth/sign-in`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email, password: data.password }),
@@ -50,7 +51,7 @@ const useProviderAuth = () => {
       })
     ).json();
     console.log(result);
-    if (result.status === "success") {
+    if (result.status === 200) {
       setUser(result.data);
       localStorage.setItem("user", btoa(JSON.stringify(result.data)));
       navigate("/");
@@ -64,28 +65,30 @@ const useProviderAuth = () => {
   };
 
   const signup = async (data: SignUp) => {
-    const result: Response<User> = await (
-      await fetch("http://localhost:3000/auth/sign-up", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: data.email,
-          fullname: data.fullname,
-          password: data.password,
-          avatar: data.avatar
-        }),
-        credentials: "include"
-      })
-    ).json();
-    console.log("result", result);
-    if (result.status === "success") {
+    console.log("signup", data);
+    try {
+      const result: Response<User> = await (
+        await fetch(`${getApiUrl()}/auth/sign-up`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: data.email,
+            fullname: data.fullname,
+            password: data.password,
+            avatar: data.avatar
+          }),
+          credentials: "include"
+        })
+      ).json();
+      console.log("result", result);
+      if (result.status === 400 && result.message === "User already exists") {
+        setError("User already exists");
+        return;
+      }
       setUser(result.data);
       navigate("/");
-    } else {
-      console.log("result", result);
-      setError(
-        result.message === "Email already exists" ? "Email already exists" : "Something went wrong"
-      );
+    } catch (error) {
+      setError("Something went wrong");
     }
   };
 

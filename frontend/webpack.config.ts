@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import path from "path";
 import webpack, { Configuration as WebpackConfiguration } from "webpack";
+import Dotenv from "dotenv-webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
@@ -43,6 +44,7 @@ const webpackConfig = (env): Configuration => ({
     ]
   },
   plugins: [
+    new Dotenv(),
     new HtmlWebpackPlugin({
       template: "./public/index.html"
     }),
@@ -54,7 +56,8 @@ const webpackConfig = (env): Configuration => ({
     new ForkTsCheckerWebpackPlugin()
   ],
   devServer: {
-    allowedHosts: "all"
+    allowedHosts: "all",
+    historyApiFallback: true
   }
 });
 

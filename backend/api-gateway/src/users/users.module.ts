@@ -11,7 +11,7 @@ import { UsersController } from '@vira/users/users.controller';
         transport: Transport.TCP,
         options: {
           host: 'localhost',
-          port: 8080,
+          port: 1209,
         },
       },
     ]),

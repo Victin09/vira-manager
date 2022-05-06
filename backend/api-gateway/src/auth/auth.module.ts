@@ -16,7 +16,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         transport: Transport.TCP,
         options: {
           host: 'localhost',
-          port: 8080,
+          port: 1209,
         },
       },
     ]),
@@ -28,4 +28,4 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
 })
-export class AuthModule {}
+export class AuthModule { }

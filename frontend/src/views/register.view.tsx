@@ -20,6 +20,7 @@ const Register = (): JSX.Element => {
         <div className="card shadow-sm p-3">
           <div className="card-body">
             <h2 className="card-title text-center mb-2">Signup</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleSubmit(sendForm)} noValidate>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
