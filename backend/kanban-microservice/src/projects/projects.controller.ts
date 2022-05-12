@@ -20,9 +20,9 @@ export class ProjectsController {
     return this.projectsService.findAllByUserId(userId);
   }
 
-  @MessagePattern('findOneProject')
+  @MessagePattern('findProjectById')
   findOne(@Payload() findProjectDto: FindProjectDto) {
-    return this.projectsService.findOne(findProjectDto);
+    return this.projectsService.findById(findProjectDto);
   }
 
   @MessagePattern('updateProject')

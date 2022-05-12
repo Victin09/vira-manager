@@ -41,7 +41,6 @@ export const CreateKanbanProjectModal = (): JSX.Element => {
 
   return (
     <>
-      {console.log("users", users)}
       {users ? (
         <div
           className="modal fade"
@@ -64,6 +63,12 @@ export const CreateKanbanProjectModal = (): JSX.Element => {
                 ></button>
               </div>
               <div className="modal-body">
+                {data && (
+                  <div className="alert alert-success">
+                    El proyecto {values.name} se ha creado con exito
+                  </div>
+                )}
+                {data && <div className="alert alert-danger">Ops! Algo ha ido mal</div>}
                 <form onSubmit={handleSubmit(sendForm)} noValidate>
                   <div className="mb-3">
                     <label htmlFor="name" className="form-label">
@@ -107,7 +112,7 @@ export const CreateKanbanProjectModal = (): JSX.Element => {
                     </label>
                     <Select
                       isMulti
-                      name="colors"
+                      name="users"
                       options={users}
                       className="basic-multi-select"
                       classNamePrefix="select"

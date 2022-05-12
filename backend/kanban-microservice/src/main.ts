@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from '@vira/app.module';
@@ -14,5 +15,6 @@ async function bootstrap() {
     },
   );
   app.listen();
+  Logger.log('Kanban microservice is up');
 }
 bootstrap();

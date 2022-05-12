@@ -11,6 +11,8 @@ import { AppTemplate } from "@vira/components/templates/app.template";
 import Home from "@vira/views/home.view";
 import Kanban from "@vira/views/kanban/kanban.view";
 import { KanbanLayout } from "@vira/components/templates/kanban.template";
+import KanbanProjectView from "@vira/views/kanban/kanban-project.view";
+import KanbanTasksView from "@vira/views/kanban/kanban-tasks.view";
 
 function App() {
   return (
@@ -26,8 +28,10 @@ function App() {
         {/* <Route element={<PrivateRoute />}> */}
         <Route element={<AppTemplate />}>
           <Route path="/" element={<Home />} />
-          <Route path="/kanban" element={<KanbanLayout />}>
-            <Route index element={<Kanban />} />
+          <Route element={<KanbanLayout />}>
+            <Route path="/kanban" element={<Kanban />} />
+            <Route path="/kanban/:projectId" element={<KanbanProjectView />} />
+            <Route path="/kanban/tasks" element={<KanbanTasksView />} />
           </Route>
         </Route>
         {/* </Route> */}

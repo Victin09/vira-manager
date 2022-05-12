@@ -53,7 +53,7 @@ export class ProjectsService {
     }
   }
 
-  async findOne(findProjectDto: FindProjectDto): Promise<ApiResponse<any>> {
+  async findById(findProjectDto: FindProjectDto): Promise<ApiResponse<any>> {
     try {
       const project = await this.projectModel.aggregate([
         {
