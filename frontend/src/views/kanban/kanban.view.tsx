@@ -1,61 +1,61 @@
-import React, { useEffect } from "react";
-import { useFetch } from "@vira/common/hooks/use-fetch.hook";
-import { Kanban } from "@vira/models/kanban/kanban.model";
-import { useAuth } from "@vira/common/providers/auth.provider";
-import { ApiResponse } from "@vira/common/types/api-response.type";
-import { getDateName } from "@vira/common/utils/date.util";
+import React, { useEffect } from 'react'
+import { useFetch } from '@vira/common/hooks/use-fetch.hook'
+import { Kanban } from '@vira/models/kanban/kanban.model'
+import { useAuth } from '@vira/common/providers/auth.provider'
+import { ApiResponse } from '@vira/common/types/api-response.type'
+import { getDateName } from '@vira/common/utils/date.util'
 
 const Kanban = (): JSX.Element => {
-  const { fetchData, data, error } = useFetch<ApiResponse<any>>();
-  const { getUser } = useAuth();
+  const { fetchData, data, error } = useFetch<ApiResponse<any>>()
+  const { getUser } = useAuth()
 
   useEffect(() => {
-    fetchData(`/kanban/projects/${getUser().id}`, {
-      method: "GET",
+    fetchData(`/kanban/projects/${getUser()!.id}`, {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
-      credentials: "include"
-    });
-    console.log("data", data);
-  }, []);
+      credentials: 'include'
+    })
+    console.log('data', data)
+  }, [])
 
   return (
     <>
       {data && data.status === 200 ? (
-        <div className="h-100 container d-flex flex-column align-items-center">
-          <div className="w-100 mt-2 text-center">
-            <span>{getDateName("es-ES")}</span>
-            <h3>Hola de nuevo, {getUser().fullname}</h3>
+        <div className='h-100 d-flex flex-column align-items-center container'>
+          <div className='w-100 mt-2 text-center'>
+            <span>{getDateName('es-ES')}</span>
+            <h3>Hola de nuevo, {getUser()!.fullname}</h3>
           </div>
-          <div className="w-100 h-100 p-2 row d-flex flex-wrap">
-            <div className="col-6">
-              <div className="card shadow-sm">
-                <div className="card-body">
-                  <div className="card-title fw-bold">Tareas</div>
-                  <div className="card-text">
-                    <span className="fw-light">
+          <div className='w-100 h-100 row d-flex flex-wrap p-2'>
+            <div className='col-6'>
+              <div className='card shadow-sm'>
+                <div className='card-body'>
+                  <div className='fw-bold card-title'>Tareas</div>
+                  <div className='card-text'>
+                    <span className='fw-light'>
                       {!data.data.lenght
-                        ? "Para tener tareas asignadas, primero debes crear un proyecto"
-                        : ""}
+                        ? 'Para tener tareas asignadas, primero debes crear un proyecto'
+                        : ''}
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-6">
-              <div className="card shadow-sm">
-                <div className="card-body">
-                  <div className="card-title fw-bold">Proyectos</div>
-                  <div className="card-text">
+            <div className='col-6'>
+              <div className='card shadow-sm'>
+                <div className='card-body'>
+                  <div className='fw-bold card-title'>Proyectos</div>
+                  <div className='card-text'>
                     {!data.data.lenght ? (
-                      <span className="fw-light">
-                        No tienes ningún proyecto asociado, puedes crear uno{" "}
+                      <span className='fw-light'>
+                        No tienes ningún proyecto asociado, puedes crear uno{' '}
                         <a
-                          className="link-primary"
-                          data-vds-toggle="modal"
-                          href="#createProjectModal"
-                          role="button"
+                          className='link-primary'
+                          data-vds-toggle='modal'
+                          href='#createProjectModal'
+                          role='button'
                         >
                           aquí
                         </a>
@@ -75,7 +75,7 @@ const Kanban = (): JSX.Element => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Kanban;
+export default Kanban

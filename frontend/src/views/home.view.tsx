@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
         equipo y un chat.
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

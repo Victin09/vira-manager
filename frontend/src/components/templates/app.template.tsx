@@ -1,93 +1,96 @@
-import { useAuth } from "@vira/common/providers/auth.provider";
-import React from "react";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { useAuth } from '@vira/common/providers/auth.provider'
+import { getInitials } from '@vira/common/utils/text.util'
+import React from 'react'
+import { NavLink, Link, Outlet } from 'react-router-dom'
 
 export const AppTemplate = () => {
-  const { getUser } = useAuth();
+  const { getUser } = useAuth()
 
   return (
-    <div className="container-fluid vh-100 d-flex flex-column px-0">
-      <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/welcome">
-            vira.MANAGER
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-vds-toggle="collapse"
-            data-vds-target="#landingNavbar"
-            aria-controls="landingNavbar"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="landingNavbar">
-            <ul className="navbar-nav mb-2">
-              <li className="nav-item">
-                <NavLink
-                  to="/kanban"
-                  className={(navData) => "nav-link" + (navData.isActive ? " active" : "")}
-                >
-                  Kanban
+    <div className='container flex h-screen min-h-screen flex-col overflow-hidden'>
+      <div className='navbar sticky top-0 z-50 bg-base-100 shadow-sm'>
+        <div className='navbar-start'>
+          <div className='dropdown'>
+            <label tabIndex={0} className='btn btn-ghost lg:hidden'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M4 6h16M4 12h8m-8 6h16'
+                />
+              </svg>
+            </label>
+            <ul className='dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow'>
+              <li>
+                <NavLink to='/kanban' className={(navData) => (navData.isActive ? ' active' : '')}>
+                  Tablero kanban
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink
-                  to="/docs"
-                  className={(navData) => "nav-link" + (navData.isActive ? " active" : "")}
-                >
-                  Documentation
+              <li>
+                <NavLink to='/docs' className={(navData) => (navData.isActive ? ' active' : '')}>
+                  Documentación
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink
-                  to="/chat"
-                  className={(navData) => "nav-link" + (navData.isActive ? " active" : "")}
-                >
+              <li>
+                <NavLink to='/chat' className={(navData) => (navData.isActive ? ' active' : '')}>
                   Chat
                 </NavLink>
               </li>
             </ul>
-            <ul className="navbar-nav mb-2 mb-lg-0 ms-auto">
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="userDropdown"
-                  role="button"
-                  data-vds-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {getUser().fullname.toUpperCase()}
-                </a>
-                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Perfil
-                    </a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Cerrar sesión
-                    </a>
-                  </li>
-                </ul>
+          </div>
+          <Link to='/' className='btn btn-ghost text-xl normal-case'>
+            viraMANAGER
+          </Link>
+          <ul className='menu menu-horizontal hidden p-0 lg:flex'>
+            <li>
+              <NavLink to='/kanban' className={(navData) => (navData.isActive ? ' active' : '')}>
+                Tablero kanban
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to='/docs' className={(navData) => (navData.isActive ? ' active' : '')}>
+                Documentación
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to='/chat' className={(navData) => (navData.isActive ? ' active' : '')}>
+                Chat
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+        <div className='navbar-end'>
+          <div className='dropdown dropdown-end'>
+            <label tabIndex={0} className='avatar placeholder btn btn-ghost btn-circle'>
+              <div className='w-10 rounded-full bg-neutral-focus text-neutral-content'>
+                <span>{getInitials(getUser()!.fullname)}</span>
+              </div>
+            </label>
+            <ul
+              tabIndex={0}
+              className='dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow'
+            >
+              <li>
+                <a>Perfil</a>
+              </li>
+              <li>
+                <a>Ajustes</a>
+              </li>
+              <li>
+                <a>Cerrar sesión</a>
               </li>
             </ul>
           </div>
         </div>
-      </nav>
-
-      <div className="container-fluid d-flex flex-grow-1 flex-column">
-        <div className="row flex-grow-1">
-          <div className="col-md-12">{<Outlet />}</div>
-        </div>
       </div>
+      <div className='flex flex-1 flex-wrap overflow-auto'>{<Outlet />}</div>
     </div>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import { Project } from "@vira/models/kanban/board.model";
+import { Project } from '@vira/models/kanban/board.model'
 
 export interface Workspace {
   id: string;
