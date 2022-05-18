@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 // import { I18nProvider } from 'vira-i18n-react'
 import { Routes, Route } from 'react-router-dom'
-import * as es from '@vira/common/i18n/es.json'
-import * as en from '@vira/common/i18n/en.json'
+// import * as es from '@vira/common/i18n/es.json'
+// import * as en from '@vira/common/i18n/en.json'
 import { PublicRoute } from '@vira/common/routes/public.route'
 import { PrivateRoute } from '@vira/common/routes/private.route'
 import { LandingTemplate } from '@vira/components/templates/landing.template'
@@ -13,7 +13,6 @@ import { AuthProvider } from '@vira/common/providers/auth.provider'
 import { AppTemplate } from '@vira/components/templates/app.template'
 import Home from '@vira/views/home.view'
 import Kanban from '@vira/views/kanban/kanban.view'
-import { KanbanLayout } from '@vira/components/templates/kanban.template'
 import KanbanProjectView from '@vira/views/kanban/kanban-project.view'
 import KanbanTasksView from '@vira/views/kanban/kanban-tasks.view'
 
@@ -55,11 +54,9 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route element={<AppTemplate />}>
             <Route path='/' element={<Home />} />
-            <Route element={<KanbanLayout />}>
-              <Route path='/kanban' element={<Kanban />} />
-              <Route path='/kanban/:projectId' element={<KanbanProjectView />} />
-              <Route path='/kanban/tasks' element={<KanbanTasksView />} />
-            </Route>
+            <Route path='/kanban' element={<Kanban />} />
+            <Route path='/kanban/:projectId' element={<KanbanProjectView />} />
+            <Route path='/kanban/tasks' element={<KanbanTasksView />} />
           </Route>
         </Route>
       </Routes>

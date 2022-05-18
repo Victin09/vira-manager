@@ -1,395 +1,230 @@
-/* eslint-disable multiline-ternary */
-/* eslint-disable react/prop-types */
-import React, { useState, useEffect, Fragment } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import { KanbanCard } from './board/card.kanban'
+import React, { useState, useEffect } from 'react'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { List } from '@vira/components/kanban/board/list.kanban'
 
-const ITEM_TYPES = {
-  CARD: 'card',
-  TASK: 'task'
-}
+const dataset = [
+  {
+    id: '1',
+    title: 'List 1',
+    cards: [
+      {
+        id: '1',
+        title: 'Card 1'
+      },
+      {
+        id: '2',
+        title: 'Card 2'
+      },
+      {
+        id: '3',
+        title: 'Card 3'
+      }
+    ]
+  },
+  {
+    id: '2',
+    title: 'List 2',
+    cards: [
+      {
+        id: '4',
+        title: 'Card 4'
+      },
+      {
+        id: '5',
+        title: 'Card 5'
+      },
+      {
+        id: '6',
+        title: 'Card 6'
+      }
+    ]
+  },
+  {
+    id: '3',
+    title: 'List 3',
+    cards: [
+      {
+        id: '7',
+        title: 'Card 7'
+      },
+      {
+        id: '8',
+        title: 'Card 8'
+      },
+      {
+        id: '9',
+        title: 'Card 9'
+      }
+    ]
+  }
+]
 
-const DATASET = {
-  tasks: {
-    'task-1': { id: 'task-1', content: 'water plants' },
-    'task-2': { id: 'task-2', content: 'buy oat milk' },
-    'task-3': { id: 'task-3', content: 'build a trello board' },
-    'task-4': { id: 'task-4', content: 'have a beach day' },
-    'task-5': { id: 'task-5', content: 'build tic tac toe' }
-  },
-  cards: {
-    'card-1': {
-      id: 'card-1',
-      title: 'Home Todos',
-      taskIds: ['task-1', 'task-2']
+const datatest = {
+  lists: [
+    {
+      id: 'list-1',
+      title: 'water plants',
+      cards: [
+        {
+          id: 'card-1',
+          title: 'Home Todos'
+        },
+        {
+          id: 'card-2',
+          title: 'Work Todos'
+        },
+        { id: 'card-3', title: 'Fun Todos' },
+        { id: 'card-4', title: 'Completed' }
+      ],
+      order: 1
     },
-    'card-2': {
-      id: 'card-2',
-      title: 'Work Todos',
-      taskIds: ['task-3']
+    {
+      id: 'list-2',
+      title: 'buy oat milk',
+      cards: [
+        {
+          id: 'card-5',
+          title: 'Home Todos'
+        },
+        {
+          id: 'card-6',
+          title: 'Work Todos'
+        },
+        { id: 'card-7', title: 'Fun Todos' },
+        { id: 'card-8', title: 'Completed' }
+      ],
+      order: 2
     },
-    'card-3': { id: 'card-3', title: 'Fun Todos', taskIds: ['task-4'] },
-    'card-4': { id: 'card-4', title: 'Completed', taskIds: ['task-5'] }
-  },
-  cardOrder: ['card-1', 'card-2', 'card-3', 'card-4']
+    {
+      id: 'list-3',
+      title: 'build a trello board',
+      cards: [
+        {
+          id: 'card-9',
+          title: 'Home Todos'
+        },
+        {
+          id: 'card-10',
+          title: 'Work Todos'
+        },
+        { id: 'card-11', title: 'Fun Todos' },
+        { id: 'card-12', title: 'Completed' }
+      ],
+      order: 3
+    },
+    { id: 'list-4', title: 'have a beach day', cards: [], order: 4 },
+    { id: 'list-5', title: 'build tic tac toe', cards: [], order: 5 }
+  ]
 }
 
 export const ListKanban = () => {
-  const [dataset, _] = useState(() => {
-    const savedDataset = localStorage.getItem('board-dataset')
-    const initialValue = JSON.parse(savedDataset!)
-    return initialValue || DATASET
-  })
-
-  const [tasks, setTasks] = useState(dataset.tasks)
-  const [cards, setCards] = useState(dataset.cards)
-  const [cardOrder, setCardOrder] = useState(dataset.cardOrder)
+  const [data, _setData] = useState(datatest)
 
   useEffect(() => {
-    localStorage.setItem('board-dataset', JSON.stringify({ tasks, cards, cardOrder }))
-  }, [tasks, cards, cardOrder])
-
-  const onAddNewCard = () => {
-    const newCard = {
-      id: 'card-' + genRandomID(),
-      title: '**New**',
-      taskIds: []
-    }
-    const newCardOrder = Array.from(cardOrder)
-    newCardOrder.unshift(newCard.id)
-    setCards({
-      ...cards,
-      [newCard.id]: newCard
-    })
-    setCardOrder(newCardOrder)
-  }
-
-  return (
-    <div className='align-center flex w-full flex-1'>
-      <DragDropCards
-        cards={cards}
-        tasks={tasks}
-        cardOrder={cardOrder}
-        setCards={setCards}
-        setTasks={setTasks}
-        setCardOrder={setCardOrder}
-      />
-    </div>
-  )
-}
-
-// eslint-disable-next-line react/prop-types
-const DragDropCards = ({ cards, tasks, cardOrder, setCards, setTasks, setCardOrder }) => {
-  const [editing, setEditing] = useState(null)
+    localStorage.setItem('board-dataset', JSON.stringify({ data }))
+  }, [data])
 
   const onDragEnd = (result) => {
-    const { destination, source, draggableId, type } = result
+    const { destination, source, draggableId } = result
 
-    if (
-      !destination ||
-      (destination.droppableId === source.droppableId && destination.index === source.index)
-    ) {
-      return
+    if (!destination) return
+
+    if (result.type === 'task') {
+      // Change or
+      console.log({ source })
+      console.log({ destination })
+      const startColumn = data.lists.find((list) => list.id === source.droppableId)!
+      console.log(startColumn)
+      const endColumn = data.lists.find((list) => list.id === destination.droppableId)!
+      console.log(endColumn)
+
+      if (startColumn === endColumn) {
+        const newTaskIds = Array.from(endColumn.cards)
+
+        newTaskIds.splice(source.index, 1)
+        newTaskIds.splice(destination.index, 0, draggableId)
+
+        const newColumn = {
+          ...endColumn,
+          cards: newTaskIds
+        }
+
+        const newState = {
+          ...data,
+          columns: { ...data, [endColumn.id]: newColumn }
+        }
+
+        console.log({ newState })
+        return
+      }
+
+      const sourceCards = Array.from(startColumn.cards)
+      sourceCards.splice(source.index, 1)
+      const newStart = {
+        ...startColumn,
+        cards: sourceCards
+      }
+      console.log({ newStart })
+
+      const destinationCards = Array.from(endColumn.cards)
+      destinationCards.splice(destination.index, 0, draggableId)
+      const newFinish = {
+        ...endColumn,
+        cards: destinationCards
+      }
+      console.log({ newFinish })
+
+      // Update dataset with new lists
+      const newState = {
+        ...data,
+        lists: {
+          ...data,
+          [newStart.id]: newStart,
+          [newFinish.id]: newFinish
+        }
+      }
+
+      _setData(newState)
     }
-
-    if (type === ITEM_TYPES.CARD) {
-      reorderCards(source, destination, draggableId)
+     
+      console.log({ newState })
     } else {
-      // type === tasks
-      const start = cards[source.droppableId]
-      const finish = cards[destination.droppableId]
-      if (start.id === finish.id) {
-        reorderTasksWithinCard(start, source.index, destination.index, draggableId)
-      } else {
-        moveTask(start, finish, source.index, destination.index, draggableId)
-      }
+      // const list = data.splice(source.index, 1)[0]
+      // data.splice(destination.index, 0, list)
+      // list.order = destination.index
+      // data
+      //   .slice(destination.index)
+      //   .map((list, index) => (list.order = destination.index + index + 1))
     }
-  }
-
-  const reorderCards = (source, destination, draggableId) => {
-    const newCardOrder = Array.from(cardOrder)
-    newCardOrder.splice(source.index, 1)
-    newCardOrder.splice(destination.index, 0, draggableId)
-    setCardOrder(newCardOrder)
-  }
-
-  const reorderTasksWithinCard = (card, sourceIdx, destinationIdx, draggableId) => {
-    const newTaskIds = Array.from(card.taskIds)
-    newTaskIds.splice(sourceIdx, 1)
-    newTaskIds.splice(destinationIdx, 0, draggableId)
-    setCards({
-      ...cards,
-      [card.id]: {
-        ...card,
-        taskIds: newTaskIds
-      }
-    })
-  }
-
-  const moveTask = (start, finish, sourceIdx, destinationIdx, draggableId) => {
-    const startTaskIds = Array.from(start.taskIds)
-    startTaskIds.splice(sourceIdx, 1)
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds
-    }
-    const finishTaskIds = Array.from(finish.taskIds)
-    finishTaskIds.splice(destinationIdx, 0, draggableId)
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds
-    }
-    setCards({
-      ...cards,
-      [newStart.id]: newStart,
-      [newFinish.id]: newFinish
-    })
-  }
-
-  const onAddNewTask = (cardID, content) => {
-    const newTask = {
-      id: 'task-' + genRandomID(),
-      content
-    }
-    setTasks({
-      ...tasks,
-      [newTask.id]: newTask
-    })
-    const newTaskIds = Array.from(cards[cardID].taskIds)
-    newTaskIds.push(newTask.id)
-    setCards({ ...cards, [cardID]: { ...cards[cardID], taskIds: newTaskIds } })
-  }
-
-  const onRemoveCard = (cardID) => {
-    const newCardOrder = cardOrder.filter((id) => id !== cardID)
-    setCardOrder(newCardOrder)
-
-    const cardTaskIds = cards[cardID].taskIds
-    cardTaskIds.forEach((taskID) => delete tasks[taskID])
-    delete cards[cardID]
-    setCards(cards)
-    setTasks(tasks)
-  }
-
-  const onRemoveTask = (taskID, cardID) => {
-    const newTaskIds = cards[cardID].taskIds.filter((id) => id !== taskID)
-    setCards({ ...cards, [cardID]: { ...cards[cardID], taskIds: newTaskIds } })
-    delete tasks[taskID]
-    setTasks(tasks)
-  }
-
-  const onSaveTitleEdit = (cardID, newTitle) => {
-    if (newTitle !== cards[cardID].title) {
-      setCards({
-        ...cards,
-        [cardID]: {
-          ...cards[cardID],
-          title: newTitle
-        }
-      })
-    }
-    setEditing(null)
-  }
-
-  const onSaveTaskEdit = (taskID, cardID, newContent) => {
-    if (newContent.trim() === '') {
-      onRemoveTask(taskID, cardID)
-    } else if (newContent !== tasks[taskID].content) {
-      setTasks({
-        ...tasks,
-        [taskID]: { ...tasks[taskID], content: newContent }
-      })
-    }
-    setEditing(null)
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId='all-cards' direction='horizontal' type='card'>
-        {(provided) => (
-          <div
-            className='flex w-full overflow-y-auto'
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-            {cardOrder.map((id, index) => {
-              const card = cards[id]
-              const cardTasks = card.taskIds.map((taskId) => tasks[taskId])
-              return (
-                <List
-                  key={card.id}
-                  card={card}
-                  tasks={cardTasks}
-                  index={index}
-                  // onFocusClick={() => onFocusClick(card.id)}
-                  onSaveTitleEdit={(title) => onSaveTitleEdit(card.id, title)}
-                  onRemoveCard={() => onRemoveCard(card.id)}
-                  onAddNewTask={(content) => onAddNewTask(card.id, content)}
-                  onSaveTaskEdit={(taskID, newContent) =>
-                    onSaveTaskEdit(taskID, card.id, newContent)
-                  }
-                  onTitleDoubleClick={() => setEditing(card.id)}
-                  onTaskDoubleClick={(task) => setEditing(task.id)}
-                  isTitleEditing={editing === card.id}
-                  isTaskEditing={(task) => editing === task.id}
-                />
-              )
-            })}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <main className='h-screen w-screen pb-2'>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId='allCols' type='list' direction='horizontal'>
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className='auto-cols-220 md:auto-cols-270 mx-1 grid h-full grid-flow-col items-start overflow-x-auto pt-3 md:mx-6 md:pt-2'
+              style={{ height: '90%' }}
+            >
+              {data.lists.map((column, i) => {
+                return (
+                  <List
+                    id={column.id}
+                    title={column.title}
+                    cards={column.cards}
+                    key={column.id}
+                    index={i}
+                  />
+                )
+              })}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </main>
   )
-}
-
-const List = (props) => {
-  const [isAddingNewTask, setIsAddingNewTask] = useState(false)
-  const onSaveTask = (content) => {
-    if (content.trim() !== '') {
-      props.onAddNewTask(content)
-    }
-    setIsAddingNewTask(false)
-  }
-
-  return (
-    <Draggable draggableId={props.card.id} index={props.index}>
-      {(provided) => (
-        <div
-          className='card mx-1 flex w-56 flex-col bg-base-200 p-2'
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          id={props.card.id}
-          // style={{ maxHeight: 'calc(100vh - 190px)' }}
-        >
-          <div className='flex justify-between px-2'>
-            {props.isTitleEditing ? (
-              <EditInput
-                key={props.card.id}
-                value={props.card.title}
-                onSave={props.onSaveTitleEdit}
-                fontSize='1.5em'
-                margin='20px 0 20px 8px'
-              />
-            ) : (
-              <span
-                className='font-lg font-bold'
-                onDoubleClick={props.onTitleDoubleClick}
-                {...provided.dragHandleProps}
-              >
-                {props.card.title}
-              </span>
-            )}
-            <span onClick={props.onRemoveCard}>x</span>
-          </div>
-          <Droppable droppableId={props.card.id} type='task'>
-            {(provided, snapshot) => (
-              <Fragment>
-                <div
-                  className={`${
-                    snapshot.isDraggingOver ? 'bg-base-300' : 'bg-base-200'
-                  } mt-1 flex h-full flex-col overflow-y-auto rounded p-1`}
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  style={{ minHeight: '5em', maxHeight: 'calc(100vh - 12em)' }}
-                >
-                  {props.tasks.map((task, index: number) => (
-                    <KanbanCard key={index} id={task.id} title={task.content} index={index} />
-                    // <div className='flex' key={index}>
-                    //   <Draggable draggableId={task.id} index={index}>
-                    //     {(provided, snapshot) => (
-                    //       <div
-                    //         className={`${
-                    //           snapshot.isDragging ? 'bg-info' : 'bg-base-100'
-                    //         } card mb-1 w-full shadow-sm`}
-                    //         {...provided.draggableProps}
-                    //         {...provided.dragHandleProps}
-                    //         ref={provided.innerRef}
-                    //       >
-                    //         <div className='card-body p-2.5'>
-                    //           <span className='card-title'>{task.content}</span>
-                    //           <p>If a dog chews shoes whose shoes does he choose?</p>
-                    //         </div>
-                    //       </div>
-                    //     )}
-                    //   </Draggable>
-                    // </div>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              </Fragment>
-            )}
-          </Droppable>
-          <div className='flex flex-1 items-end'>
-            {isAddingNewTask ? (
-              <EditInput key='newtask' value='' onSave={onSaveTask} margin='8px' />
-            ) : (
-              <span onClick={() => setIsAddingNewTask(true)}>+ New Task</span>
-            )}
-          </div>
-        </div>
-      )}
-    </Draggable>
-  )
-}
-
-// const Task = (props) => {
-//   return (
-//     <div className='flex'>
-//       {props.isTaskEditing ? (
-//         <EditInput
-//           key={props.task.id}
-//           value={props.task.content}
-//           onSave={props.onSaveTaskEdit}
-//           margin='0 0 8px 0'
-//         />
-//       ) : (
-//         <Draggable draggableId={props.task.id} index={props.index}>
-//           {(provided) => (
-//             <div
-//               className={`${
-//                 props.isDragging ? 'bg-info' : 'bg-base-100'
-//               } card mb-1 w-full shadow-sm`}
-//               {...provided.draggableProps}
-//               {...provided.dragHandleProps}
-//               ref={provided.innerRef}
-//               // isDragging={snapshot.isDragging}
-//               onDoubleClick={props.onTaskDoubleClick}
-//             >
-//               <div className='card-body p-2.5'>
-//                 <span className='card-title'>{props.task.content}</span>
-//                 <p>If a dog chews shoes whose shoes does he choose?</p>
-//               </div>
-//             </div>
-//           )}
-//         </Draggable>
-//       )}
-//     </div>
-//   )
-// }
-
-const EditInput = (props) => {
-  const [val, setVal] = useState(props.value)
-  return (
-    <input
-      type='text'
-      autoFocus
-      value={val}
-      onChange={(e) => setVal(e.target.value)}
-      onKeyPress={(event) => {
-        if (event.key === 'Enter' || event.key === 'Escape') {
-          props.onSave(val)
-          event.preventDefault()
-          event.stopPropagation()
-        }
-      }}
-      onBlur={() => props.onSave(val)}
-      // fontSize={props.fontSize}
-      // margin={props.margin}
-    />
-  )
-}
-
-const genRandomID = () => {
-  return (Math.random() + 1).toString(36).substring(7)
 }

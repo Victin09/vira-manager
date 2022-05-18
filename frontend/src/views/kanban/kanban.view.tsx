@@ -4,8 +4,9 @@ import { Kanban } from '@vira/models/kanban/kanban.model'
 import { useAuth } from '@vira/common/providers/auth.provider'
 import { ApiResponse } from '@vira/common/types/api-response.type'
 import { getDateName } from '@vira/common/utils/date.util'
+import { ListKanban } from '@vira/components/kanban/list.kanban'
 
-const Kanban = (): JSX.Element => {
+const Kanban = () => {
   const { fetchData, data, error } = useFetch<ApiResponse<any>>()
   const { getUser } = useAuth()
 
@@ -71,7 +72,7 @@ const Kanban = (): JSX.Element => {
         </div>
       ) : (
         <div>
-          <h1>Loading...</h1>
+          <ListKanban />
         </div>
       )}
     </>
