@@ -33,32 +33,6 @@ const DATASET = {
   cardOrder: ['card-1', 'card-2', 'card-3', 'card-4']
 }
 
-// const Container = styled.div`
-//   margin: 2em;
-//   display: flex;
-//   @media (max-width: 720px) {
-//     flex-direction: column;
-//   }
-//   align-items: center;
-//   justify-items: center;
-// `
-// const Menu = styled.div`
-//   margin: 2em;
-//   display: flex;
-//   flex-direction: column;
-// `
-// const Note = styled.div`
-//   font-size: 0.8em;
-//   margin: 20px 0;
-// `
-// const NewCard = styled.div`
-//   font-size: 1em;
-//   color: grey;
-//   min-width: 100px;
-//   text-align: center;
-//   cursor: pointer;
-// `
-
 export const ListKanban = () => {
   const [dataset, _] = useState(() => {
     const savedDataset = localStorage.getItem('board-dataset')
@@ -91,16 +65,6 @@ export const ListKanban = () => {
 
   return (
     <div className='align-center flex w-full flex-1'>
-      {/* <Menu>
-        <Note>
-          you can add, edit, or remove cards & tasks. <br />
-          double click to edit card title or task content. <br />
-          task is removed when content is empty. <br />
-          drag/drop card or task to desired order. <br />
-          your edited changes are saved in local storage.
-        </Note>
-        <NewCard onClick={onAddNewCard}>+ New Card</NewCard>
-      </Menu> */}
       <DragDropCards
         cards={cards}
         tasks={tasks}
@@ -112,14 +76,6 @@ export const ListKanban = () => {
     </div>
   )
 }
-
-// const CardsContainer = styled.div`
-//   margin: 2em;
-//   display: flex;
-//   @media (max-width: 720px) {
-//     flex-direction: column;
-//   }
-// `
 
 // eslint-disable-next-line react/prop-types
 const DragDropCards = ({ cards, tasks, cardOrder, setCards, setTasks, setCardOrder }) => {
@@ -259,7 +215,7 @@ const DragDropCards = ({ cards, tasks, cardOrder, setCards, setTasks, setCardOrd
               const card = cards[id]
               const cardTasks = card.taskIds.map((taskId) => tasks[taskId])
               return (
-                <Card
+                <List
                   key={card.id}
                   card={card}
                   tasks={cardTasks}
@@ -286,7 +242,7 @@ const DragDropCards = ({ cards, tasks, cardOrder, setCards, setTasks, setCardOrd
   )
 }
 
-const Card = (props) => {
+const List = (props) => {
   const [isAddingNewTask, setIsAddingNewTask] = useState(false)
   const onSaveTask = (content) => {
     if (content.trim() !== '') {
@@ -299,11 +255,11 @@ const Card = (props) => {
     <Draggable draggableId={props.card.id} index={props.index}>
       {(provided) => (
         <div
-          className='mx-1 flex w-56 flex-col rounded-lg bg-base-200'
+          className='mx-1 flex w-56 flex-col rounded-lg bg-base-200 p-2'
           ref={provided.innerRef}
           {...provided.draggableProps}
           id={props.card.id}
-          style={{ maxHeight: 'calc(100vh - 190px)' }}
+          // style={{ maxHeight: 'calc(100vh - 190px)' }}
         >
           <div className='flex justify-between px-2'>
             {props.isTitleEditing ? (
@@ -331,10 +287,10 @@ const Card = (props) => {
                 <div
                   className={`${
                     snapshot.isDraggingOver ? 'bg-base-300' : 'bg-base-200'
-                  } flex h-full flex-col overflow-y-auto rounded p-1`}
+                  } mt-1 flex h-full flex-col overflow-y-auto rounded p-1`}
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  style={{ minHeight: '5em' }}
+                  style={{ minHeight: '5em', maxHeight: 'calc(100vh - 12em)' }}
                 >
                   {props.tasks.map((task, index) => (
                     <Task
@@ -346,12 +302,12 @@ const Card = (props) => {
                       isTaskEditing={props.isTaskEditing(task)}
                     />
                   ))}
+                  {provided.placeholder}
                 </div>
-                {provided.placeholder}
               </Fragment>
             )}
           </Droppable>
-          <div className='m-2 p-2'>
+          <div className='flex flex-1 items-end'>
             {isAddingNewTask ? (
               <EditInput key='newtask' value='' onSave={onSaveTask} margin='8px' />
             ) : (

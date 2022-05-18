@@ -11,6 +11,7 @@
 /* Works on Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 0.25em;
+  height: 0.25em;
 }
 
 *::-webkit-scrollbar-track {
