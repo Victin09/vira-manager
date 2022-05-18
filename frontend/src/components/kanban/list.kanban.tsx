@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, Fragment } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { KanbanCard } from './board/card.kanban'
 
 const ITEM_TYPES = {
   CARD: 'card',
@@ -255,7 +256,7 @@ const List = (props) => {
     <Draggable draggableId={props.card.id} index={props.index}>
       {(provided) => (
         <div
-          className='mx-1 flex w-56 flex-col rounded-lg bg-base-200 p-2'
+          className='card mx-1 flex w-56 flex-col bg-base-200 p-2'
           ref={provided.innerRef}
           {...provided.draggableProps}
           id={props.card.id}
@@ -292,15 +293,27 @@ const List = (props) => {
                   {...provided.droppableProps}
                   style={{ minHeight: '5em', maxHeight: 'calc(100vh - 12em)' }}
                 >
-                  {props.tasks.map((task, index) => (
-                    <Task
-                      key={task.id}
-                      task={task}
-                      index={index}
-                      onSaveTaskEdit={(content) => props.onSaveTaskEdit(task.id, content)}
-                      onTaskDoubleClick={() => props.onTaskDoubleClick(task)}
-                      isTaskEditing={props.isTaskEditing(task)}
-                    />
+                  {props.tasks.map((task, index: number) => (
+                    <KanbanCard key={index} id={task.id} title={task.content} index={index} />
+                    // <div className='flex' key={index}>
+                    //   <Draggable draggableId={task.id} index={index}>
+                    //     {(provided, snapshot) => (
+                    //       <div
+                    //         className={`${
+                    //           snapshot.isDragging ? 'bg-info' : 'bg-base-100'
+                    //         } card mb-1 w-full shadow-sm`}
+                    //         {...provided.draggableProps}
+                    //         {...provided.dragHandleProps}
+                    //         ref={provided.innerRef}
+                    //       >
+                    //         <div className='card-body p-2.5'>
+                    //           <span className='card-title'>{task.content}</span>
+                    //           <p>If a dog chews shoes whose shoes does he choose?</p>
+                    //         </div>
+                    //       </div>
+                    //     )}
+                    //   </Draggable>
+                    // </div>
                   ))}
                   {provided.placeholder}
                 </div>
@@ -320,40 +333,40 @@ const List = (props) => {
   )
 }
 
-const Task = (props) => {
-  return (
-    <div className='flex'>
-      {props.isTaskEditing ? (
-        <EditInput
-          key={props.task.id}
-          value={props.task.content}
-          onSave={props.onSaveTaskEdit}
-          margin='0 0 8px 0'
-        />
-      ) : (
-        <Draggable draggableId={props.task.id} index={props.index}>
-          {(provided) => (
-            <div
-              className={`${
-                props.isDragging ? 'bg-info' : 'bg-base-100'
-              } card w-full rounded-lg border shadow-sm`}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              ref={provided.innerRef}
-              // isDragging={snapshot.isDragging}
-              onDoubleClick={props.onTaskDoubleClick}
-            >
-              <div className='card-body p-2.5'>
-                <span className='card-title'>{props.task.content}</span>
-                <p>If a dog chews shoes whose shoes does he choose?</p>
-              </div>
-            </div>
-          )}
-        </Draggable>
-      )}
-    </div>
-  )
-}
+// const Task = (props) => {
+//   return (
+//     <div className='flex'>
+//       {props.isTaskEditing ? (
+//         <EditInput
+//           key={props.task.id}
+//           value={props.task.content}
+//           onSave={props.onSaveTaskEdit}
+//           margin='0 0 8px 0'
+//         />
+//       ) : (
+//         <Draggable draggableId={props.task.id} index={props.index}>
+//           {(provided) => (
+//             <div
+//               className={`${
+//                 props.isDragging ? 'bg-info' : 'bg-base-100'
+//               } card mb-1 w-full shadow-sm`}
+//               {...provided.draggableProps}
+//               {...provided.dragHandleProps}
+//               ref={provided.innerRef}
+//               // isDragging={snapshot.isDragging}
+//               onDoubleClick={props.onTaskDoubleClick}
+//             >
+//               <div className='card-body p-2.5'>
+//                 <span className='card-title'>{props.task.content}</span>
+//                 <p>If a dog chews shoes whose shoes does he choose?</p>
+//               </div>
+//             </div>
+//           )}
+//         </Draggable>
+//       )}
+//     </div>
+//   )
+// }
 
 const EditInput = (props) => {
   const [val, setVal] = useState(props.value)
