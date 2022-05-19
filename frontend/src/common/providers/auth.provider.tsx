@@ -71,7 +71,6 @@ const useProviderAuth = () => {
   }
 
   const signup = async (data: SignUp) => {
-    console.log('signup', data)
     try {
       const result: Response<User> = await (
         await fetch(`${getApiUrl()}/auth/sign-up`, {

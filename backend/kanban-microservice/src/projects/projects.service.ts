@@ -39,7 +39,9 @@ export class ProjectsService {
 
   async findAllByUserId(userId: string): Promise<ApiResponse<Project[]>> {
     try {
+      console.log('userId', userId);
       const projects = await this.projectModel.find({ users: userId });
+      console.log('projects', projects);
       return {
         status: HttpStatus.OK,
         message: 'Projects found',
@@ -55,6 +57,7 @@ export class ProjectsService {
 
   async findById(findProjectDto: FindProjectDto): Promise<ApiResponse<any>> {
     try {
+      console.log('projectId', findProjectDto.projectId);
       const project = await this.projectModel.aggregate([
         {
           $match: {
@@ -65,15 +68,15 @@ export class ProjectsService {
         {
           $lookup: {
             from: 'lists',
-            let: { projectId: '$_id' },
+            let: { board: '$_id' },
             pipeline: [
-              { $match: { $expr: { $eq: ['$projectId', '$$projectId'] } } },
+              { $match: { $expr: { $eq: ['$board', '$$board'] } } },
               {
                 $lookup: {
                   from: 'cards',
-                  let: { listId: '$_id' },
+                  let: { list: '$_id' },
                   pipeline: [
-                    { $match: { $expr: { $eq: ['$listId', '$$listId'] } } },
+                    { $match: { $expr: { $eq: ['$list', '$$list'] } } },
                   ],
                   as: 'cards',
                 },
@@ -88,7 +91,13 @@ export class ProjectsService {
         message: 'Project found',
         data: project,
       };
-    } catch (error) {}
+    } catch (error) {
+      console.log('error', error);
+      return {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error: project not found',
+      };
+    }
   }
 
   async update(updateProjectDto: UpdateProjectDto): Promise<ApiResponse<any>> {

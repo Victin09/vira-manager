@@ -13,16 +13,16 @@ export class Card {
   name: string;
 
   @Prop()
-  description: string;
+  description?: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, default: 1 })
   order: number;
 
   @Prop()
   users: string[];
 
   @Prop({ required: true })
-  listId: string;
+  list: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;

@@ -14,7 +14,13 @@ export class CardsService {
 
   async create(createCardDto: CreateCardDto): Promise<ApiResponse<Card>> {
     try {
-      const cardToCreate = new this.cardModel({ ...createCardDto });
+      const order = await this.cardModel.countDocuments({
+        list: createCardDto.list,
+      });
+      const cardToCreate = new this.cardModel({
+        ...createCardDto,
+        order: order + 1,
+      });
       const card = await cardToCreate.save();
       return {
         status: HttpStatus.CREATED,

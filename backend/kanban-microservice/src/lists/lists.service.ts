@@ -14,7 +14,13 @@ export class ListsService {
 
   async create(createListDto: CreateListDto): Promise<ApiResponse<List>> {
     try {
-      const listToCreate = new this.listModel({ ...createListDto });
+      const order = await this.listModel.countDocuments({
+        board: createListDto.board,
+      });
+      const listToCreate = new this.listModel({
+        ...createListDto,
+        order: order + 1,
+      });
       const list = await listToCreate.save();
       return {
         status: HttpStatus.CREATED,

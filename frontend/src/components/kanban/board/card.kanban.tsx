@@ -10,17 +10,15 @@ type Props = {
 
 export const Card = ({ id, index, title, description }: Props) => {
   return (
-    <div className='flex'>
+    <div className='flex w-full'>
       <Draggable draggableId={id} index={index}>
         {(provided, snapshot) => (
           <div
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
-            className={`mb-4 rounded px-1.5 py-2.5 shadow-lg transition-shadow duration-300 hover:shadow-xl ${
-              snapshot.isDragging
-                ? 'bg-gradient-to-r from-red-100 to-blue-100 text-gray-900'
-                : 'bg-white text-gray-800'
+            className={`mb-4 w-full rounded px-1.5 py-2.5 shadow-sm transition-shadow duration-300 hover:shadow-md ${
+              snapshot.isDragging ? 'bg-info text-gray-900' : 'bg-base-100 text-gray-800'
             }`}
           >
             <div className='w-full'>

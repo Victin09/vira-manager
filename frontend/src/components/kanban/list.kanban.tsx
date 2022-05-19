@@ -4,121 +4,66 @@ import { List } from '@vira/components/kanban/board/list.kanban'
 
 const dataset = [
   {
-    id: '1',
+    id: 'list1',
     title: 'List 1',
     cards: [
       {
-        id: '1',
+        id: 'card1',
         title: 'Card 1'
       },
       {
-        id: '2',
+        id: 'card2',
         title: 'Card 2'
       },
       {
-        id: '3',
+        id: 'card3',
         title: 'Card 3'
       }
-    ]
+    ],
+    order: 1
   },
   {
-    id: '2',
+    id: 'list2',
     title: 'List 2',
     cards: [
       {
-        id: '4',
+        id: 'card4',
         title: 'Card 4'
       },
       {
-        id: '5',
+        id: 'card5',
         title: 'Card 5'
       },
       {
-        id: '6',
+        id: 'card6',
         title: 'Card 6'
       }
-    ]
+    ],
+    order: 2
   },
   {
-    id: '3',
+    id: 'list3',
     title: 'List 3',
     cards: [
       {
-        id: '7',
+        id: 'card7',
         title: 'Card 7'
       },
       {
-        id: '8',
+        id: 'card8',
         title: 'Card 8'
       },
       {
-        id: '9',
+        id: 'card9',
         title: 'Card 9'
       }
-    ]
+    ],
+    order: 3
   }
 ]
 
-const datatest = {
-  lists: [
-    {
-      id: 'list-1',
-      title: 'water plants',
-      cards: [
-        {
-          id: 'card-1',
-          title: 'Home Todos'
-        },
-        {
-          id: 'card-2',
-          title: 'Work Todos'
-        },
-        { id: 'card-3', title: 'Fun Todos' },
-        { id: 'card-4', title: 'Completed' }
-      ],
-      order: 1
-    },
-    {
-      id: 'list-2',
-      title: 'buy oat milk',
-      cards: [
-        {
-          id: 'card-5',
-          title: 'Home Todos'
-        },
-        {
-          id: 'card-6',
-          title: 'Work Todos'
-        },
-        { id: 'card-7', title: 'Fun Todos' },
-        { id: 'card-8', title: 'Completed' }
-      ],
-      order: 2
-    },
-    {
-      id: 'list-3',
-      title: 'build a trello board',
-      cards: [
-        {
-          id: 'card-9',
-          title: 'Home Todos'
-        },
-        {
-          id: 'card-10',
-          title: 'Work Todos'
-        },
-        { id: 'card-11', title: 'Fun Todos' },
-        { id: 'card-12', title: 'Completed' }
-      ],
-      order: 3
-    },
-    { id: 'list-4', title: 'have a beach day', cards: [], order: 4 },
-    { id: 'list-5', title: 'build tic tac toe', cards: [], order: 5 }
-  ]
-}
-
 export const ListKanban = () => {
-  const [data, _setData] = useState(datatest)
+  const [data, _setData] = useState(dataset)
 
   useEffect(() => {
     localStorage.setItem('board-dataset', JSON.stringify({ data }))
@@ -133,9 +78,9 @@ export const ListKanban = () => {
       // Change or
       console.log({ source })
       console.log({ destination })
-      const startColumn = data.lists.find((list) => list.id === source.droppableId)!
+      const startColumn = data.find((list) => list.id === source.droppableId)!
       console.log(startColumn)
-      const endColumn = data.lists.find((list) => list.id === destination.droppableId)!
+      const endColumn = data.find((list) => list.id === destination.droppableId)!
       console.log(endColumn)
 
       if (startColumn === endColumn) {
@@ -165,6 +110,7 @@ export const ListKanban = () => {
         cards: sourceCards
       }
       console.log({ newStart })
+      data.splice(data.indexOf(startColumn), 1, newStart)
 
       const destinationCards = Array.from(endColumn.cards)
       destinationCards.splice(destination.index, 0, draggableId)
@@ -173,43 +119,38 @@ export const ListKanban = () => {
         cards: destinationCards
       }
       console.log({ newFinish })
+      data.splice(data.indexOf(endColumn), 1, newFinish)
 
       // Update dataset with new lists
-      const newState = {
-        ...data,
-        lists: {
-          ...data,
-          [newStart.id]: newStart,
-          [newFinish.id]: newFinish
-        }
-      }
-
-      _setData(newState)
-    }
-     
-      console.log({ newState })
+      // const newState = {
+      //   ...data,
+      //   [newStart.id]: newStart,
+      //   [newFinish.id]: newFinish
+      // }
+      _setData(data)
+      console.log(data)
     } else {
-      // const list = data.splice(source.index, 1)[0]
-      // data.splice(destination.index, 0, list)
-      // list.order = destination.index
-      // data
-      //   .slice(destination.index)
-      //   .map((list, index) => (list.order = destination.index + index + 1))
+      const list = data.splice(source.index, 1)[0]
+      data.splice(destination.index, 0, list)
+      list.order = destination.index
+      data
+        .slice(destination.index)
+        .map((list, index) => (list.order = destination.index + index + 1))
     }
   }
 
   return (
-    <main className='h-screen w-screen pb-2'>
+    <main className='flex h-full w-full flex-1 pb-2'>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='allCols' type='list' direction='horizontal'>
           {(provided) => (
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className='auto-cols-220 md:auto-cols-270 mx-1 grid h-full grid-flow-col items-start overflow-x-auto pt-3 md:mx-6 md:pt-2'
-              style={{ height: '90%' }}
+              className='flex h-full flex-1 overflow-x-auto p-2'
+              style={{ maxHeight: 'calc(100vh - 3em)' }}
             >
-              {data.lists.map((column, i) => {
+              {data.map((column, i) => {
                 return (
                   <List
                     id={column.id}
