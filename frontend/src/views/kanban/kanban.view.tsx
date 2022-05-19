@@ -71,9 +71,7 @@ const Kanban = () => {
           </div>
         </div>
       ) : (
-        <div>
-          <ListKanban />
-        </div>
+        <ListKanban />
       )}
     </>
   )

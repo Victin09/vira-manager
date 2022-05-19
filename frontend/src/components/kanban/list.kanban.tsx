@@ -140,32 +140,24 @@ export const ListKanban = () => {
   }
 
   return (
-    <main className='flex h-full w-full flex-1 pb-2'>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId='allCols' type='list' direction='horizontal'>
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className='flex h-full flex-1 overflow-x-auto p-2'
-              style={{ maxHeight: 'calc(100vh - 3em)' }}
-            >
-              {data.map((column, i) => {
-                return (
-                  <List
-                    id={column.id}
-                    title={column.title}
-                    cards={column.cards}
-                    key={column.id}
-                    index={i}
-                  />
-                )
-              })}
-              {provided.placeholder}
+    <DragDropContext onDragEnd={onDragEnd}>
+    <Droppable droppableId='allCols' type='column' direction='horizontal'>
+        {(provided, snapshot) => 
+            <div {...provided.droppableProps} ref={provided.innerRef} className="grid overflow-x-auto h-full items-start pt-3 md:pt-2 mx-1 md:mx-6 auto-cols-220 md:auto-cols-270 grid-flow-col" style={{height: '90%'}}>
+                {
+                    data?.map((col, i) => {
+                        const column = col
+                        const tasks = column.cards?.map(t => t)
+                        return <List id={col.id} index={i} title={col.title} cards={col.cards} />
+                    }) 
+                }
+                {provided.placeholder}
+                <form autoComplete='off' className='ml-2'>
+                    <input maxLength={20} className='truncate bg-transparent placeholder-indigo-500 text-indigo-800 bg-indigo-50 px-2 outline-none py-1 rounded-sm ring-2 focus:ring-indigo-500' type="text" name='newCol' placeholder='Add a new column' />
+                </form>
             </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </main>
+        }
+    </Droppable>
+</DragDropContext>
   )
 }
