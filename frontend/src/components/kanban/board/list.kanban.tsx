@@ -12,13 +12,8 @@ export const List = ({ id, index, title, cards }: ListProps) => {
           ref={provided.innerRef}
           className='card mr-5 w-56 bg-base-200'
         >
-          <div
-            {...provided.dragHandleProps}
-            className='flex justify-between bg-primary-content px-4 py-2 shadow-sm'
-          >
-            <h2 className={'truncate text-lg font-bold text-neutral-content sm:text-lg'}>
-              {title}
-            </h2>
+          <div {...provided.dragHandleProps} className='flex justify-between px-4 py-2 shadow-sm'>
+            <h2 className={'truncate text-lg font-bold sm:text-lg'}>{title}</h2>
           </div>
           <Droppable droppableId={id} type='task'>
             {(provided, snapshot) => (

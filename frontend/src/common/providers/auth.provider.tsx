@@ -38,13 +38,13 @@ const useProviderAuth = () => {
       const user = JSON.parse(atob(userString))
       return user
     }
-    // return null
-    return {
-      id: '1dc93e11-99a5-4177-8d2e-400576b2029f',
-      fullname: 'VIRA',
-      email: 'vira@vira.es',
-      avatar: ''
-    }
+    return null
+    // return {
+    //   id: '1dc93e11-99a5-4177-8d2e-400576b2029f',
+    //   fullname: 'VIRA',
+    //   email: 'vira@vira.es',
+    //   avatar: ''
+    // }
     // navigate('/signin')
   }
 

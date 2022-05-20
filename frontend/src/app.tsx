@@ -12,7 +12,7 @@ import Register from '@vira/views/register.view'
 import { AuthProvider } from '@vira/common/providers/auth.provider'
 import { AppTemplate } from '@vira/components/templates/app.template'
 import Home from '@vira/views/home.view'
-import Kanban from '@vira/views/kanban/kanban.view'
+import KanbanView from '@vira/views/kanban/kanban.view'
 import KanbanProjectView from '@vira/views/kanban/kanban-project.view'
 import KanbanTasksView from '@vira/views/kanban/kanban-tasks.view'
 
@@ -54,7 +54,7 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route element={<AppTemplate />}>
             <Route path='/' element={<Home />} />
-            <Route path='/kanban' element={<Kanban />} />
+            <Route path='/kanban' element={<KanbanView />} />
             <Route path='/kanban/:projectId' element={<KanbanProjectView />} />
             <Route path='/kanban/tasks' element={<KanbanTasksView />} />
           </Route>
