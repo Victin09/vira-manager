@@ -1,3 +1,4 @@
 export interface Kanban {
-  projects: []
+  tasks: any[]
+  projects: any[]
 }

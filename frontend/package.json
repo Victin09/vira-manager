@@ -1,6 +1,6 @@
 {
-  "name": "react-with-webpack",
-  "version": "1.0.0",
+  "name": "vm-frontend",
+  "version": "0.0.0",
   "description": "React app built with Webpack and Babel",
   "main": "index.js",
   "scripts": {

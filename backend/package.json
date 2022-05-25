@@ -1,0 +1,11 @@
+{
+  "name": "vm-backend",
+  "description": "Project to run all microservices of Vira Manager backend",
+  "private": true,
+  "scripts": {
+    "dev": "npx lerna run start:dev --stream"
+  },
+  "devDependencies": {
+    "lerna": "^5.0.0"
+  }
+}
