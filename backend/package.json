@@ -3,6 +3,7 @@
   "description": "Project to run all microservices of Vira Manager backend",
   "private": true,
   "scripts": {
+    "install" : "npx lerna bootstrap",
     "dev": "npx lerna run start:dev --stream"
   },
   "devDependencies": {
