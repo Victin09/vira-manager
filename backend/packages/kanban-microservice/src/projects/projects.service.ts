@@ -10,12 +10,14 @@ import {
 } from '@vira/projects/entities/project.entity';
 import { FindProjectDto } from '@vira/projects/dtos/find-project.dto';
 import { RemoveProjectDto } from '@vira/projects/dtos/remove-project.dto';
+import { CardsService } from '@vira/cards/cards.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectModel(Project.name)
     private readonly projectModel: Model<ProjectDocument>,
+    private readonly cardService: CardsService,
   ) {}
 
   async create(
@@ -37,15 +39,15 @@ export class ProjectsService {
     }
   }
 
-  async findAllByUserId(userId: string): Promise<ApiResponse<Project[]>> {
+  async findAllByUserId(userId: string): Promise<ApiResponse<any>> {
     try {
-      console.log('userId', userId);
       const projects = await this.projectModel.find({ users: userId });
-      console.log('projects', projects);
+      const cards = await this.cardService.findByUser(userId);
+      console.log('cards', cards);
       return {
         status: HttpStatus.OK,
         message: 'Projects found',
-        data: projects,
+        data: { projects: projects, cards: cards.data },
       };
     } catch (error) {
       return {
@@ -71,12 +73,14 @@ export class ProjectsService {
             let: { board: '$_id' },
             pipeline: [
               { $match: { $expr: { $eq: ['$board', '$$board'] } } },
+              { $sort: { order: 1 } },
               {
                 $lookup: {
                   from: 'cards',
                   let: { list: '$_id' },
                   pipeline: [
                     { $match: { $expr: { $eq: ['$list', '$$list'] } } },
+                    { $sort: { order: 1 } },
                   ],
                   as: 'cards',
                 },
@@ -86,10 +90,11 @@ export class ProjectsService {
           },
         },
       ]);
+      const result = project.reduce((r, c) => Object.assign(r, c), {});
       return {
         status: HttpStatus.OK,
         message: 'Project found',
-        data: project,
+        data: result,
       };
     } catch (error) {
       console.log('error', error);

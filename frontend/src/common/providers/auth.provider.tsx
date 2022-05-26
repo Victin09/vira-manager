@@ -52,7 +52,9 @@ const useProviderAuth = () => {
     const result: Response<User> = await (
       await fetch(`${getApiUrl()}/auth/sign-in`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ email: data.email, password: data.password }),
         credentials: 'include'
       })

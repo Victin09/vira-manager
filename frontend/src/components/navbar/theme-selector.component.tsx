@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { HiColorSwatch } from 'react-icons/hi'
 import { themeChange } from 'theme-change'
 import { themes } from '@vira/common/data/themes'
 
@@ -10,7 +11,7 @@ export const ThemeSelector = () => {
   return (
     <div className='dropdown-end dropdown'>
       <label tabIndex={0} className='btn btn-ghost m-1'>
-        Tema
+        <HiColorSwatch size={24} />
       </label>
       <div className='dropdown-content rounded-box mt-3 h-56 w-56 overflow-y-auto bg-base-200 shadow-sm'>
         <div className='grid grid-cols-1 gap-3 p-3' tabIndex={0}>

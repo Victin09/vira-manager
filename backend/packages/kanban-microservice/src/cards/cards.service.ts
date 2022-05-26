@@ -28,6 +28,7 @@ export class CardsService {
         data: card,
       };
     } catch (error) {
+      console.log('error', error);
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Error: Cannot create card',
@@ -47,6 +48,36 @@ export class CardsService {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Error: Cannot find card',
+      };
+    }
+  }
+
+  async findByUser(userId: string): Promise<ApiResponse<Card[]>> {
+    try {
+      const cards = await this.cardModel.aggregate([
+        {
+          $match: {
+            users: userId,
+          },
+        },
+        {
+          $lookup: {
+            from: 'Projects',
+            localField: 'project',
+            foreignField: '_id',
+            as: 'project',
+          },
+        },
+      ]);
+      return {
+        status: HttpStatus.OK,
+        message: 'Cards found',
+        data: cards,
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error: Cannot find cards',
       };
     }
   }

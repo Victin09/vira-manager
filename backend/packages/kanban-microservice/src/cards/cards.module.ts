@@ -8,5 +8,6 @@ import { CardSchema } from '@vira/cards/entities/card.entity';
   imports: [MongooseModule.forFeature([{ name: 'Card', schema: CardSchema }])],
   controllers: [CardsController],
   providers: [CardsService],
+  exports: [CardsService],
 })
 export class CardsModule {}

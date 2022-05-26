@@ -24,6 +24,9 @@ export class Card {
   @Prop({ required: true })
   list: string;
 
+  @Prop({ required: true })
+  project: string;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 

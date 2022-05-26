@@ -2,10 +2,8 @@ import React, { useEffect } from 'react'
 import Select from 'react-select'
 import { useAuth } from '@vira/common/providers/auth.provider'
 import { useForm } from '@vira/common/hooks/use-form.hook'
-import { CreateProject } from '@vira/models/kanban/board.model'
-import { useFetch } from '@vira/common/hooks/use-fetch.hook'
+import { CreateProject } from '@vira/models/kanban/project.model'
 import { ApiResponse } from '@vira/common/types/api-response.type'
-import { User } from '@vira/models/user.model'
 import { getApiUrl } from '@vira/common/utils/api.util'
 
 export const CreateKanbanProjectModal = (): React.ReactElement => {
@@ -32,7 +30,7 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
 
   const sendForm = async () => {
     const projectUsers = [...selectedUsers.map((user) => user.value), getUser()!.id]
-    const response = await fetch('/kanban/projects', {
+    const response = await fetch(`${getApiUrl()}/kanban/projects`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

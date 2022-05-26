@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@vira/common/providers/auth.provider'
 import { ApiResponse } from '@vira/common/types/api-response.type'
-import { getDateName } from '@vira/common/utils/date.util'
+import { formatToDate, getDateName } from '@vira/common/utils/date.util'
 import { getApiUrl } from '@vira/common/utils/api.util'
 import { Kanban } from '@vira/models/kanban/kanban.model'
+import { Link } from 'react-router-dom'
 
 const KanbanView = () => {
   const [data, setData] = useState<Kanban>()
@@ -16,8 +17,8 @@ const KanbanView = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
-        }
-        // credentials: 'include'
+        },
+        credentials: 'include'
       })
 
       console.log('url', `${getApiUrl()}/kanban/projects/${getUser()!.id}`)
@@ -25,6 +26,7 @@ const KanbanView = () => {
       console.log('resultData', resultData)
 
       if (resultData.status === 200) setData(resultData.data)
+      console.log('data', data)
     }
     fetchData()
   }, [])
@@ -32,45 +34,75 @@ const KanbanView = () => {
   return (
     <>
       {data ? (
-        <div className='h-100 d-flex flex-column align-items-center container'>
-          <div className='w-100 mt-2 text-center'>
-            <span>{getDateName('es-ES')}</span>
-            <h3>Hola de nuevo, {getUser()!.fullname}</h3>
+        <div className='flex flex-1 flex-col p-2'>
+          <div className='mt-2 text-center'>
+            <span className='italic'>{getDateName('es-ES')}</span>
+            <h3 className='text-2xl font-bold'>Hola de nuevo, {getUser()!.fullname}</h3>
           </div>
-          <div className='w-100 h-100 row d-flex flex-wrap p-2'>
-            <div className='col-6'>
-              <div className='card shadow-sm'>
-                <div className='card-body'>
-                  <div className='fw-bold card-title'>Tareas</div>
+          <div className='mt-2'>
+            <div className='grid grid-flow-col grid-cols-2 gap-2 sm:grid-cols-2'>
+              <div className='card bg-base-200 shadow'>
+                <div className='card-body p-4'>
+                  <div className='fw-bold card-title flex items-center text-center'>
+                    Tareas <div className='badge badge-primary'>{data.cards.length}</div>
+                  </div>
                   <div className='card-text'>
                     <span className='fw-light'>
-                      {!data.tasks.length
-                        ? 'Para tener tareas asignadas, primero debes crear un proyecto'
-                        : ''}
+                      {!data.cards.length ? (
+                        'Para tener tareas asignadas, primero debes crear un proyecto'
+                      ) : (
+                        <>
+                          {data.cards.map((card) => (
+                            <div
+                              className='card h-24 cursor-pointer bg-base-100 shadow-sm hover:bg-primary-content'
+                              key={card.id}
+                            >
+                              <div className='card-body p-4'>
+                                <span className='card-title truncate'>{card.name}</span>
+                                <div className='flex items-end'>
+                                  {/* <div className='badge badge-primary'>{project.name}</div> */}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      )}
                     </span>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className='col-6'>
-              <div className='card shadow-sm'>
-                <div className='card-body'>
-                  <div className='fw-bold card-title'>Proyectos</div>
-                  <div className='card-text'>
+              <div className='card bg-base-200 shadow'>
+                <div className='card-body p-4'>
+                  <div className='fw-bold card-title'>
+                    Proyectos <div className='badge badge-primary'>{data.projects.length}</div>
+                  </div>
+                  <div className='mt-2'>
                     {!data.projects.length ? (
                       <span className='fw-light'>
                         No tienes ningún proyecto asociado, puedes crear uno{' '}
-                        <a
-                          className='link-primary'
-                          data-vds-toggle='modal'
-                          href='#createProjectModal'
-                          role='button'
-                        >
+                        <a className='link-primary' href='#create-project-modal' role='button'>
                           aquí
                         </a>
                       </span>
                     ) : (
-                      <div>MAP</div>
+                      <>
+                        {data.projects.map((project) => (
+                          <Link
+                            to={`/kanban/${project._id}`}
+                            className='card h-24 cursor-pointer bg-base-100 shadow-sm hover:bg-primary-content'
+                            key={project.name}
+                          >
+                            <div className='card-body p-4'>
+                              <span className='card-title truncate'>{project.name}</span>
+                              <div className='flex items-center font-thin'>
+                                <p className='font-thin'>{project.description}</p>
+                                {/* <HiOutlineCalendar /> */}
+                                <span className='self-end'>{formatToDate(project.createdAt)}</span>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </>
                     )}
                   </div>
                 </div>

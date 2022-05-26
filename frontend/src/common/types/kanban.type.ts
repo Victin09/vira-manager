@@ -1,12 +1,12 @@
 export type CardProps = {
-  id: string
+  _id: string
   index?: number
-  title: string
+  name: string
   description?: string
 }
 
 export type ListProps = {
-  id: string
+  _id: string
   index: number
   title: string
   cards: CardProps[]

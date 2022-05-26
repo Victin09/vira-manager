@@ -1,4 +1,6 @@
+import { Project } from '@vira/models/kanban/project.model'
+
 export interface Kanban {
-  tasks: any[]
-  projects: any[]
+  projects: Project[]
+  cards: any[]
 }

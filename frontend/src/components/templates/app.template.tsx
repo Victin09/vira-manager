@@ -10,7 +10,7 @@ export const AppTemplate = () => {
 
   return (
     <div className='flex h-screen min-h-screen w-full flex-col overflow-hidden'>
-      <div className='navbar sticky top-0 z-50 bg-primary text-primary-content shadow-sm'>
+      <div className='navbar sticky top-0 z-50 shadow-sm'>
         <div className='navbar-start'>
           <div className='dropdown'>
             <label tabIndex={0} className='btn btn-ghost lg:hidden'>
@@ -61,28 +61,31 @@ export const AppTemplate = () => {
           </Link>
           <ul className='menu menu-horizontal hidden p-0 lg:flex'>
             <li>
-              <NavLink
-                to='/kanban'
-                className={(navData) => (navData.isActive ? ' bg-secondary' : 'hover:border-b-2')}
-              >
+              <NavLink to='/kanban' className={(navData) => (navData.isActive ? 'active' : '')}>
                 Tablero kanban
               </NavLink>
             </li>
             <li>
               <NavLink
                 to={location.pathname}
-                className={`disabled ${(navData) => (navData.isActive ? ' active' : '')}`}
+                className={(navData) => (navData.isActive ? ' ' : '')}
               >
                 Documentación
               </NavLink>
             </li>
             <li>
-              <NavLink to={location.pathname} className='disabled'>
+              <NavLink
+                to={location.pathname}
+                className={(navData) => (navData.isActive ? ' ' : '')}
+              >
                 Drive
               </NavLink>
             </li>
             <li>
-              <NavLink to={location.pathname} className='disabled'>
+              <NavLink
+                to={location.pathname}
+                className={(navData) => (navData.isActive ? ' ' : '')}
+              >
                 Chat
               </NavLink>
             </li>
@@ -116,7 +119,4 @@ export const AppTemplate = () => {
       <div className='flex flex-1 flex-wrap overflow-auto'>{<Outlet />}</div>
     </div>
   )
-}
-function useRouteMatch(arg0: { path: any; exact: any; strict: any }) {
-  throw new Error('Function not implemented.')
 }
