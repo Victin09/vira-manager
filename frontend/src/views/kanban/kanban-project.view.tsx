@@ -6,6 +6,7 @@ import { Project } from '@vira/models/kanban/project.model'
 import { ApiResponse } from '@vira/common/types/api-response.type'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { List } from '@vira/components/kanban/board/list.kanban'
+import { reorder } from '@vira/common/utils/kanban.util'
 
 const KanbanProjectView = () => {
   const { getUser } = useAuth()
@@ -46,110 +47,133 @@ const KanbanProjectView = () => {
     if (!destination) return
 
     if (result.type === 'task') {
-      const startColumn = listsTmp.find((list) => list._id === source.droppableId)!
-      const endColumn = listsTmp.find((list) => list._id === destination.droppableId)!
+      // Move card from one list to another
+      const sourceList = listsTmp.find((list) => list.id === source.droppableId)
+      const destinationList = listsTmp.find((list) => list.id === destination.droppableId)
+      const sourceCard = sourceList!.cards!.find((card) => card.id === draggableId)
+      // const destinationCard = destinationList!.cards!.find((card) => card.id === draggableId)
 
-      if (startColumn === endColumn) {
-        const newTaskIds = Array.from(endColumn.cards)
-
-        newTaskIds.splice(source.index, 1)
-        newTaskIds.splice(destination.index, 0, draggableId)
-
-        const newColumn = {
-          ...endColumn,
-          cards: newTaskIds
+      if (sourceList && destinationList) {
+        if (sourceList.id === destinationList.id) {
+          // Move card in the same list
+          const newCards = reorder(sourceList.cards!, source.index, destination.index)
+          sourceList.cards = newCards
+          console.log('newCards', newCards)
+          console.log('sourceList', sourceList)
+          // setProject({ ...project, lists: listsTmp })
+        } else {
+          // Move card from one list to another
+          const newCards = reorder(sourceList.cards!, source.index, destination.index)
+          sourceList.cards = newCards
+          destinationList.cards = [...destinationList.cards!, sourceCard!]
+          console.log('newCards', newCards)
+          console.log('sourceList', sourceList)
+          console.log('destinationList', destinationList)
+          // setProject({ ...project, lists: listsTmp })
         }
-
-        const newState = {
-          ...project,
-          columns: { ...project, [endColumn.id]: newColumn }
-        }
-
-        console.log({ newState })
-        return
       }
-
-      const sourceCards = startColumn.cards
-      const cardToMove = sourceCards.splice(source.index, 1)[0]
-      sourceCards.slice(source.index).map(async (card, index) => {
-        const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${card._id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...card,
-            order: (card.order = card.order - index - 1)
-          })
-        })
-
-        const response: ApiResponse<any> = await apiResponse.json()
-        if (response.status === 200) {
-          const origin = project!.lists!.find((list) => list._id === source.droppableId)!
-          origin.cards = sourceCards
-          console.log('sourceCards', project!.lists!)
-        }
-      })
-
-      const endCards = endColumn.cards
-      endCards.splice(destination.index, 0, cardToMove)
-      cardToMove.list = destination.droppableId
-      console.log('destIndex', destination.index)
-      cardToMove.order = destination.index
-      const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${cardToMove._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ ...cardToMove })
-      })
-
-      const response: ApiResponse<any> = await apiResponse.json()
-      if (response.status === 200) {
-        endCards.slice(destination.index + 1).map(async (card, index) => {
-          console.log('CARD', card)
-          console.log('DESTINATION', destination.index)
-          console.log('INDEX', index)
-          const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${card._id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              ...card,
-              order: (card.order = destination.index + index + 1)
-            })
-          })
-
-          const response: ApiResponse<any> = await apiResponse.json()
-          if (response.status === 200) {
-            const end = project!.lists!.find((list) => list._id === destination.droppableId)!
-            end.cards = endCards
-            console.log('destinationCardsAFTERPDATE', project!.lists!)
-          }
-        })
-      }
+      // const startColumn = listsTmp.find((list) => list._id === source.droppableId)!
+      // const endColumn = listsTmp.find((list) => list._id === destination.droppableId)!
+      // if (startColumn === endColumn) {
+      //   const newTaskIds = Array.from(endColumn.cards)
+      //   newTaskIds.splice(source.index, 1)
+      //   newTaskIds.splice(destination.index, 0, draggableId)
+      //   const newColumn = {
+      //     ...endColumn,
+      //     cards: newTaskIds
+      //   }
+      //   const newState = {
+      //     ...project,
+      //     columns: { ...project, [endColumn.id]: newColumn }
+      //   }
+      //   console.log({ newState })
+      //   return
+      // }
+      // const sourceCards = startColumn.cards
+      // const cardToMove = sourceCards.splice(source.index, 1)[0]
+      // sourceCards.slice(source.index).map(async (card, index) => {
+      //   const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${card._id}`, {
+      //     method: 'PUT',
+      //     headers: {
+      //       'Content-Type': 'application/json'
+      //     },
+      //     body: JSON.stringify({
+      //       ...card,
+      //       order: (card.order = card.order - index - 1)
+      //     })
+      //   })
+      //   const response: ApiResponse<any> = await apiResponse.json()
+      //   if (response.status === 200) {
+      //     const origin = project!.lists!.find((list) => list._id === source.droppableId)!
+      //     origin.cards = sourceCards
+      //     console.log('sourceCards', project!.lists!)
+      //   }
+      // })
+      // const endCards = endColumn.cards
+      // endCards.splice(destination.index, 0, cardToMove)
+      // cardToMove.list = destination.droppableId
+      // console.log('destIndex', destination.index)
+      // cardToMove.order = destination.index
+      // const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${cardToMove._id}`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({ ...cardToMove })
+      // })
+      // const response: ApiResponse<any> = await apiResponse.json()
+      // if (response.status === 200) {
+      //   endCards.slice(destination.index + 1).map(async (card, index) => {
+      //     console.log('CARD', card)
+      //     console.log('DESTINATION', destination.index)
+      //     console.log('INDEX', index)
+      //     const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${card._id}`, {
+      //       method: 'PUT',
+      //       headers: {
+      //         'Content-Type': 'application/json'
+      //       },
+      //       body: JSON.stringify({
+      //         ...card,
+      //         order: (card.order = destination.index + index + 1)
+      //       })
+      //     })
+      //     const response: ApiResponse<any> = await apiResponse.json()
+      //     if (response.status === 200) {
+      //       const end = project!.lists!.find((list) => list._id === destination.droppableId)!
+      //       end.cards = endCards
+      //       console.log('destinationCardsAFTERPDATE', project!.lists!)
+      //     }
+      //   })
+      // }
     } else {
-      const list = listsTmp.splice(source.index, 1)[0]
-      listsTmp.splice(destination.index, 0, list)
-      list.order = destination.index
-      listsTmp.slice(destination.index).map(async (list, index) => {
-        const apiResponse = await fetch(`${getApiUrl()}/kanban/lists/${list._id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ ...list, order: (list.order = destination.index + index + 1) })
-        })
+      const listTest = reorder<any>(listsTmp, source.index, destination.index)
+      console.log('listTest', listTest)
+      const newState = {
+        ...project,
+        lists: listTest
+      }
+      console.log('newState', newState)
 
-        const result: ApiResponse<any> = await apiResponse.json()
-        if (result.status !== 200) return
-        project!.lists!.forEach((list, index) => {
-          if (list._id === result.data._id) {
-            project!.lists![index] = result.data
-          }
-        })
-      })
+      // const list = listsTmp.splice(source.index, 1)[0]
+      // listsTmp.splice(destination.index, 0, list)
+      // list.order = destination.index
+      // listsTmp.slice(destination.index).map(async (list, index) => {
+      //   const apiResponse = await fetch(`${getApiUrl()}/kanban/lists/${list._id}`, {
+      //     method: 'PUT',
+      //     headers: {
+      //       'Content-Type': 'application/json'
+      //     },
+      //     body: JSON.stringify({ ...list, order: (list.order = destination.index + index + 1) })
+      //   })
+
+      //   const result: ApiResponse<any> = await apiResponse.json()
+      //   if (result.status !== 200) return
+      //   project!.lists!.forEach((list, index) => {
+      //     if (list._id === result.data._id) {
+      //       project!.lists![index] = result.data
+      //     }
+      //   })
+      // })
     }
   }
 

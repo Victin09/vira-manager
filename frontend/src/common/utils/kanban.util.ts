@@ -1,4 +1,4 @@
-// A little function to help us with reordering the result
+/* A function that reoder the kanban board */
 export const reorder = <T>(list: T[], startIndex: number, endIndex: number) => {
   const result = Array.from(list)
   const [removed] = result.splice(startIndex, 1)
