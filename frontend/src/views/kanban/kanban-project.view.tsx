@@ -35,6 +35,10 @@ const KanbanProjectView = () => {
     fetchData()
   }, [])
 
+  /**
+   * * Reorder dont work properlly
+   * TODO: Fix reorder
+   */
   const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result
     const listsTmp = project!.lists!
@@ -90,25 +94,41 @@ const KanbanProjectView = () => {
       const endCards = endColumn.cards
       endCards.splice(destination.index, 0, cardToMove)
       cardToMove.list = destination.droppableId
-      endCards.slice(destination.index).map(async (card, index) => {
-        const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${card._id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...card,
-            order: (card.order = card.order + index)
-          })
-        })
-
-        const response: ApiResponse<any> = await apiResponse.json()
-        if (response.status === 200) {
-          const end = project!.lists!.find((list) => list._id === destination.droppableId)!
-          end.cards = endCards
-          console.log('destinationCards', project!.lists!)
-        }
+      console.log('destIndex', destination.index)
+      cardToMove.order = destination.index
+      const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${cardToMove._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ...cardToMove })
       })
+
+      const response: ApiResponse<any> = await apiResponse.json()
+      if (response.status === 200) {
+        endCards.slice(destination.index + 1).map(async (card, index) => {
+          console.log('CARD', card)
+          console.log('DESTINATION', destination.index)
+          console.log('INDEX', index)
+          const apiResponse = await fetch(`${getApiUrl()}/kanban/cards/${card._id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              ...card,
+              order: (card.order = destination.index + index + 1)
+            })
+          })
+
+          const response: ApiResponse<any> = await apiResponse.json()
+          if (response.status === 200) {
+            const end = project!.lists!.find((list) => list._id === destination.droppableId)!
+            end.cards = endCards
+            console.log('destinationCardsAFTERPDATE', project!.lists!)
+          }
+        })
+      }
     } else {
       const list = listsTmp.splice(source.index, 1)[0]
       listsTmp.splice(destination.index, 0, list)
