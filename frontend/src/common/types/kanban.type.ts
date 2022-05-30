@@ -10,4 +10,5 @@ export type ListProps = {
   index: number
   title: string
   cards: CardProps[]
+  project?: any
 }

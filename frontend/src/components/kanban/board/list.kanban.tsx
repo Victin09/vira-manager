@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Card } from '@vira/components/kanban/board/card.kanban'
-import { CardProps, ListProps } from '@vira/common/types/kanban.type'
+import { CardProps } from '@vira/common/types/kanban.type'
 import { getApiUrl } from '@vira/common/utils/api.util'
 import { ApiResponse } from '@vira/common/types/api-response.type'
 import { useParams } from 'react-router-dom'
 
-export const List = ({ _id, index, title, cards }: ListProps) => {
+export const List = (props: any) => {
   const { projectId } = useParams()
   const [addTask, setAddTask] = useState<boolean>(false)
   const [newCardName, setNewCardName] = useState<string>('')
@@ -15,8 +15,8 @@ export const List = ({ _id, index, title, cards }: ListProps) => {
   const [cardsState, setCardsState] = useState<CardProps[]>([])
 
   useEffect(() => {
-    setCardsState(cards)
-  }, [])
+    setCardsState(props.data.cards)
+  }, [props])
 
   const createNewCard = async (e: React.FormEvent<HTMLFormElement>) => {
     console.log('sending')
@@ -29,7 +29,7 @@ export const List = ({ _id, index, title, cards }: ListProps) => {
       body: JSON.stringify({
         name: newCardName,
         description: '',
-        list: _id,
+        list: props._id,
         project: projectId,
         users: []
       })
@@ -44,7 +44,7 @@ export const List = ({ _id, index, title, cards }: ListProps) => {
   }
 
   return (
-    <Draggable draggableId={_id} index={index} key={_id}>
+    <Draggable draggableId={props.data._id} index={props.index}>
       {(provided) => (
         <div
           {...provided.draggableProps}
@@ -52,9 +52,9 @@ export const List = ({ _id, index, title, cards }: ListProps) => {
           className='card mr-5 w-56 bg-base-200'
         >
           <div {...provided.dragHandleProps} className='flex justify-between px-4 py-2 shadow-sm'>
-            <h2 className={'truncate text-lg font-bold sm:text-lg'}>{title}</h2>
+            <h2 className={'truncate text-lg font-bold sm:text-lg'}>{props.data.name}</h2>
           </div>
-          <Droppable droppableId={_id} type='task'>
+          <Droppable droppableId={props.data._id} type='task'>
             {(provided, snapshot) => (
               <div
                 {...provided.droppableProps}
