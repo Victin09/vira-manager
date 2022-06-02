@@ -8,6 +8,23 @@ export const reorder = (list: any[], startIndex: number, endIndex: number) => {
   return result
 }
 
+export const removeAndReorder = (list: any[], startIndex: number, endIndex: number) => {
+  const result = Array.from(list)
+  const [removed] = result.splice(startIndex, 1)
+  // result.splice(endIndex, 0, removed)
+  result.map((item, index) => (item.order = index))
+
+  return { result, removed }
+}
+
+export const insertAndReorder = (list: any[], item: any, endIndex: number) => {
+  const result = Array.from(list)
+  result.splice(endIndex, 0, item)
+  result.map((item, index) => (item.order = index))
+
+  return result
+}
+
 export const reorderQuoteMap = ({ quoteMap, source, destination }) => {
   console.log(quoteMap)
   const test = [...quoteMap.filter((test) => test._id === source.droppableId)]

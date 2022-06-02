@@ -4,7 +4,6 @@
   "description": "React app built with Webpack and Babel",
   "main": "index.js",
   "scripts": {
-    "postinstall": "mkdir -p tailwindcss; cd tailwindcss; git init; git remote add -f origin https://github.com/Victin09/tailwindcss.git; git pull origin master; cd ..; npm i -D ./tailwindcss/base/; cd ./tailwindcss/base && npm i && npm run swcify; cd ../..; npm i -D ./tailwindcss/components/; cd ./tailwindcss/components/ && npm i && npm run build",
     "lint": "npx eslint --ignore-path .gitignore \"**/*.{ts,tsx}\"",
     "lint:fix": "npx eslint --fix --ignore-path .gitignore \"**/*.{ts,tsx}\"",
     "webpack": "webpack",
@@ -39,10 +38,9 @@
     "postcss-loader": "^6.2.1",
     "prettier": "^2.6.2",
     "style-loader": "^2.0.0",
-    "tailwindcss": "file:tailwindcss/base",
+    "tailwindcss": "github:Victin09/tailwindcss",
     "ts-loader": "^9.3.0",
     "typescript": "^4.6.4",
-    "vds-components": "file:tailwindcss/components",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2"
@@ -55,7 +53,7 @@
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.3.0",
     "react-select": "^5.3.2",
-    "theme-change": "^2.0.2",
+    "vira-design-system": "https://github.com/Victin09/vira-design-system.git",
     "vira-i18n-react": "^1.0.4"
   }
 }

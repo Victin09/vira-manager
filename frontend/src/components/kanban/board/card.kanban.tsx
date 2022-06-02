@@ -1,16 +1,12 @@
 import React from 'react'
 import { Draggable } from 'react-beautiful-dnd'
+import { formatToDate } from '@vira/common/utils/date.util'
+import { HiOutlineCalendar } from 'react-icons/hi'
 
-type Props = {
-  id: string
-  index: number
-  title: string
-  description?: string
-}
-
-export const Card = ({ id, index, title, description }: Props) => {
+export const Card = (props: any) => {
+  console.log('data', props.data)
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={props.data._id} index={props.index}>
       {(provided, snapshot) => (
         <div
           {...provided.draggableProps}
@@ -21,7 +17,14 @@ export const Card = ({ id, index, title, description }: Props) => {
           }`}
         >
           <div className='card-body w-full p-1'>
-            <h4 className='card-title text-sm sm:text-base'>{title}</h4>
+            <h4 className='card-title text-sm sm:text-base'>{props.data.name}</h4>
+            {props.data.description && props.data.description !== '' && (
+              <p className='font-light italic'>{props.data.description}</p>
+            )}
+            <div className='flex items-center self-end'>
+              <HiOutlineCalendar />
+              <span className='font-thin'>{formatToDate(props.data.createdAt)}</span>
+            </div>
           </div>
         </div>
       )}

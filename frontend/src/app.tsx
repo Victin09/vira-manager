@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import { I18nProvider } from 'vira-i18n-react'
 import { Routes, Route } from 'react-router-dom'
 // import * as es from '@vira/common/i18n/es.json'
@@ -39,6 +39,18 @@ const App = () => {
   //     resources: es
   //   }
   // ]
+
+  useEffect(() => {
+    if (
+      localStorage.getItem('color-theme') === 'dark' ||
+      (!('color-theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [])
 
   return (
     // <I18nProvider language={selectedLanguage} locales={locales}>

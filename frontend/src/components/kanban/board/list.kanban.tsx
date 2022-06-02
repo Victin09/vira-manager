@@ -6,6 +6,7 @@ import { CardProps } from '@vira/common/types/kanban.type'
 import { getApiUrl } from '@vira/common/utils/api.util'
 import { ApiResponse } from '@vira/common/types/api-response.type'
 import { useParams } from 'react-router-dom'
+import { HiOutlineDotsVertical } from 'react-icons/hi'
 
 export const List = (props: any) => {
   const { projectId } = useParams()
@@ -19,27 +20,31 @@ export const List = (props: any) => {
   }, [props])
 
   const createNewCard = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('sending')
     e.preventDefault()
-    const apiResponse = await fetch(`${getApiUrl()}/kanban/cards`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: newCardName,
-        description: '',
-        list: props._id,
-        project: projectId,
-        users: []
+    try {
+      const apiResponse = await fetch(`${getApiUrl()}/kanban/cards`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: newCardName,
+          description: '',
+          list: props.data._id,
+          project: projectId,
+          users: []
+        })
       })
-    })
 
-    const response: ApiResponse<any> = await apiResponse.json()
-    if (response.status === 201) {
-      console.log('new_card', response.data)
-      setCardsState([...cardsState, response.data])
-      setAddTask(false)
+      const result: ApiResponse<any> = await apiResponse.json()
+      if (result.status === 201) {
+        const newState = [...cardsState]
+        newState.push(result.data)
+        setCardsState(newState)
+        setAddTask(false)
+      }
+    } catch (error) {
+      console.log('error', error)
     }
   }
 
@@ -51,20 +56,39 @@ export const List = (props: any) => {
           ref={provided.innerRef}
           className='card mr-5 w-56 bg-base-200'
         >
-          <div {...provided.dragHandleProps} className='flex justify-between px-4 py-2 shadow-sm'>
-            <h2 className={'truncate text-lg font-bold sm:text-lg'}>{props.data.name}</h2>
+          <div className='flex items-center justify-between'>
+            <div {...provided.dragHandleProps} className='px-4 py-2'>
+              <h2 className={'truncate text-lg font-bold sm:text-lg'}>{props.data.name}</h2>
+            </div>
+            <div className='dropdown-end dropdown dropdown-left dropdown-open'>
+              <label tabIndex={100} className='btn btn-ghost btn-sm m-1'>
+                <HiOutlineDotsVertical />
+              </label>
+
+              <ul
+                tabIndex={100}
+                className='dropdown-content menu rounded-box h-52 w-52 flex-grow bg-base-100 p-2 shadow'
+              >
+                <li>
+                  <a>Item 1</a>
+                </li>
+                <li>
+                  <a>Item 2</a>
+                </li>
+              </ul>
+            </div>
           </div>
           <Droppable droppableId={props.data._id} type='task'>
             {(provided, snapshot) => (
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`h-full bg-base-200 py-4 px-2 ${
+                className={`h-full overflow-auto bg-base-200 py-4 px-2 ${
                   snapshot.isDraggingOver ? 'bg-base-300' : ''
                 }`}
               >
                 {cardsState.map((t, i) => (
-                  <Card id={t._id} index={i} title={t.name} key={t._id} />
+                  <Card data={t} index={i} key={t._id} />
                 ))}
                 {provided.placeholder}
               </div>
