@@ -7,7 +7,7 @@ export const AppTemplate = () => {
   const { getUser } = useAuth()
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col h-full'>
       <nav className='bg-white border-b border-gray-200 px-4 sm:px-4 py-2.5 rounded dark:bg-gray-800'>
         <div className='flex flex-wrap justify-between md:justify-start items-center mx-auto'>
           <Link to='/' className='flex items-center'>

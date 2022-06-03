@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Landing = () => {
   return (
-    <div className='flex flex-col flex-1 h-full justify-center items-center text-center'>
+    <div className='flex flex-col flex-1 h-full justify-center items-center text-center dark:text-white'>
       <h1 className='text-5xl font-bold'>Vira Manager</h1>
       <p className='py-6'>
         Vira Manager es un software que incluye herramientas para la gestión de proyectos.
