@@ -9,9 +9,13 @@ export const KanbanTemplate = () => {
   }, [pathname])
 
   return (
-    <div className='flex h-full overflow-hidden'>
-      <aside id='sidebar-menu' className='w-48 border-r-2 border-r-gray-100' aria-label='Sidebar'>
-        <div className='overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800'>
+    <div className='flex grow h-full overflow-hidden'>
+      <aside
+        id='sidebar-menu'
+        className='min-w-fit w-48 border-r-2 border-r-gray-100'
+        aria-label='Sidebar'
+      >
+        <div className='overflow-y-auto h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800'>
           <ul className='space-y-2'>
             <li>
               <Link
@@ -70,9 +74,9 @@ export const KanbanTemplate = () => {
         </div>
       </aside>
 
-      {/* <div className='flex'> */}
-      <Outlet />
-      {/* </div> */}
+      <div className='flex grow'>
+        <Outlet />
+      </div>
     </div>
   )
 }

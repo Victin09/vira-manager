@@ -3,13 +3,14 @@ import React from 'react'
 import { useAuth } from '@vira/common/providers/auth.provider'
 import { getInitials } from '@vira/common/utils/text.util'
 import { NavLink, Link, Outlet } from 'react-router-dom'
+import { ThemeSelector } from '../navbar/theme-selector.component'
 
 export const AppTemplate = () => {
   const { getUser } = useAuth()
 
   return (
     <div className='flex flex-col h-full'>
-      <nav className='sticky top-0 z-50 bg-white border-b border-gray-200 px-4 sm:px-4 py-2.5 rounded dark:bg-gray-800'>
+      <nav className='sticky top-0 z-50 bg-white border-b border-gray-200 px-4 sm:px-4 py-2.5 dark:bg-gray-800'>
         <div className='flex flex-wrap justify-between md:justify-start items-center mx-auto'>
           <button
             data-collapse-toggle='sidebar-menu'
@@ -72,6 +73,13 @@ export const AppTemplate = () => {
                   d='M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'
                 ></path>
               </svg>
+            </button>
+            <button
+              type='button'
+              className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+            >
+              <span className='sr-only'>Open apps menu</span>
+              <ThemeSelector />
             </button>
             <div
               className='hidden z-50 my-4 w-72 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600'
@@ -274,7 +282,7 @@ export const AppTemplate = () => {
           </div> */}
         </div>
       </nav>
-      <div className='w-ful h-full bg-white dark:bg-gray-800'>
+      <div className='grow h-full bg-white dark:bg-gray-800'>
         <Outlet />
       </div>
     </div>
