@@ -11,6 +11,7 @@ import {
 import { FindProjectDto } from '@vira/projects/dtos/find-project.dto';
 import { RemoveProjectDto } from '@vira/projects/dtos/remove-project.dto';
 import { CardsService } from '@vira/cards/cards.service';
+import { getInitials } from '@vira/utils/text.util';
 
 @Injectable()
 export class ProjectsService {
@@ -24,7 +25,10 @@ export class ProjectsService {
     createProjectDto: CreateProjectDto,
   ): Promise<ApiResponse<Project>> {
     try {
-      const projectToCreate = new this.projectModel({ ...createProjectDto });
+      const projectToCreate = new this.projectModel({
+        ...createProjectDto,
+        code: getInitials(createProjectDto.name),
+      });
       const project = await projectToCreate.save();
       return {
         status: HttpStatus.CREATED,

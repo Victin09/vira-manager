@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@vira/common/providers/auth.provider'
 import { getApiUrl } from '@vira/common/utils/api.util'
@@ -7,6 +8,7 @@ import { ApiResponse } from '@vira/common/types/api-response.type'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { List } from '@vira/components/kanban/board/list.kanban'
 import { reorder, removeAndReorder, insertAndReorder } from '@vira/common/utils/kanban.util'
+import { useForm } from '@vira/common/hooks/use-form.hook'
 
 // const dataTest = {
 //   _id: '803bbe92-d512-4f88-b881-0d3c14d41583',
@@ -120,9 +122,11 @@ import { reorder, removeAndReorder, insertAndReorder } from '@vira/common/utils/
 
 const KanbanProjectView = () => {
   const { getUser } = useAuth()
+  const { handleSubmit, register, values, errors } = useForm<{ name: string }>()
   const { projectId } = useParams()
   const [project, setProject] = useState<Project>()
   const [lists, setLists] = useState<any[]>([])
+  const [newList, setNewList] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -138,6 +142,8 @@ const KanbanProjectView = () => {
       )
       const result: ApiResponse<Project> = await apiResult.json()
       if (result.status === 200) {
+        console.log('result', result.data)
+        console.log('users length', result.data.users?.length)
         setProject(result.data)
         setLists(result.data.lists ? result.data.lists : [])
       }
@@ -262,11 +268,59 @@ const KanbanProjectView = () => {
     }
   }
 
+  const handleNewList = async () => {
+    try {
+      const apiResponse = await fetch(`${getApiUrl()}/kanban/lists/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: values.name,
+          board: projectId,
+          cards: []
+        })
+      })
+      const result: ApiResponse<any> = await apiResponse.json()
+      if (result.status === 201) {
+        setLists([...lists, result.data])
+        setNewList(false)
+        return
+      }
+      return
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   return (
     <div className='flex flex-1 flex-col p-2'>
-      <div className='mb-2 flex flex-row items-center justify-between'>
-        <h2 className='flex items-center text-xl font-bold'>{project?.name}</h2>
-        <button className='btn btn-ghost btn-sm'>Invitar a gente</button>
+      <div className='mx-2 mb-2 flex flex-row items-center justify-between'>
+        <h2 className='flex items-center text-xl font-semibold'>{project?.name}</h2>
+        <div className='flex mb-5 -space-x-4'>
+          {/* {project?.users?.map((user, index) => (
+              <div
+                className='relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600'
+                key={index}
+              >
+                {user.avatar ? (
+                  <img
+                    className='w-10 h-10 border-2 border-white rounded-full dark:border-gray-800'
+                    src='/docs/images/people/profile-picture-5.jpg'
+                    alt=''
+                  ></img>
+                ) : (
+                  <span>{getInitials(user.fullname)}</span>
+                )}
+              </div>
+            ))} */}
+        </div>
+        {/* <button
+          type='button'
+          className='py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-1 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'
+        >
+          Invitar a gente
+        </button> */}
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='allCols' type='column' direction='horizontal'>
@@ -275,21 +329,59 @@ const KanbanProjectView = () => {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className='flex flex-1'
-              style={{ maxHeight: 'calc(100vh - 8em)' }}
+              style={{ height: 'calc(100vh - 8em)' }}
             >
               {lists.map((list, i) => {
                 return <List key={list._id} data={...list} index={i} />
               })}
               {provided.placeholder}
-              <form autoComplete='off' className='ml-2'>
-                <input
-                  maxLength={20}
-                  className='truncate rounded-sm bg-transparent bg-indigo-50 px-2 py-1 text-indigo-800 placeholder-indigo-500 outline-none ring-2 focus:ring-indigo-500'
-                  type='text'
-                  name='newCol'
-                  placeholder='Add a new column'
-                />
-              </form>
+              {!newList ? (
+                <div
+                  className='h-10 text-gray-900 bg-gray-100 hover:bg-gray-100 font-medium rounded text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2 cursor-pointer'
+                  onClick={() => setNewList(true)}
+                >
+                  <div className='flex align-middle'>
+                    <svg
+                      className='w-5 h-5'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                      xmlns='http://www.w3.org/2000/svg'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth='2'
+                        d='M12 6v6m0 0v6m0-6h6m-6 0H6'
+                      ></path>
+                    </svg>
+                    <span>Añadir nueva lista</span>
+                  </div>
+                </div>
+              ) : (
+                <form className='ml-2' onSubmit={handleSubmit(handleNewList)}>
+                  <input
+                    type='text'
+                    className={`${
+                      errors.name
+                        ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 dark:bg-red-100 dark:border-red-400'
+                        : 'text-gray-900 bg-gray-50 border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                    } block p-2 w-full rounded border sm:text-xs`}
+                    placeholder='Añadir nueva columna'
+                    {...register('name', {
+                      required: {
+                        value: true,
+                        message: 'El nombre es obligatorio'
+                      }
+                    })}
+                  />
+                  {errors.name && (
+                    <p className='mt-2 text-sm text-red-600 dark:text-red-500'>
+                      <span className='font-medium'>Oops!</span> {errors.name}
+                    </p>
+                  )}
+                </form>
+              )}
             </div>
           )}
         </Droppable>

@@ -11,6 +11,9 @@ export class Project {
   @Prop({ required: true, unique: true })
   name: string;
 
+  @Prop({ required: true })
+  code: string;
+
   @Prop()
   description: string;
 

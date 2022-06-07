@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@vira/common/providers/auth.provider'
 import { ApiResponse } from '@vira/common/types/api-response.type'
-import { formatToDate, getDateName } from '@vira/common/utils/date.util'
 import { getApiUrl } from '@vira/common/utils/api.util'
 import { Kanban } from '@vira/models/kanban/kanban.model'
 import { Link } from 'react-router-dom'
+import { CreateKanbanProjectModal } from '@vira/components/kanban/create-project.kanban'
 
 const KanbanView = () => {
   const [data, setData] = useState<Kanban>()
+  const [filterProject, setFilterProject] = useState('')
   const { getUser } = useAuth()
 
   useEffect(() => {
@@ -28,22 +29,21 @@ const KanbanView = () => {
   }, [])
 
   return (
-    <>
+    <div className='flex flex-1 flex-col p-2'>
+      <div className='flex justify-between px-2'>
+        <span className='text-2xl px-2 font-bold'>Tus proyectos</span>
+        <button
+          className='block text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          type='button'
+          data-modal-toggle='createKanbanProject'
+        >
+          Crear proyecto
+        </button>
+        <CreateKanbanProjectModal />
+      </div>
+
       {data ? (
         <div className='flex flex-1 flex-col p-2'>
-          {/* <div className='mt-2 text-center'>
-            <span className='italic'>{getDateName('es-ES')}</span>
-            <h3 className='text-2xl font-bold'>Hola de nuevo, {getUser()!.fullname}</h3>
-          </div> */}
-          <div className='flex justify-between'>
-            <span className='text-2xl px-2 font-bold'>Tus proyectos</span>
-            <button
-              type='button'
-              className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'
-            >
-              Crear proyecto
-            </button>
-          </div>
           <div className='mt-2 flex flex-1'>
             <div className='mb-3 w-full font-normal text-gray-700 dark:text-gray-400'>
               {!data.projects.length ? (
@@ -54,84 +54,110 @@ const KanbanView = () => {
                   </a>
                 </span>
               ) : (
-                <>
-                  <div className='relative overflow-x-auto'>
-                    <div className='p-2'>
-                      <label htmlFor='table-search' className='sr-only'>
-                        Search
-                      </label>
-                      <div className='relative mt-1'>
-                        <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-                          <svg
-                            className='w-5 h-5 text-gray-500 dark:text-gray-400'
-                            fill='currentColor'
-                            viewBox='0 0 20 20'
-                            xmlns='http://www.w3.org/2000/svg'
-                          >
-                            <path
-                              fillRule='evenodd'
-                              d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
-                              clipRule='evenodd'
-                            ></path>
-                          </svg>
-                        </div>
-                        <input
-                          type='text'
-                          id='table-search'
-                          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-52 pl-10 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                          placeholder='Busca un proyecto'
-                        />
+                <div className='overflow-x-auto'>
+                  <div className='px-2'>
+                    <label htmlFor='table-search' className='sr-only'>
+                      Buscar
+                    </label>
+                    <div className='relative mt-1'>
+                      <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+                        <svg
+                          className='w-5 h-5 text-gray-500 dark:text-gray-400'
+                          fill='currentColor'
+                          viewBox='0 0 20 20'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <path
+                            fillRule='evenodd'
+                            d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
+                            clipRule='evenodd'
+                          ></path>
+                        </svg>
                       </div>
+                      <input
+                        type='text'
+                        id='table-search'
+                        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-52 pl-10 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                        placeholder='Busca un proyecto'
+                        onChange={(e) => setFilterProject(e.target.value)}
+                      />
                     </div>
-                    <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
-                      <thead className='text-xs border-b-2 border-b-blue-700  text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
-                        <tr>
-                          <th scope='col' className='px-6 py-3'>
-                            Nombre
-                          </th>
-                          <th scope='col' className='px-6 py-3'>
-                            Código
-                          </th>
-                          <th scope='col' className='px-6 py-3'>
-                            Descripción
-                          </th>
-                          <th scope='col' className='px-6 py-3'>
-                            Usuarios
-                          </th>
-                          <th scope='col' className='px-6 py-3'>
-                            <span className='sr-only'>Ver</span>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className='border-b-2 border-b-blue-700'>
-                        {data.projects.map((project, index) => (
-                          <tr
-                            className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
-                            key={index}
-                          >
-                            <th
-                              scope='row'
-                              className='px-6 py-4 font-medium text-blue-700 dark:text-white whitespace-nowrap'
-                            >
-                              <Link to={`/kanban/${project._id}`}>{project.name}</Link>
-                            </th>
-                            <td className='px-6 py-4'>{project.name}</td>
-                            <td className='px-6 py-4'>{project.description}</td>
-                            <td className='px-6 py-4'>{project.updatedAt}</td>
-                            <td className='px-6 py-4 text-right'>
-                              <Link
-                                to={`/kanban/${project._id}`}
-                                className='font-medium text-blue-600 dark:text-blue-500 hover:underline'
-                              >
-                                Ver
-                              </Link>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
                   </div>
-                </>
+                  <div className='flex flex-wrap mt-4 p-2 overflow-y-auto'>
+                    {data.projects
+                      .filter((item) => {
+                        if (!filterProject) return true
+                        if (
+                          item.name.includes(filterProject) ||
+                          item.name.includes(filterProject)
+                        ) {
+                          return true
+                        }
+                        return false
+                      })
+                      .map((project, index) => (
+                        <Link
+                          to={`/kanban/${project._id}`}
+                          className='block p-6 mr-2 max-w-sm w-56 bg-white rounded border border-gray-200 shadow hover:bg-gray-100 hover:scale-105 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700'
+                          key={index}
+                        >
+                          <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>
+                            {project.name}
+                          </h5>
+                          <p className='italic truncate font-normal text-gray-700 dark:text-gray-400'>
+                            {project.description ? project.description : 'Sin descripción'}
+                          </p>
+                        </Link>
+                      ))}
+                  </div>
+                  {/* <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+                    <thead className='text-xs border-b-2 border-b-gray-300  text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+                      <tr>
+                        <th scope='col' className='px-6 py-3'>
+                          Nombre
+                        </th>
+                        <th scope='col' className='px-6 py-3'>
+                          Código
+                        </th>
+                        <th scope='col' className='px-6 py-3'>
+                          Descripción
+                        </th>
+                        <th scope='col' className='px-6 py-3'>
+                          Fecha de creación
+                        </th>
+                        <th scope='col' className='px-6 py-3'>
+                          <span className='sr-only'>Ver</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className='border-b-2 border-b-gray-300'>
+                      {data.projects.map((project, index) => (
+                        <tr
+                          className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
+                          key={index}
+                        >
+                          <th
+                            scope='row'
+                            className='px-6 py-4 font-medium text-blue-700 dark:text-white whitespace-nowrap'
+                          >
+                            <Link to={`/kanban/${project._id}`}>{project.name}</Link>
+                          </th>
+                          <td className='px-6 py-4'>{project.name}</td>
+                          <td className='px-6 py-4'>{project.description}</td>
+                          <td className='px-6 py-4'>{formatToDate(project.createdAt)}</td>
+                          <td className='px-6 py-4 text-right'>
+                            <Link
+                              to={`/kanban/${project._id}`}
+                              className='font-medium text-blue-600 dark:text-blue-500 hover:underline'
+                            >
+                              Ver
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table> */}
+                </div>
               )}
             </div>
           </div>
@@ -156,7 +182,7 @@ const KanbanView = () => {
           </svg>
         </div>
       )}
-    </>
+    </div>
   )
 }
 

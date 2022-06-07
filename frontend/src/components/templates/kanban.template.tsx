@@ -9,19 +9,25 @@ export const KanbanTemplate = () => {
   }, [pathname])
 
   return (
-    <div className='flex flex-1 h-full'>
-      <aside className='w-56 border-r-2 border-r-gray-100' aria-label='Sidebar'>
+    <div className='flex flex-1 h-full overflow-hidden'>
+      <aside id='sidebar-menu' className='w-48 border-r-2 border-r-gray-100' aria-label='Sidebar'>
         <div className='overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800'>
           <ul className='space-y-2'>
             <li>
               <Link
                 to='/kanban'
                 className={`${
-                  pathname === '/kanban' ? 'text-blue-700' : 'text-gray-900'
+                  pathname.includes('kanban') && !pathname.includes('kanban/tasks')
+                    ? 'text-blue-700 bg-gray-200 dark:bg-gray-700'
+                    : 'text-gray-500'
                 } flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700`}
               >
                 <svg
-                  className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white'
+                  className={`${
+                    pathname.includes('kanban') && !pathname.includes('kanban/tasks')
+                      ? 'text-blue-700'
+                      : 'text-gray-500'
+                  } flex-shrink-0 w-6 h-6 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white`}
                   fill='currentColor'
                   viewBox='0 0 20 20'
                   xmlns='http://www.w3.org/2000/svg'
@@ -35,11 +41,15 @@ export const KanbanTemplate = () => {
               <Link
                 to='/kanban/tasks'
                 className={`${
-                  pathname === '/kanban/taks' ? 'text-blue-700' : 'text-gray-900'
+                  pathname.includes('kanban/tasks')
+                    ? 'text-blue-700 bg-gray-200 dark:bg-gray-700'
+                    : 'text-gray-500'
                 } flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700`}
               >
                 <svg
-                  className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white'
+                  className={`${
+                    pathname.includes('kanban/tasks') ? 'text-blue-700' : 'text-gray-500'
+                  } flex-shrink-0 w-6 h-6 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white`}
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -60,7 +70,7 @@ export const KanbanTemplate = () => {
         </div>
       </aside>
 
-      <div className='flex flex-1'>
+      <div className='flex flex-1 overflow-x-auto'>
         <Outlet />
       </div>
     </div>

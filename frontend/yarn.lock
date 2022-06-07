@@ -3196,6 +3196,14 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.5.tgz#76c8584f4fc843db64702a6bd04ab7a8bd666da3"
   integrity sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==
 
+flowbite@^1.4.7:
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/flowbite/-/flowbite-1.4.7.tgz#c7f117441f6755f03f39a151e3274050bffaf32a"
+  integrity sha512-/U0gOIY9RFlMWEMAVnjZpVYzSG0uEDlZ0kLCuTURukXSxqkWi3xulqooPlfmf2aw0wEMJy7d/IWEm3DntP4aUw==
+  dependencies:
+    "@popperjs/core" "^2.9.3"
+    mini-svg-data-uri "^1.4.3"
+
 follow-redirects@^1.0.0:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.1.tgz#0ca6a452306c9b276e4d3127483e29575e207ad5"
@@ -5968,11 +5976,6 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-theme-change@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/theme-change/-/theme-change-2.0.2.tgz#142aa0669fde5ca7e625f5d3c09074ebb5bdb374"
-  integrity sha512-YvQqavf8nlGB3J7PdO0zLLhSLlgYhrqZL6By3FuzFIlWBsPTSPG/V98cHJllK3mmU97Jecei8XYiHalhy2umUw==
-
 thunky@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.1.0.tgz#5abaf714a9405db0504732bbccd2cedd9ef9537d"
@@ -6227,13 +6230,6 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
-
-"vira-design-system@https://github.com/Victin09/vira-design-system.git":
-  version "1.4.7"
-  resolved "https://github.com/Victin09/vira-design-system.git#bcd540b99654b2b5b51f3c2b3d756e96269ecd2c"
-  dependencies:
-    "@popperjs/core" "^2.9.3"
-    mini-svg-data-uri "^1.4.3"
 
 vira-i18n-react@^1.0.4:
   version "1.0.4"
