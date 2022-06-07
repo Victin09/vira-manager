@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@vira/common/guards/jwt.guard';
 import { UsersService } from '@vira/users/users.service';
 
@@ -10,5 +10,10 @@ export class UsersController {
   @Get('list')
   findAllUsers() {
     return this.usersService.findAllUsers();
+  }
+
+  @Get(':userId')
+  findUserById(@Param('userId') userId: string) {
+    return this.usersService.findUserById(userId);
   }
 }

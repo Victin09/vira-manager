@@ -9,6 +9,8 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { List } from '@vira/components/kanban/board/list.kanban'
 import { reorder, removeAndReorder, insertAndReorder } from '@vira/common/utils/kanban.util'
 import { useForm } from '@vira/common/hooks/use-form.hook'
+import { User } from '@vira/models/user.model'
+import { getInitials } from '@vira/common/utils/text.util'
 
 // const dataTest = {
 //   _id: '803bbe92-d512-4f88-b881-0d3c14d41583',
@@ -126,6 +128,7 @@ const KanbanProjectView = () => {
   const { projectId } = useParams()
   const [project, setProject] = useState<Project>()
   const [lists, setLists] = useState<any[]>([])
+  const [users, setUsers] = useState<any[]>([])
   const [newList, setNewList] = useState<boolean>(false)
 
   useEffect(() => {
@@ -142,10 +145,25 @@ const KanbanProjectView = () => {
       )
       const result: ApiResponse<Project> = await apiResult.json()
       if (result.status === 200) {
-        console.log('result', result.data)
-        console.log('users length', result.data.users?.length)
+        console.log('result.data.users', result.data.users)
+        result.data.users!.forEach((adsf) => console.log(adsf))
+        result.data.users!.forEach(async (userId) => {
+          const apiResponse = await fetch(`${getApiUrl()}/users/${userId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+          })
+          const response: ApiResponse<User> = await apiResponse.json()
+          console.log('response', response)
+          if (response.status === 200) {
+            setUsers([...users, response.data])
+          }
+        })
         setProject(result.data)
         setLists(result.data.lists ? result.data.lists : [])
+        console.log('result.data', result.data)
       }
     }
 
@@ -294,26 +312,31 @@ const KanbanProjectView = () => {
   }
 
   return (
-    <div className='flex flex-1 flex-col p-2'>
+    <div className='flex flex-col p-2 overflow-x-auto'>
       <div className='mx-2 mb-2 flex flex-row items-center justify-between'>
         <h2 className='flex items-center text-xl font-semibold'>{project?.name}</h2>
-        <div className='flex mb-5 -space-x-4'>
-          {/* {project?.users?.map((user, index) => (
-              <div
-                className='relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600'
-                key={index}
-              >
-                {user.avatar ? (
-                  <img
-                    className='w-10 h-10 border-2 border-white rounded-full dark:border-gray-800'
-                    src='/docs/images/people/profile-picture-5.jpg'
-                    alt=''
-                  ></img>
-                ) : (
+        <div className='flex mb-5 space-x-4'>
+          {users.map((user, index) => (
+            <div
+              className='relative w-10 h-10 bg-blue-600 rounded-full dark:bg-gray-600'
+              key={index}
+            >
+              {user.avatar ? (
+                <img
+                  className='w-10 h-10 border-2 border-white rounded-full dark:border-gray-800'
+                  src='/docs/images/people/profile-picture-5.jpg'
+                  alt=''
+                ></img>
+              ) : (
+                <a
+                  className='flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800'
+                  href='#'
+                >
                   <span>{getInitials(user.fullname)}</span>
-                )}
-              </div>
-            ))} */}
+                </a>
+              )}
+            </div>
+          ))}
         </div>
         {/* <button
           type='button'
@@ -328,7 +351,7 @@ const KanbanProjectView = () => {
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className='flex flex-1'
+              className='flex'
               style={{ height: 'calc(100vh - 8em)' }}
             >
               {lists.map((list, i) => {

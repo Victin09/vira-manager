@@ -96,8 +96,21 @@ export class UserService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(userId: string) {
+    try {
+      const { _id, email, fullname, role, createdAt, updatedAt } =
+        await this.userModel.findById(userId).select('-password -__v');
+      return {
+        status: HttpStatus.OK,
+        message: 'User found',
+        data: { id: _id, email, fullname, role, createdAt, updatedAt },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error: Cannot find user',
+      };
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

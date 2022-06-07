@@ -30,7 +30,7 @@ export class UserController {
   }
 
   @MessagePattern('findOneUser')
-  findOne(@Payload() id: number) {
+  findOne(@Payload() id: string) {
     return this.userService.findOne(id);
   }
 

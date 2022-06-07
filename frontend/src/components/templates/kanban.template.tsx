@@ -9,7 +9,7 @@ export const KanbanTemplate = () => {
   }, [pathname])
 
   return (
-    <div className='flex flex-1 h-full overflow-hidden'>
+    <div className='flex h-full overflow-hidden'>
       <aside id='sidebar-menu' className='w-48 border-r-2 border-r-gray-100' aria-label='Sidebar'>
         <div className='overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800'>
           <ul className='space-y-2'>
@@ -70,9 +70,9 @@ export const KanbanTemplate = () => {
         </div>
       </aside>
 
-      <div className='flex flex-1 overflow-x-auto'>
-        <Outlet />
-      </div>
+      {/* <div className='flex'> */}
+      <Outlet />
+      {/* </div> */}
     </div>
   )
 }

@@ -9,7 +9,7 @@ export const AppTemplate = () => {
 
   return (
     <div className='flex flex-col h-full'>
-      <nav className='bg-white border-b border-gray-200 px-4 sm:px-4 py-2.5 rounded dark:bg-gray-800'>
+      <nav className='sticky top-0 z-50 bg-white border-b border-gray-200 px-4 sm:px-4 py-2.5 rounded dark:bg-gray-800'>
         <div className='flex flex-wrap justify-between md:justify-start items-center mx-auto'>
           <button
             data-collapse-toggle='sidebar-menu'
@@ -55,7 +55,7 @@ export const AppTemplate = () => {
             <button
               type='button'
               className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              data-dropdown-toggle='dropdown'
+              data-dropdown-toggle='apps-dropdown'
             >
               <span className='sr-only'>Open apps menu</span>
               <svg
@@ -74,48 +74,96 @@ export const AppTemplate = () => {
               </svg>
             </button>
             <div
-              className='hidden z-50 my-4 w-52 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600'
-              id='dropdown'
+              className='hidden z-50 my-4 w-72 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600'
+              id='apps-dropdown'
             >
-              <div className='py-3 px-4 bg-gray-100'>
+              <div className='p-2 bg-gray-100'>
                 <span className='block text-md text-center font-semibold text-gray-900 dark:text-white'>
                   Apps
                 </span>
               </div>
-              <ul className='py-1' aria-labelledby='dropdown'>
-                <li>
-                  <a
-                    href='#'
-                    className='block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+              <div className='p-2 grid grid-cols-3 gap-4 self-center' aria-labelledby='dropdown'>
+                <Link
+                  to='/kanban'
+                  className='p-2 flex flex-col items-center cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-gray-700'
+                >
+                  <svg
+                    className='w-6 h-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
                   >
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href='#'
-                    className='block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2'
+                    ></path>
+                  </svg>
+                  <span>Kanban</span>
+                </Link>
+                <Link
+                  to='/docs'
+                  className='p-2 flex flex-col items-center cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-gray-700'
+                >
+                  <svg
+                    className='w-6 h-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
                   >
-                    Settings
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href='#'
-                    className='block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'
+                    ></path>
+                  </svg>
+                  <span>Docs</span>
+                </Link>
+                <Link
+                  to='/drive'
+                  className='p-2 flex flex-col items-center cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-gray-700'
+                >
+                  <svg
+                    className='w-6 h-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
                   >
-                    Earnings
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href='#'
-                    className='block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'
+                    ></path>
+                  </svg>
+                  <span>Drive</span>
+                </Link>
+                <Link
+                  to='/chat'
+                  className='p-2 flex flex-col items-center cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-gray-700'
+                >
+                  <svg
+                    className='w-6 h-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
                   >
-                    Sign out
-                  </a>
-                </li>
-              </ul>
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z'
+                    ></path>
+                  </svg>
+                  <span>Chat</span>
+                </Link>
+              </div>
             </div>
 
             <button
@@ -123,7 +171,7 @@ export const AppTemplate = () => {
               className='relative w-10 h-10 overflow-hidden bg-blue-600 rounded-full dark:bg-gray-600'
               id='user-menu-button'
               aria-expanded='false'
-              data-dropdown-toggle='dropdown'
+              data-dropdown-toggle='user-dropdown'
             >
               <span className='sr-only'>Open user menu</span>
               {getUser()!.avatar ? (
@@ -138,7 +186,7 @@ export const AppTemplate = () => {
             </button>
             <div
               className='hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600'
-              id='dropdown'
+              id='user-dropdown'
               data-popper-reference-hidden=''
               data-popper-escaped=''
               data-popper-placement='top'
@@ -171,7 +219,7 @@ export const AppTemplate = () => {
               </ul>
             </div>
 
-            <button
+            {/* <button
               data-collapse-toggle='mobile-menu-2'
               type='button'
               className='inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
@@ -203,9 +251,9 @@ export const AppTemplate = () => {
                   clipRule='evenodd'
                 ></path>
               </svg>
-            </button>
+            </button> */}
           </div>
-          <div
+          {/* <div
             className='hidden justify-start items-center w-full md:flex md:ml-4 md:w-auto md:order-1'
             id='mobile-menu-2'
           >
@@ -223,7 +271,7 @@ export const AppTemplate = () => {
                 </NavLink>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </nav>
       <div className='w-ful h-full bg-white dark:bg-gray-800'>

@@ -9,4 +9,8 @@ export class UsersService {
   findAllUsers(): Observable<any> {
     return this.client.send('findAllUsers', {});
   }
+
+  findUserById(userId: string): Observable<any> {
+    return this.client.send('findOneUser', userId);
+  }
 }

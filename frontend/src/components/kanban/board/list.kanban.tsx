@@ -68,7 +68,7 @@ export const List = (props: any) => {
                 className={`h-5/6 pt-2 overflow-auto bg-gray-100 px-2 ${
                   snapshot.isDraggingOver ? 'bg-gray-300' : ''
                 }`}
-                style={{ height: 'calc(100vh - 12em)' }}
+                style={{ height: 'calc(100vh - 15em)' }}
               >
                 {cardsState.map((t, i) => (
                   <Card data={t} index={i} key={t._id} />

@@ -1,5 +1,3 @@
-import { User } from '../user.model'
-
 export interface Project {
   _id: string
   name: string
@@ -7,7 +5,7 @@ export interface Project {
   createdAt: string
   updatedAt: string
   lists?: any[]
-  users?: User[]
+  users?: string[]
 }
 
 export interface CreateProject {

@@ -4,6 +4,7 @@
 
 html, body {
   height: 100%;
+  overflow: hidden;
 }
 
 html, body > #root {
@@ -20,6 +21,7 @@ html, body > #root {
 *::-webkit-scrollbar {
   width: 0.25em;
   height: 0.25em;
+  padding: 0.25em;
 }
 
 *::-webkit-scrollbar-track {
