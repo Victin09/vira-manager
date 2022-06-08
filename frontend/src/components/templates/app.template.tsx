@@ -10,12 +10,12 @@ export const AppTemplate = () => {
 
   return (
     <div className='flex flex-col h-full'>
-      <nav className='sticky top-0 z-50 bg-white border-b border-gray-200 px-4 sm:px-4 py-2.5 dark:bg-gray-800'>
+      <nav className='sticky top-0 z-30 bg-white border-b border-gray-200 px-4 sm:px-4 py-2.5 dark:bg-gray-800'>
         <div className='flex flex-wrap justify-between md:justify-start items-center mx-auto'>
           <button
             data-collapse-toggle='sidebar-menu'
             type='button'
-            className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+            className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
             aria-controls='sidebar-menu'
             aria-expanded='true'
           >
@@ -55,7 +55,7 @@ export const AppTemplate = () => {
           <div className='flex items-center md:order-2 md:ml-auto'>
             <button
               type='button'
-              className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+              className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
               data-dropdown-toggle='apps-dropdown'
             >
               <span className='sr-only'>Open apps menu</span>
@@ -76,7 +76,7 @@ export const AppTemplate = () => {
             </button>
             <button
               type='button'
-              className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+              className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
             >
               <span className='sr-only'>Open apps menu</span>
               <ThemeSelector />
@@ -230,7 +230,7 @@ export const AppTemplate = () => {
             {/* <button
               data-collapse-toggle='mobile-menu-2'
               type='button'
-              className='inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
+              className='inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
               aria-controls='mobile-menu-2'
               aria-expanded='false'
             >

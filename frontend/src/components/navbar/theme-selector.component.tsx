@@ -19,7 +19,6 @@ export const ThemeSelector = () => {
   const handleClick = () => {
     // if set via local storage previously
     if (localStorage.getItem('color-theme')) {
-      console.log('in local storage')
       if (localStorage.getItem('color-theme') === 'light') {
         document.documentElement.classList.add('dark')
         localStorage.setItem('color-theme', 'dark')
@@ -32,13 +31,11 @@ export const ThemeSelector = () => {
 
       // if NOT set via local storage previously
     } else {
-      console.log('not in local storage')
       if (document.documentElement.classList.contains('dark')) {
         document.documentElement.classList.remove('dark')
         localStorage.setItem('color-theme', 'light')
         setTheme('light')
       } else {
-        console.log('setting dark')
         document.documentElement.classList.add('dark')
         localStorage.setItem('color-theme', 'dark')
         setTheme('dark')

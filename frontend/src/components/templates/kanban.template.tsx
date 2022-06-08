@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 
 export const KanbanTemplate = () => {
   const { pathname } = useLocation()
-
-  useEffect(() => {
-    console.log('params', pathname)
-  }, [pathname])
 
   return (
     <div className='flex grow h-full overflow-hidden'>
@@ -24,7 +20,7 @@ export const KanbanTemplate = () => {
                   pathname.includes('kanban') && !pathname.includes('kanban/tasks')
                     ? 'text-blue-700 bg-gray-200 dark:bg-gray-700'
                     : 'text-gray-500'
-                } flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700`}
+                } flex items-center p-2 text-base font-normal rounded dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700`}
               >
                 <svg
                   className={`${
@@ -48,7 +44,7 @@ export const KanbanTemplate = () => {
                   pathname.includes('kanban/tasks')
                     ? 'text-blue-700 bg-gray-200 dark:bg-gray-700'
                     : 'text-gray-500'
-                } flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700`}
+                } flex items-center p-2 text-base font-normal text-gray-900 rounded dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700`}
               >
                 <svg
                   className={`${

@@ -5,12 +5,15 @@ import { ApiResponse } from '@vira/common/types/api-response.type'
 import { getApiUrl } from '@vira/common/utils/api.util'
 import { Kanban } from '@vira/models/kanban/kanban.model'
 import { Link } from 'react-router-dom'
-import { CreateKanbanProjectModal } from '@vira/components/kanban/create-project.kanban'
+import { CreateKanbanProjectModal } from '@vira/components/kanban/modals/create-project.kanban'
+import { useKanban } from '@vira/common/providers/kanban.provider'
 
 const KanbanView = () => {
-  const [data, setData] = useState<Kanban>()
+  const [loaded, setLoaded] = useState<boolean>(false)
   const [filterProject, setFilterProject] = useState('')
   const { getUser } = useAuth()
+  const { projects, setProjects, displayCreateProjectModal, setDisplayCreateProjectModal } =
+    useKanban()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +26,10 @@ const KanbanView = () => {
       })
 
       const resultData: ApiResponse<Kanban> = await result.json()
-      if (resultData.status === 200) setData(resultData.data)
+      if (resultData.status === 200) {
+        setProjects(resultData.data.projects)
+        setLoaded(true)
+      }
     }
     fetchData()
   }, [])
@@ -35,18 +41,20 @@ const KanbanView = () => {
         <button
           className='block text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
           type='button'
-          data-modal-toggle='createKanbanProject'
+          // data-modal-toggle='createKanbanProject'
+          onClick={() => setDisplayCreateProjectModal(true)}
         >
           Crear proyecto
         </button>
-        <CreateKanbanProjectModal />
+        {/* <CreateKanbanProjectModal /> */}
+        {displayCreateProjectModal && <CreateKanbanProjectModal />}
       </div>
 
-      {data ? (
+      {loaded ? (
         <div className='flex flex-1 flex-col p-2'>
           <div className='mt-2 flex flex-1'>
             <div className='mb-3 w-full font-normal text-gray-700 dark:text-gray-400'>
-              {!data.projects.length ? (
+              {!projects.length ? (
                 <span className='fw-light'>
                   No tienes ningún proyecto asociado, puedes crear uno{' '}
                   <a className='text-blue-600' href='#create-project-modal' role='button'>
@@ -84,7 +92,7 @@ const KanbanView = () => {
                     </div>
                   </div>
                   <div className='flex flex-wrap mt-4 p-2 overflow-y-auto'>
-                    {data.projects
+                    {projects
                       .filter((item) => {
                         if (!filterProject) return true
                         if (

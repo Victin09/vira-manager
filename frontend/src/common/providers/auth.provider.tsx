@@ -87,7 +87,6 @@ const useProviderAuth = () => {
           credentials: 'include'
         })
       ).json()
-      console.log('result', result)
       if (result.status === 400 && result.message === 'User already exists') {
         setError('User already exists')
         return

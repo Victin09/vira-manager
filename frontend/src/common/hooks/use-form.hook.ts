@@ -8,7 +8,6 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
   const validateField = (value: any, validation?: Validation): string => {
     if (validation) {
       if (validation.required) {
-        console.log('im in')
         if (!value || !value.trim()) {
           return validation.required.message || 'This field is required'
         }
@@ -16,7 +15,6 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
 
       if (validation.minLength) {
         if (value.length < validation.minLength.value) {
-          console.log('MINLENGTH')
           return (
             validation.minLength.message ||
             `This field must be at least ${validation.minLength.value} characters`
@@ -64,13 +62,13 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, unknown>
 
   const handleSubmit =
     (callback: any) =>
-      (e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault()
-        const error = Object.values(errors).find((err) => err)
-        if (!error) {
-          return callback()
-        }
+    (e: React.FormEvent<HTMLFormElement>): void => {
+      e.preventDefault()
+      const error = Object.values(errors).find((err) => err)
+      if (!error) {
+        return callback()
       }
+    }
 
   return {
     values,

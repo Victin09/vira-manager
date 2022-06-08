@@ -17,7 +17,7 @@ const Register = () => {
 
   return (
     <div className='flex h-full items-center justify-center'>
-      <div className='p-4 w-80 bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700'>
+      <div className='p-4 w-80 bg-white rounded border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700'>
         <form className='space-y-6' onSubmit={handleSubmit(sendForm)} noValidate>
           <h5 className='text-xl font-medium text-gray-900 dark:text-white'>
             Sign up to our platform
@@ -54,7 +54,7 @@ const Register = () => {
                 name='email'
                 className={`${
                   errors.email && 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700'
-                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                 placeholder='vira@manager.com'
                 {...register('email', {
                   required: {
@@ -107,7 +107,7 @@ const Register = () => {
                 className={`${
                   errors.fullname &&
                   'bg-red-50 border border-red-500 text-red-900 placeholder-red-700'
-                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                 placeholder='Vira Manager'
                 {...register('fullname', {
                   required: {
@@ -156,7 +156,7 @@ const Register = () => {
                 className={`${
                   errors.password &&
                   'bg-red-50 border border-red-500 text-red-900 placeholder-red-700'
-                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                 placeholder='••••••••'
                 {...register('password', {
                   required: {
@@ -174,7 +174,7 @@ const Register = () => {
           </div>
           <button
             type='submit'
-            className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+            className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
           >
             Create new account
           </button>

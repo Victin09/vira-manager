@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { useAuth } from '@vira/common/providers/auth.provider'
 import { useForm } from '@vira/common/hooks/use-form.hook'
 import { CreateProject } from '@vira/models/kanban/project.model'
 import { ApiResponse } from '@vira/common/types/api-response.type'
 import { getApiUrl } from '@vira/common/utils/api.util'
+import { useKanban } from '@vira/common/providers/kanban.provider'
 
 export const CreateKanbanProjectModal = (): React.ReactElement => {
   const { getUser } = useAuth()
+  const { setDisplayCreateProjectModal, setProjects, projects } = useKanban()
+  const [projectCreated, setProjectCreated] = useState<boolean>(false)
   const { register, values, handleSubmit } = useForm<CreateProject>()
   const [users, setUsers] = React.useState<any[]>([])
   const [selectedUsers, setSelectedUsers] = React.useState<any[]>([])
@@ -39,10 +42,9 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
       body: JSON.stringify({ ...values, users: projectUsers })
     })
     const data: ApiResponse<any> = await response.json()
-    console.log({ data })
-    if (data.status === 200) {
-      // Set new project to kanban provider
-      console.log('data', data.data)
+    if (data.status === 201) {
+      setProjects([...projects, data.data])
+      setProjectCreated(true)
     }
   }
 
@@ -54,14 +56,15 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
             id='createKanbanProject'
             tabIndex={-1}
             aria-hidden='true'
-            className='hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full'
+            className='overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center flex'
           >
             <div className='relative p-4 w-full max-w-md h-full md:h-auto'>
-              <div className='relative bg-white rounded-lg shadow dark:bg-gray-700'>
+              <div className='relative bg-white rounded shadow dark:bg-gray-700'>
                 <button
                   type='button'
-                  className='absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white'
-                  data-modal-toggle='createKanbanProject'
+                  className='absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white'
+                  // data-modal-toggle='createKanbanProject'
+                  onClick={() => setDisplayCreateProjectModal(false)}
                 >
                   <svg
                     className='w-5 h-5'
@@ -80,6 +83,15 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
                   <h3 className='mb-4 text-xl font-medium text-gray-900 dark:text-white'>
                     Crear un nuevo proyecto
                   </h3>
+                  {projectCreated && (
+                    <div
+                      className='p-4 mb-4 text-sm text-green-700 bg-green-100 rounded dark:bg-green-200 dark:text-green-800'
+                      role='alert'
+                    >
+                      <span className='font-medium'>Proyecto creado con exito!</span> Puedes cerrar
+                      esta ventana!
+                    </div>
+                  )}
                   <form className='space-y-6' onSubmit={handleSubmit(sendForm)} noValidate>
                     <div>
                       <label
@@ -92,7 +104,7 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
                         type='name'
                         name='name'
                         id='name'
-                        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
+                        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
                         placeholder='Proyecto 1'
                         {...register('name', {
                           required: {
@@ -113,7 +125,7 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
                         type='description'
                         name='description'
                         id='description'
-                        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
+                        className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
                         placeholder='Proyecto 1 descripción'
                         {...register('description')}
                       />
@@ -128,7 +140,7 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
                       <div className='flex justify-center items-center w-full'>
                         <label
                           htmlFor='dropzone-file'
-                          className='flex flex-col justify-center items-center w-full h-28 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600'
+                          className='flex flex-col justify-center items-center w-full h-28 bg-gray-50 rounded border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600'
                         >
                           <div className='flex flex-col justify-center items-center pt-5 pb-6'>
                             <svg
@@ -159,7 +171,7 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
                     </div>
                     <div>
                       <label
-                        htmlFor='description'
+                        htmlFor='users'
                         className='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300'
                       >
                         Usuarios
@@ -176,7 +188,7 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
 
                     <button
                       type='submit'
-                      className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                      className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
                     >
                       Crear proyecto
                     </button>
@@ -187,6 +199,10 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
           </div>
         </>
       )}
+      <div
+        modal-backdrop
+        className='bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40'
+      ></div>
     </>
   )
 }

@@ -11,9 +11,12 @@ import { reorder, removeAndReorder, insertAndReorder } from '@vira/common/utils/
 import { useForm } from '@vira/common/hooks/use-form.hook'
 import { User } from '@vira/models/user.model'
 import { getInitials } from '@vira/common/utils/text.util'
+import { ViewCardModal } from '@vira/components/kanban/modals/view-card-modal.kanban'
+import { useKanban } from '@vira/common/providers/kanban.provider'
 
 const KanbanProjectView = () => {
   const { getUser } = useAuth()
+  const { displayCardModal } = useKanban()
   const { handleSubmit, register, values, errors } = useForm<{ name: string }>()
   const { projectId } = useParams()
   const [project, setProject] = useState<Project>()
@@ -35,8 +38,6 @@ const KanbanProjectView = () => {
       )
       const result: ApiResponse<Project> = await apiResult.json()
       if (result.status === 200) {
-        console.log('result.data.users', result.data.users)
-        result.data.users!.forEach((adsf) => console.log(adsf))
         result.data.users!.forEach(async (userId) => {
           const apiResponse = await fetch(`${getApiUrl()}/users/${userId}`, {
             method: 'GET',
@@ -46,14 +47,12 @@ const KanbanProjectView = () => {
             credentials: 'include'
           })
           const response: ApiResponse<User> = await apiResponse.json()
-          console.log('response', response)
           if (response.status === 200) {
             setUsers([...users, response.data])
           }
         })
         setProject(result.data)
         setLists(result.data.lists ? result.data.lists : [])
-        console.log('result.data', result.data)
       }
     }
 
@@ -148,7 +147,6 @@ const KanbanProjectView = () => {
             list._id === destinationList._id && (list.cards = newCards)
             return list
           })
-          console.log('newState', newState)
           setLists(newState)
         }
       }
@@ -251,7 +249,7 @@ const KanbanProjectView = () => {
           <div
             id='tooltip-add-user-to-kanban'
             role='tooltip'
-            className='inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700'
+            className='inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700'
           >
             Tooltip content
             <div className='tooltip-arrow' data-popper-arrow></div>
@@ -326,6 +324,7 @@ const KanbanProjectView = () => {
             )}
           </Droppable>
         </DragDropContext>
+        {displayCardModal && <ViewCardModal />}
       </div>
     </div>
   )

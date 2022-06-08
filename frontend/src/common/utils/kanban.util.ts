@@ -26,16 +26,9 @@ export const insertAndReorder = (list: any[], item: any, endIndex: number) => {
 }
 
 export const reorderQuoteMap = ({ quoteMap, source, destination }) => {
-  console.log(quoteMap)
-  const test = [...quoteMap.filter((test) => test._id === source.droppableId)]
-  console.log({ test })
-  console.log({ ...quoteMap })
-  console.log({ source })
-  console.log({ destination })
   const current = [...quoteMap.filter((test) => test._id === source.droppableId)]
   const next = [...quoteMap.filter((test) => test._id === destination.droppableId)]
   const target = current[source.index]
-  console.log({ target })
 
   // moving to same list
   if (source.droppableId === destination.droppableId) {
@@ -56,7 +49,6 @@ export const reorderQuoteMap = ({ quoteMap, source, destination }) => {
   // insert into next
   next.splice(destination.index, 0, target)
 
-  console.log({ quoteMap })
   const result = {
     ...quoteMap,
     [source.droppableId]: current,

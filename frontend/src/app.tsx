@@ -16,6 +16,7 @@ import Home from '@vira/views/home.view'
 import KanbanView from '@vira/views/kanban/kanban.view'
 import KanbanProjectView from '@vira/views/kanban/kanban-project.view'
 import KanbanTasksView from '@vira/views/kanban/kanban-tasks.view'
+import { KanbanProvider } from './common/providers/kanban.provider'
 
 const App = () => {
   // const [selectedLanguage, setSelectedLanguage] = useState('')
@@ -56,25 +57,27 @@ const App = () => {
   return (
     // <I18nProvider language={selectedLanguage} locales={locales}>
     <AuthProvider>
-      <Routes>
-        <Route element={<PublicRoute />}>
-          <Route element={<LandingTemplate />}>
-            <Route path='/welcome' element={<Landing />} />
-            <Route path='/sign-in' element={<Login />} />
-            <Route path='/sign-up' element={<Register />} />
-          </Route>
-        </Route>
-        <Route element={<PrivateRoute />}>
-          <Route element={<AppTemplate />}>
-            <Route path='/' element={<Home />} />
-            <Route element={<KanbanTemplate />}>
-              <Route path='/kanban' element={<KanbanView />} />
-              <Route path='/kanban/:projectId' element={<KanbanProjectView />} />
-              <Route path='/kanban/tasks' element={<KanbanTasksView />} />
+      <KanbanProvider>
+        <Routes>
+          <Route element={<PublicRoute />}>
+            <Route element={<LandingTemplate />}>
+              <Route path='/welcome' element={<Landing />} />
+              <Route path='/sign-in' element={<Login />} />
+              <Route path='/sign-up' element={<Register />} />
             </Route>
           </Route>
-        </Route>
-      </Routes>
+          <Route element={<PrivateRoute />}>
+            <Route element={<AppTemplate />}>
+              <Route path='/' element={<Home />} />
+              <Route element={<KanbanTemplate />}>
+                <Route path='/kanban' element={<KanbanView />} />
+                <Route path='/kanban/:projectId' element={<KanbanProjectView />} />
+                <Route path='/kanban/tasks' element={<KanbanTasksView />} />
+              </Route>
+            </Route>
+          </Route>
+        </Routes>
+      </KanbanProvider>
     </AuthProvider>
     // </I18nProvider>
   )
