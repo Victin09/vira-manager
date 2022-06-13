@@ -257,8 +257,9 @@ const KanbanProjectView = () => {
         </div>
       </div>
       <div
-        className='flex grow overflow-x-auto mt-4'
-        style={{ height: 'calc(100vh - 10em)', width: 'calc(100vw - 15em)' }}
+        className='flex grow mt-4 overflow-x-auto'
+        // style={{ height: 'calc(100vh - 10em)', width: 'calc(100vw - 15em)' }}
+        style={{ width: 'calc(100vw - 15em)' }}
       >
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId='allCols' type='column' direction='horizontal'>
@@ -267,7 +268,7 @@ const KanbanProjectView = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 className='flex'
-                style={{ height: 'calc(100vh - 10em)' }}
+                // style={{ height: 'calc(100vh - 10em)' }}
               >
                 {lists.map((list, i) => {
                   return <List key={list._id} data={...list} index={i} />

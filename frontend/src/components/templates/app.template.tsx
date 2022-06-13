@@ -176,7 +176,7 @@ export const AppTemplate = () => {
 
             <button
               type='button'
-              className='relative w-10 h-10 overflow-hidden bg-blue-600 rounded-full dark:bg-gray-600'
+              className='relative w-10 h-10 bg-blue-600 rounded-full dark:bg-gray-600'
               id='user-menu-button'
               aria-expanded='false'
               data-dropdown-toggle='user-dropdown'

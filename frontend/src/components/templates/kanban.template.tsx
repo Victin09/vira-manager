@@ -11,7 +11,7 @@ export const KanbanTemplate = () => {
         className='min-w-fit w-48 border-r-2 border-r-gray-100'
         aria-label='Sidebar'
       >
-        <div className='overflow-y-auto h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800'>
+        <div className='h-full py-4 px-3 bg-gray-50 rounded dark:bg-gray-800'>
           <ul className='space-y-2'>
             <li>
               <Link

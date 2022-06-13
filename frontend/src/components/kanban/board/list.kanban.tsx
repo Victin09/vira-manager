@@ -65,10 +65,8 @@ export const List = (props: any) => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`h-5/6 pt-2 overflow-auto bg-gray-100 px-2 ${
-                  snapshot.isDraggingOver ? 'bg-gray-300' : ''
-                }`}
-                style={{ height: 'calc(100vh - 15em)' }}
+                className={`pt-2 bg-gray-100 px-2 ${snapshot.isDraggingOver ? 'bg-gray-300' : ''}`}
+                // style={{ maxHeight: 'calc(100vh - 15em)' }}
               >
                 {cardsState.map((t, i) => (
                   <Card data={t} index={i} key={t._id} />
