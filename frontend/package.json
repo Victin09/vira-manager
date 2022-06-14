@@ -53,6 +53,7 @@
     "react-dom": "^17.0.1",
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.3.0",
-    "react-select": "^5.3.2"
+    "react-select": "^5.3.2",
+    "vira-design-system": "https://github.com/Victin09/vira-design-system-bs.git"
   }
 }

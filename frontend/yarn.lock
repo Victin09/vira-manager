@@ -5053,16 +5053,6 @@ react-beautiful-dnd@^13.1.0:
     redux "^4.0.4"
     use-memo-one "^1.1.1"
 
-react-dom@^16.14.0:
-  version "16.14.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
-  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.19.1"
-
 react-dom@^17.0.1:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
@@ -5135,15 +5125,6 @@ react-transition-group@^4.3.0:
     "@babel/runtime" "^7.5.5"
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
-    prop-types "^15.6.2"
-
-react@^16.14.0:
-  version "16.14.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
-  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
     prop-types "^15.6.2"
 
 react@^17.0.1:
@@ -5437,14 +5418,6 @@ safe-regex@^1.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
-
-scheduler@^0.19.1:
-  version "0.19.1"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz#4f3e2ed2c1a7d65681f4c854fa8c5a1ccb40f196"
-  integrity sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@^0.20.2:
   version "0.20.2"
@@ -6231,19 +6204,9 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-vira-i18n-react@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/vira-i18n-react/-/vira-i18n-react-1.0.4.tgz#f69a20d1f33706a4283699e118d818eaf46e53fa"
-  integrity sha512-iO/oixfcZ6zZyTtwKAoQcyK9oSiCZLM1SW68gKR5UCizUuyS81pONgQWe0HemaVaNZoRwf5QOuujUcz4Wk8z2Q==
-  dependencies:
-    react "^16.14.0"
-    react-dom "^16.14.0"
-    vira-i18n "^1.0.3"
-
-vira-i18n@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/vira-i18n/-/vira-i18n-1.0.3.tgz#687f89764f524ddb9ded3899a3aba5ba71dad3e8"
-  integrity sha512-k0q0caIpJkOZAxfLDOySe+7dOYz731eWEStgB0i3RtTz+H9zc9u9H21MxrCdYoforeX/86lJ7AGKWqsj4nFEwQ==
+"vira-design-system@https://github.com/Victin09/vira-design-system-bs.git":
+  version "1.0.0"
+  resolved "https://github.com/Victin09/vira-design-system-bs.git#173db686db62656bb5c7506d6eb1e4f756d61163"
 
 watchpack@^2.3.1:
   version "2.3.1"

@@ -9,280 +9,71 @@ export const AppTemplate = () => {
   const { getUser } = useAuth()
 
   return (
-    <div className='flex flex-col h-full'>
-      <nav className='sticky top-0 z-30 bg-white border-b border-gray-200 px-4 sm:px-4 py-2.5 dark:bg-gray-800'>
-        <div className='flex flex-wrap justify-between md:justify-start items-center mx-auto'>
-          <button
-            data-collapse-toggle='sidebar-menu'
-            type='button'
-            className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-            aria-controls='sidebar-menu'
-            aria-expanded='true'
-          >
-            <span className='sr-only'>Open sidebar</span>
-            <svg
-              className='w-6 h-6'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                d='M4 6h16M4 12h8m-8 6h16'
-              ></path>
-            </svg>
-            <svg
-              className='hidden w-6 h-6'
-              fill='currentColor'
-              viewBox='0 0 20 20'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                fillRule='evenodd'
-                d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-                clipRule='evenodd'
-              ></path>
-            </svg>
-          </button>
-          <Link to='/' className='flex items-center'>
-            <span className='self-center text-xl font-semibold whitespace-nowrap dark:text-white'>
-              vira.MANAGER
-            </span>
+    <div className='d-flex flex-col h-full'>
+      <nav className='navbar navbar-expand-lg navbar-light bg-light shadow-sm w-100'>
+        <div className='container-fluid'>
+          <Link to='/' className='navbar-brand'>
+            vira.Manager
           </Link>
-          <div className='flex items-center md:order-2 md:ml-auto'>
-            <button
-              type='button'
-              className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-              data-dropdown-toggle='apps-dropdown'
-            >
-              <span className='sr-only'>Open apps menu</span>
-              <svg
-                className='w-6 h-6'
-                fill='none'
-                stroke='currentColor'
-                viewBox='0 0 24 24'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  d='M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'
-                ></path>
-              </svg>
-            </button>
-            <button
-              type='button'
-              className='inline-flex items-center p-2 mr-2 text-sm text-gray-500 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-            >
-              <span className='sr-only'>Open apps menu</span>
-              <ThemeSelector />
-            </button>
-            <div
-              className='hidden z-50 my-4 w-72 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600'
-              id='apps-dropdown'
-            >
-              <div className='p-2 bg-gray-100'>
-                <span className='block text-md text-center font-semibold text-gray-900 dark:text-white'>
-                  Apps
-                </span>
-              </div>
-              <div className='p-2 grid grid-cols-3 gap-4 self-center' aria-labelledby='dropdown'>
-                <Link
-                  to='/kanban'
-                  className='p-2 flex flex-col items-center cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-gray-700'
-                >
-                  <svg
-                    className='w-6 h-6'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2'
-                    ></path>
-                  </svg>
-                  <span>Kanban</span>
-                </Link>
-                <Link
-                  to='/docs'
-                  className='p-2 flex flex-col items-center cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-gray-700'
-                >
-                  <svg
-                    className='w-6 h-6'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'
-                    ></path>
-                  </svg>
-                  <span>Docs</span>
-                </Link>
-                <Link
-                  to='/drive'
-                  className='p-2 flex flex-col items-center cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-gray-700'
-                >
-                  <svg
-                    className='w-6 h-6'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'
-                    ></path>
-                  </svg>
-                  <span>Drive</span>
-                </Link>
-                <Link
-                  to='/chat'
-                  className='p-2 flex flex-col items-center cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-gray-700'
-                >
-                  <svg
-                    className='w-6 h-6'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z'
-                    ></path>
-                  </svg>
-                  <span>Chat</span>
-                </Link>
-              </div>
-            </div>
-
-            <button
-              type='button'
-              className='relative w-10 h-10 bg-blue-600 rounded-full dark:bg-gray-600'
-              id='user-menu-button'
-              aria-expanded='false'
-              data-dropdown-toggle='user-dropdown'
-            >
-              <span className='sr-only'>Open user menu</span>
-              {getUser()!.avatar ? (
-                <img
-                  className='w-10 h-10 rounded-full'
-                  src='/docs/images/people/profile-picture-5.jpg'
-                  alt='Rounded avatar'
-                ></img>
-              ) : (
-                <span className='text-white'>{getInitials(getUser()!.fullname)}</span>
-              )}
-            </button>
-            <div
-              className='hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600'
-              id='user-dropdown'
-              data-popper-reference-hidden=''
-              data-popper-escaped=''
-              data-popper-placement='top'
-            >
-              <div className='py-3 px-4'>
-                <span className='block text-sm font-semibold text-gray-900 dark:text-white'>
-                  {getUser()!.fullname}
-                </span>
-                <span className='block text-sm font-medium text-gray-500 truncate dark:text-gray-400'>
-                  {getUser()!.email}
-                </span>
-              </div>
-              <ul className='py-1' aria-labelledby='dropdown'>
-                <li>
-                  <a
-                    href='#'
-                    className='block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
-                  >
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href='#'
-                    className='block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
-                  >
-                    Sign out
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* <button
-              data-collapse-toggle='mobile-menu-2'
-              type='button'
-              className='inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
-              aria-controls='mobile-menu-2'
-              aria-expanded='false'
-            >
-              <span className='sr-only'>Open main menu</span>
-              <svg
-                className='w-6 h-6'
-                fill='currentColor'
-                viewBox='0 0 20 20'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  fillRule='evenodd'
-                  d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
-                  clipRule='evenodd'
-                ></path>
-              </svg>
-              <svg
-                className='hidden w-6 h-6'
-                fill='currentColor'
-                viewBox='0 0 20 20'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  fillRule='evenodd'
-                  d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-                  clipRule='evenodd'
-                ></path>
-              </svg>
-            </button> */}
-          </div>
-          {/* <div
-            className='hidden justify-start items-center w-full md:flex md:ml-4 md:w-auto md:order-1'
-            id='mobile-menu-2'
+          <button
+            className='navbar-toggler'
+            type='button'
+            data-vds-toggle='collapse'
+            data-vds-target='#navbarNavDropdown'
+            aria-controls='navbarNavDropdown'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
           >
-            <ul className='flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium'>
-              <li>
+            <span className='navbar-toggler-icon'></span>
+          </button>
+          <div className='collapse navbar-collapse' id='navbarNavDropdown'>
+            <ul className='navbar-nav'>
+              <li className='nav-item'>
                 <NavLink
                   to='/kanban'
-                  className={(navData) =>
-                    navData.isActive
-                      ? 'text-blue-700 block py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 dark:text-white'
-                      : 'block py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 dark:text-white'
-                  }
+                  className={(navData) => (navData.isActive ? 'active nav-link' : 'nav-link')}
                 >
                   Kanban
                 </NavLink>
               </li>
             </ul>
-          </div> */}
+            <ul className='navbar-nav ms-auto'>
+              <li className='nav-item dropdown'>
+                <a
+                  className='nav-link dropdown-toggle'
+                  href='#'
+                  id='navbarDropdownMenuLink'
+                  role='button'
+                  data-vds-toggle='dropdown'
+                  aria-expanded='false'
+                >
+                  {getUser()?.fullname.toUpperCase()}
+                </a>
+                <ul
+                  className='dropdown-menu dropdown-menu-end'
+                  aria-labelledby='navbarDropdownMenuLink'
+                >
+                  <li>
+                    <a className='dropdown-item' href='#'>
+                      Perfil
+                    </a>
+                  </li>
+                  <li>
+                    <hr className='dropdown-divider' />
+                  </li>
+                  <li>
+                    <a className='dropdown-item' href='#'>
+                      Cerrar sesión
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
-      <div className='grow h-full bg-white dark:bg-gray-800'>
+
+      <div className='d-flex h-full-w-full'>
         <Outlet />
       </div>
     </div>
