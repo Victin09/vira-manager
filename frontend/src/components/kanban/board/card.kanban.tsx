@@ -23,11 +23,11 @@ export const Card = (props: any) => {
           }`}
           onDoubleClick={() => handleDoubleClick()}
         >
-          <h4 className='mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white'>
+          <h4 className='mb-2 truncate text-lg font-semibold tracking-tight text-gray-900 dark:text-white'>
             {props.data.name}
           </h4>
           {props.data.description && props.data.description !== '' && (
-            <p className='font-light italic'>{props.data.description}</p>
+            <p className='font-light itali truncatec'>{props.data.description}</p>
           )}
           <div className='flex items-center self-end'>
             <span className='font-thin'>{formatToDate(props.data.createdAt)}</span>

@@ -200,7 +200,7 @@ const KanbanProjectView = () => {
   }
 
   return (
-    <div className='flex flex-col grow p-2'>
+    <div className='flex flex-col p-2'>
       <div className='mx-2 mb-2 flex flex-row items-center justify-between'>
         <h2 className='flex items-center text-xl font-semibold'>{project?.name}</h2>
         <div className='flex'>
@@ -257,9 +257,9 @@ const KanbanProjectView = () => {
         </div>
       </div>
       <div
-        className='flex grow mt-4 overflow-x-auto'
-        // style={{ height: 'calc(100vh - 10em)', width: 'calc(100vw - 15em)' }}
-        style={{ width: 'calc(100vw - 15em)' }}
+        className='flex mt-4 overflow-x-auto overflow-y-auto'
+        style={{ height: 'calc(100vh - 10em)', width: 'calc(100vw - 15em)' }}
+        // style={{ width: 'calc(100vw - 15em)' }}
       >
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId='allCols' type='column' direction='horizontal'>

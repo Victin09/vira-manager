@@ -60,8 +60,8 @@ export const ViewCardModal = () => {
         className='fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center flex'
       >
         {cardUsers && users && (
-          <div className='relative p-4 w-full max-w-2xl h-full md:h-auto'>
-            <div className='relative bg-white rounded shadow dark:bg-gray-700'>
+          <div className='relative p-4 w-full max-w-7xl h-full md:h-auto'>
+            <div className='relative bg-white rounded shadow dark:bg-gray-700 md:h-96'>
               <div className='flex justify-between items-start p-4 rounded-t'>
                 <h3 className='text-xl font-semibold text-gray-900 dark:text-white'>
                   {selectedCard.name}

@@ -5,7 +5,7 @@ export const KanbanTemplate = () => {
   const { pathname } = useLocation()
 
   return (
-    <div className='flex grow h-full overflow-hidden'>
+    <div className='flex overflow-hidden'>
       <aside
         id='sidebar-menu'
         className='min-w-fit w-48 border-r-2 border-r-gray-100'

@@ -18,8 +18,16 @@ export const List = (props: any) => {
     setCardsState(props.data.cards)
   }, [props])
 
-  const createNewCard = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleKeyPressed = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    console.log('e', e.key)
+    if (e.key === 'Enter') {
+      console.log('ENTER')
+      setAddTask(false)
+      createNewCard()
+    }
+  }
+
+  const createNewCard = async () => {
     try {
       const apiResponse = await fetch(`${getApiUrl()}/kanban/cards`, {
         method: 'POST',
@@ -53,10 +61,10 @@ export const List = (props: any) => {
         <div
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className='bg-gray-100 rounded shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mr-5 w-56 bg-base-200 h-auto'
+          className='mr-5 w-56 rounded shadow-sm bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700'
         >
-          <div className='flex items-center justify-between'>
-            <div {...provided.dragHandleProps} className='px-4 py-2'>
+          <div className='flex items-center justify-between w-full'>
+            <div {...provided.dragHandleProps} className='px-4 py-2 w-full'>
               <h2 className={'truncate text-lg font-bold sm:text-lg'}>{props.data.name}</h2>
             </div>
           </div>
@@ -83,15 +91,15 @@ export const List = (props: any) => {
               <span className='font-bold'>+ Añadir tarea</span>
             </div>
           ) : (
-            <form onSubmit={(e) => createNewCard(e)}>
-              <input
-                type='text'
-                className='block p-2 w-full text-gray-900 bg-gray-50 rounded border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                placeholder='Tarjeta 1'
-                required
-                onChange={(e) => setNewCardName(e.target.value)}
-              />
-            </form>
+            <textarea
+              className='p-2 m-2 w-11/12 resize-none text-gray-900 bg-gray-50 rounded border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              placeholder='¿Qué se debe hacer?'
+              required
+              autoFocus
+              rows={3}
+              onChange={(e) => setNewCardName(e.target.value)}
+              onKeyPress={(e) => handleKeyPressed(e)}
+            />
           )}
         </div>
       )}
