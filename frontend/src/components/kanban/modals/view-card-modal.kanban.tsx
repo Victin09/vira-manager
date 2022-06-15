@@ -6,13 +6,18 @@ import { getApiUrl } from '@vira/common/utils/api.util'
 import { formatToDate } from '@vira/common/utils/date.util'
 import { useAuth } from '@vira/common/providers/auth.provider'
 import { getInitials } from '@vira/common/utils/text.util'
+import { ApiResponse } from '@vira/common/types/api-response.type'
+import { Card } from '@vira/models/kanban/card.model'
+import { UserSearch } from '@vira/components/shared/user-search.component'
 
 export const ViewCardModal = (props: any) => {
   const { getUser } = useAuth()
+  const [card, setCard] = useState<Card>(props.card)
   const [editName, setEditName] = useState<boolean>(false)
+  const [newCardName, setNewCardName] = useState<string>(props.card.name)
   const [editDescription, setEditDescription] = useState<boolean>(false)
+  const [newCardDescription, setNewCardDescription] = useState<string>(props.card.description)
   const [cardUsers, setCardUsers] = React.useState<any[]>([])
-  const [users, setUsers] = React.useState<any[]>([])
   const [selectedUsers, setSelectedUsers] = React.useState<any[]>([])
 
   useEffect(() => {
@@ -26,28 +31,48 @@ export const ViewCardModal = (props: any) => {
           credentials: 'include'
         })
         const data = await response.json()
-        data.data.map((user) => setCardUsers([...cardUsers, user]))
-      })
-    }
-
-    const getUsers = async () => {
-      const response = await fetch(`${getApiUrl()}/users/list`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-      })
-      const data = await response.json()
-      data.data.forEach((user) => {
-        if (user.fullname === getUser()!.fullname) user.fullname = 'Tú'
-        setUsers([...users, { value: user._id, label: user.fullname }])
+        data.data.map((user) => setSelectedUsers([...selectedUsers, user]))
       })
     }
 
     getCardUsers()
-    getUsers()
   }, [])
+
+  const handleNameKeyDown = async (event) => {
+    if (event.key === 'Enter') {
+      const response = await fetch(`${getApiUrl()}/kanban/cards/${props.card._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ name: newCardName })
+      })
+      const result: ApiResponse<Card> = await response.json()
+      if (result.status === 200) {
+        setEditName(false)
+        setCard({ ...card, name: result.data.name })
+      }
+    }
+  }
+
+  const handleDescriptionSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const response = await fetch(`${getApiUrl()}/kanban/cards/${props.card._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ description: newCardDescription })
+    })
+    const result: ApiResponse<Card> = await response.json()
+    if (result.status === 200) {
+      setEditDescription(false)
+      setCard({ ...card, description: result.data.description })
+      setNewCardDescription(result.data.description)
+    }
+  }
 
   return (
     <div
@@ -59,24 +84,10 @@ export const ViewCardModal = (props: any) => {
     >
       <div className='modal-dialog modal-dialog-centered'>
         <div className='modal-content'>
-          {/* <div className='modal-header'>
-            <h5 className='modal-title' id='exampleModalLabel'>
-              {props.list}
-            </h5>
-            <button
-              type='button'
-              className='btn-close'
-              data-vds-dismiss='modal'
-              aria-label='Close'
-            ></button>
-          </div> */}
           <div className='modal-body'>
             <div className='row'>
               <div className='d-flex justify-content-between'>
-                <div className='d-flex flex-col'>
-                  <span className='fs-4'>{props.card.name}</span>
-                  <span className='fw-light'>En la lista {props.list}</span>
-                </div>
+                <span className='fs-4'>{props.card.code}</span>
                 <button
                   type='button'
                   className='btn-close'
@@ -86,6 +97,19 @@ export const ViewCardModal = (props: any) => {
               </div>
             </div>
             <div className='row'>
+              {!editName ? (
+                <span className='fs-5 fw-semibold' onClick={() => setEditName(true)}>
+                  {card.name}
+                </span>
+              ) : (
+                <input
+                  type='text'
+                  className='form-control form-control-sm'
+                  value={newCardName}
+                  onChange={(e) => setNewCardName(e.target.value)}
+                  onKeyDown={handleNameKeyDown}
+                />
+              )}
               <div className='col-6'>
                 <div className='d-flex flex-col'>
                   <div className='my-3 d-flex flex-col'>
@@ -109,8 +133,8 @@ export const ViewCardModal = (props: any) => {
                       </svg>
                       <span className='ms-2'>Descripción</span>
                     </label>
-                    {props.card.description && !editDescription ? (
-                      <p>{props.card.description}</p>
+                    {card.description && !editDescription ? (
+                      <p onClick={() => setEditDescription(true)}>{card.description}</p>
                     ) : (
                       <>
                         {!editDescription && (
@@ -124,8 +148,14 @@ export const ViewCardModal = (props: any) => {
                       </>
                     )}
                     {editDescription && (
-                      <form noValidate>
-                        <textarea className='form-control' id='descriptionTextarea' rows={3} />
+                      <form noValidate onSubmit={(e) => handleDescriptionSubmit(e)}>
+                        <textarea
+                          className='form-control'
+                          id='descriptionTextarea'
+                          rows={3}
+                          value={newCardDescription}
+                          onChange={(e) => setNewCardDescription(e.target.value)}
+                        />
                         <button type='submit' className='btn btn-primary me-2 mt-1'>
                           Guardar
                         </button>
@@ -191,23 +221,46 @@ export const ViewCardModal = (props: any) => {
                     </svg>
                     <span className='ms-2'>Miembros</span>
                   </label>
-                  <Select
-                    // defaultValue={[colourOptions[2], colourOptions[3]]}
-                    isMulti
-                    name='users'
-                    options={users}
-                    className='basic-multi-select'
-                    classNamePrefix='select'
-                    onChange={(selected) => setSelectedUsers([...selectedUsers, selected])}
-                    styles={{
-                      input: (base) => ({
-                        ...base,
-                        'input:focus': {
-                          boxShadow: 'none'
-                        }
-                      })
-                    }}
-                  />
+                  {!selectedUsers.length ? (
+                    <span
+                      id='dropdownMenuButton1'
+                      data-vds-toggle='dropdown'
+                      aria-expanded='false'
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Sin asignar
+                    </span>
+                  ) : (
+                    <>
+                      {selectedUsers.map((user, index) => (
+                        <div
+                          style={{ width: '10%' }}
+                          className='bg-info rounded-circle'
+                          key={index}
+                        >
+                          {getInitials(user.fullname)}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                  <UserSearch selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
+                  {/* <Select
+                      // defaultValue={[colourOptions[2], colourOptions[3]]}
+                      isMulti
+                      name='users'
+                      options={users}
+                      className='basic-multi-select'
+                      classNamePrefix='select'
+                      onChange={(selected) => setSelectedUsers([...selectedUsers, selected])}
+                      styles={{
+                        input: (base) => ({
+                          ...base,
+                          'input:focus': {
+                            boxShadow: 'none'
+                          }
+                        })
+                      }}
+                    /> */}
                 </div>
                 <div className='mt-4 d-flex flex-col'>
                   <label
@@ -230,7 +283,7 @@ export const ViewCardModal = (props: any) => {
                     </svg>
                     <span className='ms-2'>Etiquetas</span>
                   </label>
-                  <Select
+                  {/* <Select
                     // defaultValue={[colourOptions[2], colourOptions[3]]}
                     isMulti
                     name='users'
@@ -246,7 +299,7 @@ export const ViewCardModal = (props: any) => {
                         }
                       })
                     }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
