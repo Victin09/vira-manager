@@ -2,38 +2,46 @@ import React from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { formatToDate } from '@vira/common/utils/date.util'
 import { useKanban } from '@vira/common/providers/kanban.provider'
+import { ViewCardModal } from '../modals/view-card-modal.kanban'
 
 export const Card = (props: any) => {
   const { setDisplayCardModal, setSelectedCard } = useKanban()
 
-  const handleDoubleClick = () => {
-    setSelectedCard(props.data)
+  const handleClick = () => {
+    setSelectedCard({ ...props.data, list: props.list })
     setDisplayCardModal(true)
   }
 
   return (
-    <Draggable draggableId={props.data._id} index={props.index}>
-      {(provided, snapshot) => (
-        <div
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
-          className={`block p-6 max-w-sm bg-white rounded border border-gray-200 shadow hover:bg-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mb-2 px-2.5 py-2.5 ${
-            snapshot.isDragging ? 'bg-gray-200' : 'bg-base-100'
-          }`}
-          onDoubleClick={() => handleDoubleClick()}
-        >
-          <h4 className='mb-2 truncate text-lg font-semibold tracking-tight text-gray-900 dark:text-white'>
-            {props.data.name}
-          </h4>
-          {props.data.description && props.data.description !== '' && (
-            <p className='font-light itali truncatec'>{props.data.description}</p>
-          )}
-          <div className='flex items-center self-end'>
-            <span className='font-thin'>{formatToDate(props.data.createdAt)}</span>
+    <>
+      <Draggable draggableId={props.data._id} index={props.index}>
+        {(provided, snapshot) => (
+          <div
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+            className={`card shadow-sm mb-2 ${
+              snapshot.isDragging ? 'bg-indigo-200' : 'bg-gray-100'
+            }`}
+            data-vds-toggle='modal'
+            data-vds-target='#exampleModal'
+            onClick={() => handleClick()}
+          >
+            <div className='card-body'>
+              <h4 className='card-title fs-6'>{props.data.name}</h4>
+              {props.data.description && props.data.description !== '' && (
+                <p className='card-text'>{props.data.description}</p>
+              )}
+              <div className='d-flex align-items-center align-self-end'>
+                <span className='text-opacity-75 text-gray-600'>
+                  {formatToDate(props.data.createdAt)}
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
-    </Draggable>
+        )}
+      </Draggable>
+      <ViewCardModal card={props.data} list={props.list} />
+    </>
   )
 }

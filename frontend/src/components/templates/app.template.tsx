@@ -1,9 +1,7 @@
 /* eslint-disable multiline-ternary */
 import React from 'react'
 import { useAuth } from '@vira/common/providers/auth.provider'
-import { getInitials } from '@vira/common/utils/text.util'
 import { NavLink, Link, Outlet } from 'react-router-dom'
-import { ThemeSelector } from '../navbar/theme-selector.component'
 
 export const AppTemplate = () => {
   const { getUser } = useAuth()
@@ -73,7 +71,7 @@ export const AppTemplate = () => {
         </div>
       </nav>
 
-      <div className='d-flex h-full-w-full'>
+      <div className='d-flex h-full w-full'>
         <Outlet />
       </div>
     </div>

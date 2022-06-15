@@ -61,46 +61,51 @@ export const List = (props: any) => {
         <div
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className='mr-5 w-56 rounded shadow-sm bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700'
+          className='mr-5 rounded shadow-sm bg-gray-200'
         >
-          <div className='flex items-center justify-between w-full'>
-            <div {...provided.dragHandleProps} className='px-4 py-2 w-full'>
-              <h2 className={'truncate text-lg font-bold sm:text-lg'}>{props.data.name}</h2>
-            </div>
-          </div>
-          <Droppable droppableId={props.data._id} type='task'>
-            {(provided, snapshot) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className={`pt-2 bg-gray-100 px-2 ${snapshot.isDraggingOver ? 'bg-gray-300' : ''}`}
-                // style={{ maxHeight: 'calc(100vh - 15em)' }}
-              >
-                {cardsState.map((t, i) => (
-                  <Card data={t} index={i} key={t._id} />
-                ))}
-                {provided.placeholder}
+          <div style={{ width: '16rem' }}>
+            <div className='d-flex align-items-center justify-content-between w-full'>
+              <div {...provided.dragHandleProps} className='px-2 py-2 w-full'>
+                <h2 className={'text-truncate fw-bold fs-5'}>{props.data.name}</h2>
               </div>
-            )}
-          </Droppable>
-          {!addTask ? (
-            <div
-              className='flex cursor-pointer justify-center hover:bg-base-300'
-              onClick={() => setAddTask(true)}
-            >
-              <span className='font-bold'>+ Añadir tarea</span>
             </div>
-          ) : (
-            <textarea
-              className='p-2 m-2 w-11/12 resize-none text-gray-900 bg-gray-50 rounded border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-              placeholder='¿Qué se debe hacer?'
-              required
-              autoFocus
-              rows={3}
-              onChange={(e) => setNewCardName(e.target.value)}
-              onKeyPress={(e) => handleKeyPressed(e)}
-            />
-          )}
+            <Droppable droppableId={props.data._id} type='task'>
+              {(provided, snapshot) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className={`py-2 bg-gray-200 px-2 ${
+                    snapshot.isDraggingOver ? 'bg-gray-400' : ''
+                  }`}
+                  // style={{ maxHeight: 'calc(100vh - 15em)' }}
+                >
+                  {cardsState.map((t, i) => (
+                    <Card data={t} list={props.data.name} index={i} key={t._id} />
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+            {!addTask ? (
+              <div
+                className='d-flex cursor-pointer justify-content-center'
+                onClick={() => setAddTask(true)}
+              >
+                <span className='font-bold'>+ Añadir tarea</span>
+              </div>
+            ) : (
+              <textarea
+                className='form-control mx-2'
+                style={{ width: '93%' }}
+                placeholder='¿Qué se debe hacer?'
+                required
+                autoFocus
+                rows={3}
+                onChange={(e) => setNewCardName(e.target.value)}
+                onKeyPress={(e) => handleKeyPressed(e)}
+              />
+            )}
+          </div>
         </div>
       )}
     </Draggable>

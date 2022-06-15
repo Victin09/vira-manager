@@ -200,65 +200,13 @@ const KanbanProjectView = () => {
   }
 
   return (
-    <div className='flex flex-col p-2'>
-      <div className='mx-2 mb-2 flex flex-row items-center justify-between'>
-        <h2 className='flex items-center text-xl font-semibold'>{project?.name}</h2>
-        <div className='flex'>
-          <div className='flex -space-x-4'>
-            {users.map((user, index) => (
-              <div
-                className='relative w-10 h-10 bg-blue-600 rounded-full dark:bg-gray-600'
-                key={index}
-              >
-                {user.avatar ? (
-                  <img
-                    className='w-10 h-10 border-2 border-white rounded-full dark:border-gray-800'
-                    src='/docs/images/people/profile-picture-5.jpg'
-                    alt=''
-                  ></img>
-                ) : (
-                  <a
-                    className='flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800'
-                    href='#'
-                  >
-                    <span>{getInitials(user.fullname)}</span>
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-          <div
-            className='flex items-center justify-center w-10 h-10 text-xs font-medium text-gray-500 bg-blue-200 border-2 border-white rounded-full hover:bg-blue-500 hover:text-white dark:border-gray-800'
-            data-tooltip-target='tooltip-add-user-to-kanban'
-          >
-            <svg
-              className='w-6 h-6'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                d='M12 6v6m0 0v6m0-6h6m-6 0H6'
-              ></path>
-            </svg>
-          </div>
-          <div
-            id='tooltip-add-user-to-kanban'
-            role='tooltip'
-            className='inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700'
-          >
-            Tooltip content
-            <div className='tooltip-arrow' data-popper-arrow></div>
-          </div>
-        </div>
+    <div className='d-flex flex-col p-2 h-full'>
+      <div className='mx-2 mb-2 d-flex align-items-center justify-between'>
+        <h2 className='d-flex align-items-center fs-3 fw-bold'>{project?.name}</h2>
       </div>
       <div
-        className='flex mt-4 overflow-x-auto overflow-y-auto'
-        style={{ height: 'calc(100vh - 10em)', width: 'calc(100vw - 15em)' }}
+        className='d-flex mt-4 overflow-auto h-full'
+        // style={{ height: 'calc(100vh - 10em)', width: 'calc(100vw - 15em)' }}
         // style={{ width: 'calc(100vw - 15em)' }}
       >
         <DragDropContext onDragEnd={onDragEnd}>
@@ -267,7 +215,7 @@ const KanbanProjectView = () => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className='flex'
+                className='d-flex'
                 // style={{ height: 'calc(100vh - 10em)' }}
               >
                 {lists.map((list, i) => {
@@ -276,10 +224,11 @@ const KanbanProjectView = () => {
                 {provided.placeholder}
                 {!newList ? (
                   <div
-                    className='h-10 text-gray-900 bg-gray-100 hover:bg-gray-100 font-medium rounded text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2 cursor-pointer'
+                    className='d-flex align-items-center justify-content-center px-2 cursor-pointer rounded-1 bg-gray-200 w-full'
+                    style={{ width: '16rem', height: '4rem' }}
                     onClick={() => setNewList(true)}
                   >
-                    <div className='flex align-middle'>
+                    <div className='d-flex align-items-center'>
                       <svg
                         className='w-5 h-5'
                         fill='none'
@@ -298,14 +247,10 @@ const KanbanProjectView = () => {
                     </div>
                   </div>
                 ) : (
-                  <form className='ml-2' onSubmit={handleSubmit(handleNewList)}>
+                  <form className='ml-2 p-2' onSubmit={handleSubmit(handleNewList)}>
                     <input
                       type='text'
-                      className={`${
-                        errors.name
-                          ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:border-red-500 dark:bg-red-100 dark:border-red-400'
-                          : 'text-gray-900 bg-gray-50 border-blue-300 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-whitedark:focus:border-blue-500'
-                      } block p-2 w-full rounded border sm:text-xs`}
+                      className={`${errors.name ? 'is-invalid ' : ''}form-control`}
                       placeholder='Añadir nueva columna'
                       {...register('name', {
                         required: {
@@ -315,9 +260,9 @@ const KanbanProjectView = () => {
                       })}
                     />
                     {errors.name && (
-                      <p className='mt-2 text-sm text-red-600 dark:text-red-500'>
-                        <span className='font-medium'>Oops!</span> {errors.name}
-                      </p>
+                      <div className='invalid-feedback'>
+                        <span className='fw-bold'>Oops!</span> {errors.name}
+                      </div>
                     )}
                   </form>
                 )}
@@ -325,7 +270,6 @@ const KanbanProjectView = () => {
             )}
           </Droppable>
         </DragDropContext>
-        {displayCardModal && <ViewCardModal />}
       </div>
     </div>
   )

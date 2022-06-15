@@ -5,10 +5,10 @@ export const KanbanTemplate = () => {
   const { pathname } = useLocation()
 
   return (
-    <div className='container-fluid'>
-      <div className='row flex-nowrap'>
-        <div className='col-auto col-md-3 col-xl-2 px-sm-2 px-0'>
-          <div className='d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100'>
+    <div className='container-fluid h-full overflow-hidden'>
+      <div className='row flex-nowrap h-full'>
+        <div className='col-auto col-md-3 col-xl-2 px-sm-2 px-0 h-full'>
+          <div className='d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 h-full shadow-sm'>
             <ul
               className='nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start'
               id='menu'
@@ -60,7 +60,9 @@ export const KanbanTemplate = () => {
             </ul>
           </div>
         </div>
-        <div className='col py-3'>Content area...</div>
+        <div className='col'>
+          <Outlet />
+        </div>
       </div>
     </div>
   )
