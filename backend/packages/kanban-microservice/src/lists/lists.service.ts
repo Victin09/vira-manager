@@ -6,11 +6,28 @@ import { UpdateListDto } from '@vira/lists/dtos/update-list.dto';
 import { List, ListDocument } from '@vira/lists/entities/list.entity';
 import { ApiResponse } from '@vira/common/types/api-response.type';
 
+type Pair = {
+  [key: string]: string[];
+};
+
 @Injectable()
 export class ListsService {
   constructor(
     @InjectModel(List.name) private readonly listModel: Model<ListDocument>,
   ) {}
+
+  async findListsByProject(projectId: string): Promise<Pair> {
+    try {
+      const result: Pair = {};
+      (await this.listModel.find({ board: projectId })).map((list: List) => {
+        result[list._id] = [...list.cards];
+      });
+      return result;
+    } catch (error) {
+      console.log('error', error);
+      return null;
+    }
+  }
 
   async create(createListDto: CreateListDto): Promise<ApiResponse<List>> {
     try {

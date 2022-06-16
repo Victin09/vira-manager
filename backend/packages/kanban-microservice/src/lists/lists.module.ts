@@ -8,5 +8,6 @@ import { ListSchema } from '@vira/lists/entities/list.entity';
   imports: [MongooseModule.forFeature([{ name: 'List', schema: ListSchema }])],
   controllers: [ListsController],
   providers: [ListsService],
+  exports: [ListsService],
 })
 export class ListsModule {}

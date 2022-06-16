@@ -12,12 +12,14 @@ import { FindProjectDto } from '@vira/projects/dtos/find-project.dto';
 import { RemoveProjectDto } from '@vira/projects/dtos/remove-project.dto';
 import { CardsService } from '@vira/cards/cards.service';
 import { getInitials } from '@vira/utils/text.util';
+import { ListsService } from '@vira/lists/lists.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectModel(Project.name)
     private readonly projectModel: Model<ProjectDocument>,
+    private readonly listService: ListsService,
     private readonly cardService: CardsService,
   ) {}
 
@@ -63,38 +65,48 @@ export class ProjectsService {
 
   async findById(findProjectDto: FindProjectDto): Promise<ApiResponse<any>> {
     try {
-      console.log('projectId', findProjectDto.projectId);
-      const project = await this.projectModel.aggregate([
-        {
-          $match: {
-            _id: findProjectDto.projectId,
-            users: findProjectDto.userId,
-          },
-        },
-        {
-          $lookup: {
-            from: 'lists',
-            let: { board: '$_id' },
-            pipeline: [
-              { $match: { $expr: { $eq: ['$board', '$$board'] } } },
-              { $sort: { order: 1 } },
-              {
-                $lookup: {
-                  from: 'cards',
-                  let: { list: '$_id' },
-                  pipeline: [
-                    { $match: { $expr: { $eq: ['$list', '$$list'] } } },
-                    { $sort: { order: 1 } },
-                  ],
-                  as: 'cards',
-                },
-              },
-            ],
-            as: 'lists',
-          },
-        },
-      ]);
-      const result = project.reduce((r, c) => Object.assign(r, c), {});
+      // const project = await this.projectModel.aggregate([
+      //   {
+      //     $match: {
+      //       _id: findProjectDto.projectId,
+      //       users: findProjectDto.userId,
+      //     },
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: 'lists',
+      //       let: { board: '$_id' },
+      //       pipeline: [
+      //         { $match: { $expr: { $eq: ['$board', '$$board'] } } },
+      //         { $sort: { order: 1 } },
+      //         {
+      //           $lookup: {
+      //             from: 'cards',
+      //             let: { list: '$_id' },
+      //             pipeline: [
+      //               { $match: { $expr: { $eq: ['$list', '$$list'] } } },
+      //               { $sort: { order: 1 } },
+      //             ],
+      //             as: 'cards',
+      //           },
+      //         },
+      //       ],
+      //       as: 'lists',
+      //     },
+      //   },
+      // ]);
+      const project = await this.projectModel.findOne({
+        _id: findProjectDto.projectId,
+        users: findProjectDto.userId,
+      });
+      const lists = await this.listService.findListsByProject(project._id);
+      console.log('lists', lists);
+      const result = {
+        project,
+        lists,
+      };
+      // const result = project.reduce((r, c) => Object.assign(r, c), {});
+      // console.log('result', result);
       return {
         status: HttpStatus.OK,
         message: 'Project found',
