@@ -78,9 +78,9 @@ const SignInView = () => {
               <input
                 type="checkbox"
                 className="form-check-input"
-                id="exampleCheck1"
+                id="keepLogin"
               />
-              <label className="form-check-label" htmlFor="exampleCheck1">
+              <label className="form-check-label" htmlFor="keepLogin">
                 Mantener sesión iniciada
               </label>
             </div>

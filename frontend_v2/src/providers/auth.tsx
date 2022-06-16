@@ -65,6 +65,7 @@ const useProviderAuth = () => {
         credentials: "include",
       })
     ).json();
+    console.log("result", result);
     if (result.status === 200) {
       setUser(result.data!);
       localStorage.setItem("user", btoa(JSON.stringify(result.data)));

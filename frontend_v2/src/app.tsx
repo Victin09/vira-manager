@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Main } from "./components/main";
 import { Modal } from "./components/modal";
-import { BasicSetup } from "./views/kanban/project-board";
+import { ManyItems } from "./views/kanban/project-board";
 import Landing from "./views/landing/landing";
 import SignIn from "./views/landing/sign-in";
 import SignUpView from "./views/landing/sign-up";
@@ -9,6 +9,8 @@ import { LandingTemplate } from "./components/templates/landing";
 
 import "./app.css";
 import { PublicRoute } from "./routes/public";
+import { PrivateRoute } from "./routes/private";
+import { AuthProvider } from "./providers/auth";
 
 type CustomState = {
   background: Location;
@@ -21,7 +23,7 @@ function App() {
   console.log({ background });
 
   return (
-    <>
+    <AuthProvider>
       <Routes location={background || location}>
         <Route element={<PublicRoute />}>
           <Route element={<LandingTemplate />}>
@@ -30,8 +32,11 @@ function App() {
             <Route path="/sign-up" element={<SignUpView />} />
           </Route>
         </Route>
-        <Route path="/kanban" element={<BasicSetup />}>
-          <Route path="/kanban/modal" element={<Modal />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/" />
+          <Route path="/kanban" element={<ManyItems />}>
+            <Route path="/kanban/modal" element={<Modal />} />
+          </Route>
         </Route>
       </Routes>
       {background && (
@@ -39,7 +44,7 @@ function App() {
           <Route path="modal" element={<Modal />} />
         </Routes>
       )}
-    </>
+    </AuthProvider>
   );
 }
 

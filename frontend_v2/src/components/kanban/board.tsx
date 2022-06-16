@@ -10,7 +10,6 @@ import {
   DragOverlay,
   DropAnimation,
   getFirstCollision,
-  KeyboardSensor,
   MouseSensor,
   TouchSensor,
   Modifiers,
@@ -33,16 +32,15 @@ import {
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-// import { coordinateGetter as multipleContainersCoordinateGetter } from "../../../views/multipleContainersKeyboardCoordinates";
 
 import { Column, Props as ColumnProps } from "./column/column";
 import { Card } from "./card/card";
 
 import { createRange } from "../../utils/create-range";
-
-export default {
-  title: "Presets/Sortable/Multiple Containers",
-};
+import { getApiUrl } from "../../utils/api";
+import { ApiResponse } from "../../types/api-response";
+import { User } from "../../models/user";
+import { useAuth } from "../../providers/auth";
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>
   defaultAnimateLayoutChanges({ ...args, wasDragging: true });
@@ -149,7 +147,7 @@ export const TRASH_ID = "void";
 const PLACEHOLDER_ID = "placeholder";
 const empty: UniqueIdentifier[] = [];
 
-export function MultipleContainers({
+export function Board({
   adjustScale = false,
   itemCount = 3,
   cancelDrop,
@@ -157,7 +155,6 @@ export function MultipleContainers({
   handle = false,
   items: initialItems,
   containerStyle,
-  // coordinateGetter = multipleContainersCoordinateGetter,
   getItemStyles = () => ({}),
   wrapperStyle = () => ({}),
   minimal = false,
@@ -184,6 +181,46 @@ export function MultipleContainers({
   const lastOverId = useRef<UniqueIdentifier | null>(null);
   const recentlyMovedToNewContainer = useRef(false);
   const isSortingContainer = activeId ? containers.includes(activeId) : false;
+
+  const { getUser } = useAuth();
+  useEffect(() => {
+    const fetchData = async () => {
+      const apiResult = await fetch(
+        `${getApiUrl()}/kanban/projects/${
+          getUser()!.id
+        }/860fa325-94bc-4629-af53-0b2f77105dd3`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      const result: ApiResponse<any> = await apiResult.json();
+      console.log("result", result);
+      if (result.status === 200) {
+        result.data.users!.forEach(async (userId: string) => {
+          const apiResponse = await fetch(`${getApiUrl()}/users/${userId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          });
+          const response: ApiResponse<User> = await apiResponse.json();
+          if (response.status === 200) {
+            // setUsers([...users, response.data]);
+            console.log("users", response.data);
+          }
+        });
+        // setProject(result.data);
+        // setLists(result.data.lists ? result.data.lists : []);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   /**
    * Custom collision detection strategy optimized for multiple containers

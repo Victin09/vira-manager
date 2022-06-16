@@ -2,10 +2,7 @@ import React from "react";
 import type { CancelDrop, UniqueIdentifier } from "@dnd-kit/core";
 import { rectSortingStrategy } from "@dnd-kit/sortable";
 
-import {
-  MultipleContainers,
-  TRASH_ID,
-} from "../../components/kanban/board";
+import { Board, TRASH_ID } from "../../components/kanban/board";
 import { Outlet } from "react-router-dom";
 
 export default {
@@ -13,25 +10,28 @@ export default {
 };
 
 export const BasicSetup = () => (
-  <>
-    <MultipleContainers />
+  <div className="container-fluid d-flex flex-column h-100 w-100">
+    <Board />
     <Outlet />
-  </>
+  </div>
 );
 
-export const DragHandle = () => <MultipleContainers handle />;
+export const DragHandle = () => <Board handle />;
 
 export const ManyItems = () => (
-  <MultipleContainers
-    containerStyle={{
-      maxHeight: "80vh",
-    }}
-    itemCount={15}
-    scrollable
-  />
+  <main tabIndex={-1}>
+    <Board
+      containerStyle={{
+        maxHeight: "80vh",
+      }}
+      itemCount={15}
+      scrollable
+    />
+    <Outlet />
+  </main>
 );
 
-export const Vertical = () => <MultipleContainers itemCount={5} vertical />;
+export const Vertical = () => <Board itemCount={5} vertical />;
 
 export const TrashableItems = ({ confirmDrop }: { confirmDrop: boolean }) => {
   const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);
@@ -55,10 +55,7 @@ export const TrashableItems = ({ confirmDrop }: { confirmDrop: boolean }) => {
 
   return (
     <>
-      <MultipleContainers
-        cancelDrop={confirmDrop ? cancelDrop : undefined}
-        trashable
-      />
+      <Board cancelDrop={confirmDrop ? cancelDrop : undefined} trashable />
       {/* {activeId && (
         <ConfirmModal
           onConfirm={() => resolveRef.current?.(true)}
@@ -80,7 +77,7 @@ TrashableItems.argTypes = {
 };
 
 export const Grid = () => (
-  <MultipleContainers
+  <Board
     columns={2}
     strategy={rectSortingStrategy}
     wrapperStyle={() => ({
@@ -91,7 +88,7 @@ export const Grid = () => (
 );
 
 export const VerticalGrid = () => (
-  <MultipleContainers
+  <Board
     columns={2}
     itemCount={5}
     strategy={rectSortingStrategy}
