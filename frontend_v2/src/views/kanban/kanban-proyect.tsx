@@ -31,7 +31,7 @@ const KanbanProjectView = () => {
   useEffect(() => {
     const fetchData = async () => {
       const apiResult = await fetch(
-        `${getApiUrl()}/kanban/projects/${getUser()!._id}/${projectId}`,
+        `${getApiUrl()}/kanban/projects/${getUser()!.id}/${projectId}`,
         {
           method: "GET",
           headers: {

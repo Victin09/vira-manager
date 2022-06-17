@@ -35,7 +35,7 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
   const sendForm = async () => {
     const projectUsers = [
       ...selectedUsers.map((user) => user.value),
-      getUser()!._id,
+      getUser()!.id,
     ];
     const response = await fetch(`${getApiUrl()}/kanban/projects`, {
       method: "POST",

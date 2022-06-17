@@ -14,6 +14,7 @@ import KanbanProjectView from "./views/kanban/kanban-proyect";
 import { KanbanTemplate } from "./components/templates/kanban";
 import KanbanView from "./views/kanban/kanban";
 import { AppTemplate } from "./components/templates/app";
+import { KanbanProvider } from "./providers/kanban";
 
 type CustomState = {
   background: Location;
@@ -27,31 +28,36 @@ function App() {
 
   return (
     <AuthProvider>
-      <Routes location={background || location}>
-        <Route element={<PublicRoute />}>
-          <Route element={<LandingTemplate />}>
-            <Route path="/welcome" element={<Landing />} />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/sign-up" element={<SignUpView />} />
+      <KanbanProvider>
+        <Routes location={background || location}>
+          <Route element={<PublicRoute />}>
+            <Route element={<LandingTemplate />}>
+              <Route path="/welcome" element={<Landing />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/sign-up" element={<SignUpView />} />
+            </Route>
           </Route>
-        </Route>
-        <Route element={<PrivateRoute />}>
-          <Route element={<AppTemplate />}>
-            <Route path="/" />
-            <Route element={<KanbanTemplate />}>
-              <Route path="/kanban" element={<KanbanView />} />
-              <Route path="/kanban/:projectId" element={<KanbanProjectView />}>
-                <Route path="/kanban/:projectId/modal" element={<Modal />} />
+          <Route element={<PrivateRoute />}>
+            <Route element={<AppTemplate />}>
+              <Route path="/" />
+              <Route element={<KanbanTemplate />}>
+                <Route path="/kanban" element={<KanbanView />} />
+                <Route
+                  path="/kanban/:projectId"
+                  element={<KanbanProjectView />}
+                >
+                  <Route path="/kanban/:projectId/modal" element={<Modal />} />
+                </Route>
               </Route>
             </Route>
           </Route>
-        </Route>
-      </Routes>
-      {background && (
-        <Routes>
-          <Route path="modal" element={<Modal />} />
         </Routes>
-      )}
+        {background && (
+          <Routes>
+            <Route path="modal" element={<Modal />} />
+          </Routes>
+        )}
+      </KanbanProvider>
     </AuthProvider>
   );
 }
