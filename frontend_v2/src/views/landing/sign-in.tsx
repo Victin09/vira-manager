@@ -1,6 +1,6 @@
 import { useForm } from "../../hooks/use-form";
 import { useAuth } from "../../providers/auth";
-import { SignIn } from "../../models/auth";
+import { SignIn } from "../../types/auth";
 
 const SignInView = () => {
   const { values, errors, register, handleSubmit } = useForm<SignIn>();
@@ -12,21 +12,33 @@ const SignInView = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center h-100">
-      <div className="card shadow" style={{ width: "24rem" }}>
-        <div className="card-body">
-          <h5 className="card-title text-center mb-4">Inicia sesión</h5>
-          {/* <h6 className='card-subtitle mb-2 text-muted'>Card subtitle</h6> */}
-          <form onSubmit={handleSubmit(sendForm)} noValidate>
-            <div className="mb-3">
-              <label htmlFor="exampleInputEmail1" className="form-label">
-                Correo electrónico
-              </label>
+    <div
+      className="uk-flex uk-flex-center uk-flex-middle"
+      data-uk-height-viewport="offset-top: true"
+    >
+      <div
+        className="uk-card uk-card-default uk-box-shadow-medium uk-card-body uk-border-rounded"
+        style={{ width: "24rem" }}
+      >
+        <h5 className="uk-card-title uk-text-bold uk-text-center">
+          Inicia sesión
+        </h5>
+        <form
+          className="uk-form-stacked"
+          onSubmit={handleSubmit(sendForm)}
+          noValidate
+        >
+          <div className="uk-margin">
+            <label className="uk-form-label" htmlFor="email">
+              Correo electrónico
+            </label>
+            <div className="uk-form-controls">
               <input
-                type="email"
-                className={`${errors.email ? "is-invalid " : ""}form-control`}
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
+                className={`${
+                  errors.email ? "uk-form-danger " : ""
+                }uk-input uk-border-rounded`}
+                id="email"
+                type="text"
                 placeholder="vira@vira.es"
                 name="email"
                 {...register("email", {
@@ -40,27 +52,26 @@ const SignInView = () => {
                   },
                 })}
               />
-              {errors.email && (
-                <div className="invalid-feedback">
-                  <span className="fw-bold">Oops!</span> {errors.email}
-                </div>
-              )}
-              <div id="emailHelp" className="form-text">
-                Nunca compartiremos tu correo electrónico con nadie más.
-              </div>
             </div>
-            <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label">
-                Contraseña
-              </label>
+            {errors.email && (
+              <div className="uk-text-danger">
+                <span className="uk-text-bold">Opps!</span> {errors.email}
+              </div>
+            )}
+          </div>
+          <div className="uk-margin">
+            <label className="uk-form-label" htmlFor="password">
+              Contraseña
+            </label>
+            <div className="uk-form-controls">
               <input
-                type="password"
                 className={`${
-                  errors.password ? "is-invalid " : ""
-                }form-control`}
-                id="exampleInputPassword1"
-                placeholder="***********"
+                  errors.password ? "uk-form-danger " : ""
+                }uk-input uk-border-rounded`}
+                id="password"
+                type="password"
                 name="password"
+                placeholder="***********"
                 {...register("password", {
                   required: {
                     value: true,
@@ -68,27 +79,20 @@ const SignInView = () => {
                   },
                 })}
               />
-              {errors.password && (
-                <div className="invalid-feedback">
-                  <span className="fw-bold">Oops!</span> {errors.password}
-                </div>
-              )}
             </div>
-            <div className="mb-3 form-check">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                id="keepLogin"
-              />
-              <label className="form-check-label" htmlFor="keepLogin">
-                Mantener sesión iniciada
-              </label>
-            </div>
-            <button type="submit" className="w-100 btn btn-primary">
-              Enviar
-            </button>
-          </form>
-        </div>
+            {errors.password && (
+              <div className="uk-text-danger">
+                <span className="uk-text-bold">Opps!</span> {errors.password}
+              </div>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="uk-width-1-1 uk-border-rounded uk-button uk-button-primary"
+          >
+            Enviar
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -20,7 +20,6 @@ export class ProjectsService {
     @InjectModel(Project.name)
     private readonly projectModel: Model<ProjectDocument>,
     private readonly listService: ListsService,
-    private readonly cardService: CardsService,
   ) {}
 
   async create(
@@ -45,15 +44,13 @@ export class ProjectsService {
     }
   }
 
-  async findAllByUserId(userId: string): Promise<ApiResponse<any>> {
+  async findAllByUserId(userId: string): Promise<ApiResponse<Project[]>> {
     try {
       const projects = await this.projectModel.find({ users: userId });
-      const cards = await this.cardService.findByUser(userId);
-      console.log('cards', cards);
       return {
         status: HttpStatus.OK,
         message: 'Projects found',
-        data: { projects: projects, cards: cards.data },
+        data: projects,
       };
     } catch (error) {
       return {

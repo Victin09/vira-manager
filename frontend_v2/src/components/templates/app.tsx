@@ -1,78 +1,58 @@
 import { useAuth } from "../../providers/auth";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { getInitials } from "../../utils/text";
 
 export const AppTemplate = () => {
+  const { pathname } = useLocation();
   const { getUser } = useAuth();
 
   return (
-    <div className="d-flex flex-col h-full">
-      <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm w-100">
-        <div className="container-fluid">
-          <Link to="/" className="navbar-brand">
-            vira.Manager
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-vds-toggle="collapse"
-            data-vds-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <NavLink
-                  to="/kanban"
-                  className={(navData) =>
-                    navData.isActive ? "active nav-link" : "nav-link"
-                  }
-                >
-                  Kanban
-                </NavLink>
-              </li>
-            </ul>
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdownMenuLink"
-                  role="button"
-                  data-vds-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {getUser()?.fullname.toUpperCase()}
-                </a>
-                <ul
-                  className="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="navbarDropdownMenuLink"
-                >
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Perfil
-                    </a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Cerrar sesión
-                    </a>
-                  </li>
-                </ul>
+    <div className="uk-height-1-1">
+      <nav
+        className="uk-background-primary uk-light uk-width-1-1"
+        data-uk-navbar
+      >
+        <Link to="/" className="uk-navbar-item uk-logo">
+          vira.Manager
+        </Link>
+        <div className="uk-navbar-right">
+          <div
+            className="uk-navbar-toggle uk-hidden@m"
+            data-uk-navbar-toggle-icon
+            data-uk-toggle="target: #offcanvas-app"
+          ></div>
+          <div className="uk-visible@m">
+            <ul className="uk-navbar-nav">
+              <li className={pathname === "/profile" ? "uk-active" : ""}>
+                <Link to="/profile">
+                  <span
+                    className="uk-icon-button uk-light uk-margin-small-right"
+                    data-uk-icon="icon: user"
+                  ></span>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
       </nav>
+      <Outlet />
+      <div id="offcanvas-app" data-uk-offcanvas="overlay: true">
+        <div className="uk-offcanvas-bar">
+          <button
+            className="uk-offcanvas-close"
+            type="button"
+            data-uk-close
+          ></button>
 
-      <div className="d-flex h-full w-full">
-        <Outlet />
+          <h3>Title</h3>
+
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </p>
+        </div>
       </div>
     </div>
   );

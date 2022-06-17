@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User } from "../models/user";
-import { SignIn, SignUp } from "../models/auth";
+import { User } from "../types/user";
+import { SignIn, SignUp } from "../types/auth";
 import { getApiUrl } from "../utils/api";
 import { ApiResponse } from "../types/api-response";
 
@@ -45,12 +45,6 @@ const useProviderAuth = () => {
       return user;
     }
     return null;
-    // return {
-    //   id: '1dc93e11-99a5-4177-8d2e-400576b2029f',
-    //   fullname: 'VIRA',
-    //   email: 'vira@vira.es',
-    //   avatar: ''
-    // }
     // navigate('/signin')
   };
 

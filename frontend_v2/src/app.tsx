@@ -1,7 +1,6 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Main } from "./components/main";
 import { Modal } from "./components/modal";
-import { ManyItems } from "./views/kanban/project-board";
 import Landing from "./views/landing/landing";
 import SignIn from "./views/landing/sign-in";
 import SignUpView from "./views/landing/sign-up";
@@ -11,6 +10,10 @@ import "./app.css";
 import { PublicRoute } from "./routes/public";
 import { PrivateRoute } from "./routes/private";
 import { AuthProvider } from "./providers/auth";
+import KanbanProjectView from "./views/kanban/kanban-proyect";
+import { KanbanTemplate } from "./components/templates/kanban";
+import KanbanView from "./views/kanban/kanban";
+import { AppTemplate } from "./components/templates/app";
 
 type CustomState = {
   background: Location;
@@ -33,9 +36,14 @@ function App() {
           </Route>
         </Route>
         <Route element={<PrivateRoute />}>
-          <Route path="/" />
-          <Route path="/kanban" element={<ManyItems />}>
-            <Route path="/kanban/modal" element={<Modal />} />
+          <Route element={<AppTemplate />}>
+            <Route path="/" />
+            <Route element={<KanbanTemplate />}>
+              <Route path="/kanban" element={<KanbanView />} />
+              <Route path="/kanban/:projectId" element={<KanbanProjectView />}>
+                <Route path="/kanban/:projectId/modal" element={<Modal />} />
+              </Route>
+            </Route>
           </Route>
         </Route>
       </Routes>

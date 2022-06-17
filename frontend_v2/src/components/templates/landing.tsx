@@ -1,48 +1,53 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 export const LandingTemplate = () => {
+  const { pathname } = useLocation();
+
   return (
-    <div className="d-flex flex-column w-100 h-100 container-fluid">
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <Link to="/welcome" className="navbar-brand">
-            vira.Manager
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-vds-toggle="collapse"
-            data-vds-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav ms-auto">
-              <NavLink
-                to="/sign-in"
-                className={(navData) =>
-                  navData.isActive ? "active nav-link" : "nav-link"
-                }
-              >
-                Inicia sesión
-              </NavLink>
-              <NavLink
-                to="/sign-up"
-                className={(navData) =>
-                  navData.isActive ? "active nav-link" : "nav-link"
-                }
-              >
-                Registrate
-              </NavLink>
-            </div>
+    <div className="uk-height-1-1">
+      <nav
+        className="uk-background-primary uk-light uk-width-1-1"
+        data-uk-navbar
+      >
+        <Link to="/" className="uk-navbar-item uk-logo">
+          vira.Manager
+        </Link>
+        <div className="uk-navbar-right">
+          <div
+            className="uk-navbar-toggle uk-hidden@m"
+            data-uk-navbar-toggle-icon
+            data-uk-toggle="target: #offcanvas-landing"
+          ></div>
+          <div className="uk-visible@m">
+            <ul className="uk-navbar-nav">
+              <li className={pathname === "/sign-in" ? "uk-active" : ""}>
+                <Link to="/sign-in">Iniciar sesión</Link>
+              </li>
+              <li className={pathname === "/sign-up" ? "uk-active" : ""}>
+                <Link to="/sign-up">Registrarse</Link>
+              </li>
+            </ul>
           </div>
         </div>
       </nav>
-      <div className="w-100 h-100">
-        <Outlet />
+      <Outlet />
+      <div id="offcanvas-landing" data-uk-offcanvas="overlay: true">
+        <div className="uk-offcanvas-bar">
+          <button
+            className="uk-offcanvas-close"
+            type="button"
+            data-uk-close
+          ></button>
+
+          <h3>Title</h3>
+
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </p>
+        </div>
       </div>
     </div>
   );
