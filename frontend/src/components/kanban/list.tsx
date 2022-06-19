@@ -6,7 +6,7 @@ import { getApiUrl } from "../../utils/api";
 import { Card } from "./card";
 import { ApiResponse } from "../../types/api-response";
 
-export const List = (data: ListType, index: number) => {
+export const List = ({ data, index }: { data: ListType; index: number }) => {
   const { projectId } = useParams();
   const [addTask, setAddTask] = useState<boolean>(false);
   const [newCardName, setNewCardName] = useState<string>("");
@@ -15,7 +15,7 @@ export const List = (data: ListType, index: number) => {
 
   useEffect(() => {
     setCardsState(data.cards);
-  }, [data]);
+  }, [data, data.cards]);
 
   const handleKeyPressed = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     console.log("e", e.key);
@@ -60,12 +60,18 @@ export const List = (data: ListType, index: number) => {
         <div
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="mr-5 rounded shadow-sm bg-gray-200"
+          className="me-3 rounded shadow-sm bg-light"
         >
           <div style={{ width: "16rem" }}>
-            <div className="d-flex align-items-center justify-content-between w-full">
-              <div {...provided.dragHandleProps} className="px-2 py-2 w-full">
-                <h2 className={"text-truncate fw-bold fs-5"}>{data.name}</h2>
+            <div className="d-flex align-items-center justify-content-between w-100">
+              <div
+                {...provided.dragHandleProps}
+                className="px-2 py-2 w-100 d-flex align-items-center"
+              >
+                <h2 className={"text-truncate fw-bold fs-5"}>{data.name} </h2>
+                <span className="badge bg-primary ms-2">
+                  {data.cards.length}
+                </span>
               </div>
             </div>
             <Droppable droppableId={data._id} type="task">
@@ -79,13 +85,7 @@ export const List = (data: ListType, index: number) => {
                   // style={{ maxHeight: 'calc(100vh - 15em)' }}
                 >
                   {cardsState.map((t, i) => (
-                    <Card
-                      data={t}
-                      list={data.name}
-                      project={projectId}
-                      index={i}
-                      key={t._id}
-                    />
+                    <Card data={t} index={i} key={t._id} />
                   ))}
                   {provided.placeholder}
                 </div>
@@ -93,14 +93,17 @@ export const List = (data: ListType, index: number) => {
             </Droppable>
             {!addTask ? (
               <div
-                className="d-flex cursor-pointer justify-content-center"
+                className="d-flex justify-content-center"
                 onClick={() => setAddTask(true)}
+                style={{ cursor: "pointer" }}
               >
-                <span className="font-bold">+ Añadir tarea</span>
+                <span className="font-bold">
+                  <i className="bi bi-plus"></i> Añadir tarea
+                </span>
               </div>
             ) : (
               <textarea
-                className="form-control mx-2"
+                className="form-control mx-2 mb-2"
                 style={{ width: "93%" }}
                 placeholder="¿Qué se debe hacer?"
                 required

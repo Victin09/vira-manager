@@ -46,7 +46,10 @@ function App() {
                   path="/kanban/:projectId"
                   element={<KanbanProjectView />}
                 >
-                  <Route path="/kanban/:projectId/modal" element={<Modal />} />
+                  <Route
+                    path="/kanban/:projectId/issue/:issueId"
+                    element={<Modal />}
+                  />
                 </Route>
               </Route>
             </Route>

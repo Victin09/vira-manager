@@ -47,7 +47,7 @@ const KanbanView = () => {
         </div>
       ) : (
         <div className="">
-          <div className="d-flex justify-content-between w-100">
+          <div className="d-flex flex-wrap justify-content-between w-100">
             <span className="fw-semibold fs-5">Tus proyectos</span>
             <button
               className="btn btn-primary"
@@ -82,57 +82,61 @@ const KanbanView = () => {
             </div>
           ) : (
             <div className="w-100">
-              <div className="mt-3">
-                <div className="input-group mb-3 w-25">
-                  <span className="input-group-text" id="search-project">
-                    <i className="bi bi-search"></i>
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control w-25"
-                    placeholder="Proyecto vira"
-                    aria-label="Username"
-                    aria-describedby="search-project"
-                    onChange={(e) => setFilterProject(e.target.value)}
-                  />
+              <div className="row mt-5">
+                <div className="col-12 col-sm-3">
+                  <div className="input-group mb-3">
+                    <span className="input-group-text" id="search-project">
+                      <i className="bi bi-search"></i>
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Proyecto vira"
+                      aria-label="Username"
+                      aria-describedby="search-project"
+                      onChange={(e) => setFilterProject(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
 
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Código</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Fecha de creación</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {projects
-                    .filter((item) => {
-                      if (!filterProject) return true;
-                      if (
-                        item.name.toLowerCase().includes(filterProject) ||
-                        item.name.toLowerCase().includes(filterProject)
-                      ) {
-                        return true;
-                      }
-                      return false;
-                    })
-                    .map((project, index) => (
-                      <tr key={index}>
-                        <th scope="row">
-                          <Link to={`/kanban/${project._id}`}>
-                            {project.code}
-                          </Link>
-                        </th>
-                        <td>{project.name}</td>
-                        <td>{project.description}</td>
-                        <td>{formatToDate(project.createdAt)}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+              <div className="table-responsive">
+                <table className="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nombre</th>
+                      <th>Descripción</th>
+                      <th className="text-truncate">Fecha de creación</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projects
+                      .filter((item) => {
+                        if (!filterProject) return true;
+                        if (
+                          item.name.toLowerCase().includes(filterProject) ||
+                          item.name.toLowerCase().includes(filterProject)
+                        ) {
+                          return true;
+                        }
+                        return false;
+                      })
+                      .map((project, index) => (
+                        <tr key={index}>
+                          <th scope="row">
+                            <Link to={`/kanban/${project._id}`}>
+                              {project.code}
+                            </Link>
+                          </th>
+                          <td>{project.name}</td>
+                          <td>{project.description}</td>
+                          <td>{formatToDate(project.createdAt)}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>

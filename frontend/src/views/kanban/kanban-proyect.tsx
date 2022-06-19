@@ -14,6 +14,7 @@ import {
   reorder,
 } from "../../utils/kanban";
 import { List } from "../../components/kanban/list";
+import { ViewCardModal } from "../../components/kanban/view-card";
 
 const KanbanProjectView = () => {
   const { getUser } = useAuth();
@@ -57,11 +58,12 @@ const KanbanProjectView = () => {
         });
         setProject(result.data);
         setLists(result.data.lists ? result.data.lists : []);
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [getUser, projectId, users]);
 
   const onDragEnd = async (result: any) => {
     const { destination, source } = result;
@@ -226,20 +228,22 @@ const KanbanProjectView = () => {
   };
 
   return (
-    <>
+    <div className="d-flex flex-column flex-grow-1 h-100">
       {loading ? (
-        <div>
-          <span>Loading</span>
+        <div className="d-flex align-items-center justify-content-center h-100">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
         </div>
       ) : (
-        <div className="d-flex flex-col p-2 h-full">
+        <div className="d-flex flex-column p-2 h-100">
           <div className="mx-2 mb-2 d-flex align-items-center justify-between">
             <h2 className="d-flex align-items-center fs-3 fw-bold">
               {project!.name}
             </h2>
           </div>
           <div
-            className="d-flex mt-4 overflow-auto h-full"
+            className="d-flex mt-4 overflow-auto"
             // style={{ height: 'calc(100vh - 10em)', width: 'calc(100vw - 15em)' }}
             // style={{ width: 'calc(100vw - 15em)' }}
           >
@@ -257,40 +261,22 @@ const KanbanProjectView = () => {
                     // style={{ height: 'calc(100vh - 10em)' }}
                   >
                     {lists.map((list, i) => {
-                      return (
-                        <List
-                          key={list._id}
-                          _id={list._id}
-                          cards={list.cards}
-                          name={list.name}
-                          createdAt={list.createdAt}
-                          updatedAt={list.updatedAt}
-                        />
-                      );
+                      return <List key={list._id} data={list} index={i} />;
                     })}
                     {provided.placeholder}
                     {!newList ? (
                       <div
-                        className="d-flex align-items-center justify-content-center px-2 cursor-pointer rounded-1 bg-gray-200 w-full"
-                        style={{ width: "16rem", height: "4rem" }}
+                        className="d-flex align-items-center justify-content-center px-2 rounded-1 bg-light w-100"
+                        style={{
+                          width: "16rem",
+                          height: "4rem",
+                          cursor: "pointer",
+                        }}
                         onClick={() => setNewList(true)}
                       >
                         <div className="d-flex align-items-center">
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                            ></path>
-                          </svg>
-                          <span>Añadir nueva lista</span>
+                          <i className="bi bi-plus"></i>
+                          <span className="ms-2">Añadir nueva lista</span>
                         </div>
                       </div>
                     ) : (
@@ -300,6 +286,7 @@ const KanbanProjectView = () => {
                       >
                         <input
                           type="text"
+                          autoFocus
                           className={`${
                             errors.name ? "is-invalid " : ""
                           }form-control`}
@@ -325,7 +312,8 @@ const KanbanProjectView = () => {
           </div>
         </div>
       )}
-    </>
+      <ViewCardModal />
+    </div>
   );
 };
 

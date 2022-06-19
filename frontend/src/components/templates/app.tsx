@@ -42,13 +42,13 @@ export const AppTemplate = () => {
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item dropdown">
                   <span
-                    className="d-flex align-items-center justify-content-center nav-link bg-info rounded-circle"
+                    className="d-flex align-items-center justify-content-center nav-link"
                     id="navbarDropdown"
                     role="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    {getInitials(getUser()!.fullname)}
+                    {getUser()!.fullname.toUpperCase()}
                   </span>
                   <ul
                     className="dropdown-menu dropdown-menu-end border-0 shadow"
