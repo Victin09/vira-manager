@@ -21,7 +21,7 @@ export const ViewCardModal = () => {
   useEffect(() => {
     const fetchData = async () => {
       const apiResponse = await fetch(
-        `${getApiUrl()}/kanban/cards/${selectedCard._id}`,
+        `${getApiUrl()}/kanban/cards/${selectedCard?._id}`,
         {
           credentials: "include",
         }

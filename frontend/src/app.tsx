@@ -10,7 +10,7 @@ import "./app.css";
 import { PublicRoute } from "./routes/public";
 import { PrivateRoute } from "./routes/private";
 import { AuthProvider } from "./providers/auth";
-import KanbanProjectView from "./views/kanban/kanban-proyect";
+import KanbanProjectView from "./views/kanban/kanban-board";
 import { KanbanTemplate } from "./components/templates/kanban";
 import KanbanView from "./views/kanban/kanban";
 import { AppTemplate } from "./components/templates/app";

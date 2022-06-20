@@ -14,6 +14,9 @@ export class Sprint {
   @Prop({ required: true })
   duration: string;
 
+  @Prop({ required: true, default: false })
+  active: boolean;
+
   @Prop({ required: true })
   initDate: Date;
 

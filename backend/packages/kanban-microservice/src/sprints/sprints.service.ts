@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ApiResponse } from '@vira/common/types/api-response.type';
 import { Model } from 'mongoose';
 import { CreateSprintDto } from './dto/create-sprint.dto';
 import { UpdateSprintDto } from './dto/update-sprint.dto';
@@ -12,9 +13,21 @@ export class SprintsService {
     private readonly sprintModel: Model<SprintDocument>,
   ) {}
 
-  async create(createSprintDto: CreateSprintDto): Promise<Sprint> {
+  async create(createSprintDto: CreateSprintDto): Promise<ApiResponse<Sprint>> {
     try {
-    } catch (error) {}
+      const sprintToCreate = new this.sprintModel(createSprintDto);
+      const sprint = await sprintToCreate.save();
+      return {
+        status: HttpStatus.OK,
+        message: 'Sprint created',
+        data: sprint,
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error: Cannot create sprint',
+      };
+    }
   }
 
   findAll() {
@@ -22,6 +35,10 @@ export class SprintsService {
   }
 
   findOne(id: number) {
+    return `This action returns a #${id} sprint`;
+  }
+
+  findSprintByProjectId(id: string) {
     return `This action returns a #${id} sprint`;
   }
 

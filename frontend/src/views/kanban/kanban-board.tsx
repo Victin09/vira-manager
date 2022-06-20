@@ -14,6 +14,7 @@ import {
 } from "../../utils/kanban";
 import { List } from "../../components/kanban/list";
 import { ViewCardModal } from "../../components/kanban/view-card";
+import { useKanban } from "../../providers/kanban";
 
 const KanbanProjectView = () => {
   const { getUser } = useAuth();
@@ -21,6 +22,7 @@ const KanbanProjectView = () => {
     name: string;
   }>();
   const { projectId } = useParams();
+  const { selectedProject } = useKanban();
   const [loading, setLoading] = useState<boolean>(true);
   const [project, setProject] = useState<ProjectType>();
   const [lists, setLists] = useState<ListType[]>([]);
@@ -54,6 +56,10 @@ const KanbanProjectView = () => {
             setUsers([...users, response.data]);
           }
         });
+    
+        if (project?.type === "kanban") {
+          const apiResult = await fetch(
+        }
         setProject(result.data);
         setLists(result.data.lists ? result.data.lists : []);
         setLoading(false);

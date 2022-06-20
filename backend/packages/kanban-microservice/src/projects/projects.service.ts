@@ -10,15 +10,15 @@ import {
 } from '@vira/projects/entities/project.entity';
 import { FindProjectDto } from '@vira/projects/dtos/find-project.dto';
 import { RemoveProjectDto } from '@vira/projects/dtos/remove-project.dto';
-import { CardsService } from '@vira/cards/cards.service';
 import { getInitials } from '@vira/utils/text.util';
-import { ListsService } from '@vira/lists/lists.service';
+import { BoardsService } from '@vira/boards/boards.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectModel(Project.name)
     private readonly projectModel: Model<ProjectDocument>,
+    private readonly boardService: BoardsService,
   ) {}
 
   async create(
@@ -30,6 +30,10 @@ export class ProjectsService {
         code: getInitials(createProjectDto.name),
       });
       const project = await projectToCreate.save();
+      this.boardService.create({
+        projectId: project._id,
+        fromSprint: false,
+      });
       return {
         status: HttpStatus.CREATED,
         message: 'Project created',
@@ -59,44 +63,18 @@ export class ProjectsService {
     }
   }
 
-  async findById(findProjectDto: FindProjectDto): Promise<ApiResponse<any>> {
+  async findById(
+    findProjectDto: FindProjectDto,
+  ): Promise<ApiResponse<Project>> {
     try {
-      const project = await this.projectModel.aggregate([
-        {
-          $match: {
-            _id: findProjectDto.projectId,
-            users: findProjectDto.userId,
-          },
-        },
-        {
-          $lookup: {
-            from: 'lists',
-            let: { board: '$_id' },
-            pipeline: [
-              { $match: { $expr: { $eq: ['$board', '$$board'] } } },
-              { $sort: { order: 1 } },
-              {
-                $lookup: {
-                  from: 'cards',
-                  let: { list: '$_id' },
-                  pipeline: [
-                    { $match: { $expr: { $eq: ['$list', '$$list'] } } },
-                    { $sort: { order: 1 } },
-                  ],
-                  as: 'cards',
-                },
-              },
-            ],
-            as: 'lists',
-          },
-        },
-      ]);
-      const result = project.reduce((r, c) => Object.assign(r, c), {});
-      // console.log('result', result);
+      const project = await this.projectModel.findOne({
+        _id: findProjectDto.projectId,
+        users: findProjectDto.userId,
+      });
       return {
         status: HttpStatus.OK,
         message: 'Project found',
-        data: result,
+        data: project,
       };
     } catch (error) {
       console.log('error', error);
