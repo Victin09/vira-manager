@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CreateKanbanProjectModal } from "../../components/kanban/create-project";
 import { useAuth } from "../../providers/auth";
 import { useKanban } from "../../providers/kanban";
@@ -9,9 +9,10 @@ import { getApiUrl } from "../../utils/api";
 import { formatToDate } from "../../utils/date";
 
 const KanbanView = () => {
+  const navigate = useNavigate();
   const [filterProject, setFilterProject] = useState("");
   const { getUser } = useAuth();
-  const { projects, setProjects, setDisplayCreateProjectModal } = useKanban();
+  const { projects, setProjects, setSelectedProject } = useKanban();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,10 +36,15 @@ const KanbanView = () => {
       }
     };
     fetchData();
-  }, [getUser, setProjects]);
+  }, []);
+
+  const handleClick = (project: ProjectType) => {
+    setSelectedProject(project);
+    navigate(`/kanban/${project._id}/board`);
+  };
 
   return (
-    <div className="d-flex flex-column flex-grow-1">
+    <div className="d-flex flex-column flex-grow-1 p-2">
       {loading ? (
         <div className="d-flex align-items-center justify-content-center h-100">
           <div className="spinner-border text-primary" role="status">
@@ -52,7 +58,6 @@ const KanbanView = () => {
             <button
               className="btn btn-primary"
               type="button"
-              onClick={() => setDisplayCreateProjectModal(true)}
               data-bs-toggle="modal"
               data-bs-target="#createProjectModal"
             >
@@ -72,11 +77,7 @@ const KanbanView = () => {
                 Crea un nuevo proyecto de software para planificar, supervisar y
                 publicar software de gran calidad con tu equipo.
               </p>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={() => setDisplayCreateProjectModal(true)}
-              >
+              <button className="btn btn-primary" type="button">
                 Crear proyecto
               </button>
             </div>
@@ -124,10 +125,13 @@ const KanbanView = () => {
                       })
                       .map((project, index) => (
                         <tr key={index}>
-                          <th scope="row">
-                            <Link to={`/kanban/${project._id}`}>
-                              {project.code}
-                            </Link>
+                          <th
+                            className="text-primary"
+                            scope="row"
+                            onClick={() => handleClick(project)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            {project.code}
                           </th>
                           <td>{project.name}</td>
                           <td>{project.description}</td>

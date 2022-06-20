@@ -23,6 +23,11 @@ export class KanbanController {
     return this.kanbanService.findProjectById(userId, projectId);
   }
 
+  @Get('/cards/:cardId')
+  findCardById(@Param('cardId') cardId: string) {
+    return this.kanbanService.findCardById(cardId);
+  }
+
   @Post('/projects')
   createProject(@Body() createProjectDto: CreateProjectDto) {
     return this.kanbanService.createProject(createProjectDto);

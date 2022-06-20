@@ -13,9 +13,9 @@ export class CardsController {
     return this.cardsService.create(createCardDto);
   }
 
-  @MessagePattern('findOneCard')
+  @MessagePattern('findCardById')
   findOne(@Payload() id: string) {
-    return this.cardsService.findOne(id);
+    return this.cardsService.findCardById(id);
   }
 
   @MessagePattern('updateCard')

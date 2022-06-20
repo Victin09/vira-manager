@@ -15,6 +15,7 @@ import { KanbanTemplate } from "./components/templates/kanban";
 import KanbanView from "./views/kanban/kanban";
 import { AppTemplate } from "./components/templates/app";
 import { KanbanProvider } from "./providers/kanban";
+import KanbanBacklogView from "./views/kanban/kanban-backlog";
 
 type CustomState = {
   background: Location;
@@ -40,17 +41,21 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route element={<AppTemplate />}>
               <Route path="/" />
+              <Route path="/kanban" element={<KanbanView />} />
               <Route element={<KanbanTemplate />}>
-                <Route path="/kanban" element={<KanbanView />} />
                 <Route
-                  path="/kanban/:projectId"
+                  path="/kanban/:projectId/board"
                   element={<KanbanProjectView />}
                 >
                   <Route
-                    path="/kanban/:projectId/issue/:issueId"
+                    path="/kanban/:projectId/board/issue/:issueId"
                     element={<Modal />}
                   />
                 </Route>
+                <Route
+                  path="/kanban/:projectId/backlog"
+                  element={<KanbanBacklogView />}
+                ></Route>
               </Route>
             </Route>
           </Route>

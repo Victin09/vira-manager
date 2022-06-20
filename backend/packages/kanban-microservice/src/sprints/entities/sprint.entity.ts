@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { v4 as uuid } from 'uuid';
 
-export type ProjectDocument = Project & Document;
+export type SprintDocument = Sprint & Document;
 
 @Schema()
-export class Project {
+export class Sprint {
   @Prop({ default: () => uuid() })
   _id: string;
 
@@ -12,22 +12,16 @@ export class Project {
   name: string;
 
   @Prop({ required: true })
-  code: string;
+  duration: string;
 
   @Prop({ required: true })
-  type: 'KANBAN' | 'SCRUM';
-
-  @Prop()
-  description: string;
-
-  @Prop()
-  image: string;
+  initDate: Date;
 
   @Prop({ required: true })
-  users: string[];
+  endDate: string;
 
-  @Prop({ default: false })
-  archived: boolean;
+  @Prop({ required: true })
+  project: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;
@@ -36,4 +30,4 @@ export class Project {
   updatedAt: Date;
 }
 
-export const ProjectSchema = SchemaFactory.createForClass(Project);
+export const SprintSchema = SchemaFactory.createForClass(Sprint);

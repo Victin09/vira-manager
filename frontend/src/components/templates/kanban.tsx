@@ -1,44 +1,47 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { useKanban } from "../../providers/kanban";
 
 export const KanbanTemplate = () => {
+  const { selectedProject } = useKanban();
+
   return (
-    <div className="container-fluid h-100">
-      {/* <div className="row flex-nowrap h-100">
-        <div className="col-auto col-md-2 col-lg-1 px-sm-2 px-0 bg-light shadow-sm">
-          <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2">
-            <ul
-              className="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-              id="menu"
-            >
-              <li className="nav-item">
-                <NavLink
-                  to="/kanban"
-                  className={({ isActive }) =>
-                    isActive
-                      ? "active nav-link align-middle px-0"
-                      : "nav-link align-middle px-0"
-                  }
-                >
-                  <i className="bi bi-view-stacked"></i>{" "}
-                  <span className="ms-1 d-none d-sm-inline">Proyectos</span>
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink
-                  to="/kanban/issues"
-                  className={({ isActive }) =>
-                    isActive
-                      ? "active nav-link align-middle px-0"
-                      : "nav-link align-middle px-0"
-                  }
-                >
-                  <i className="bi bi-card-text"></i>{" "}
-                  <span className="ms-1 d-none d-sm-inline">Tareas</span>
-                </NavLink>
-              </li>
-            </ul>
+    <div className="d-flex h-100">
+      <div
+        className="d-flex flex-column flex-shrink-0 p-3 bg-light shadow-sm border-end"
+        style={{ width: "10em" }}
+      >
+        <div className="d-flex align-items-center mb-3">
+          <div className="d-flex align-items-center rounded rounded-2 bg-primary text-white me-2 px-2">
+            {selectedProject?.code}
           </div>
-        </div> */}
+          <span className="text-center fw-semibold">
+            {selectedProject?.name}
+          </span>
+        </div>
+        <ul className="nav flex-column mb-auto">
+          <li className="nav-item">
+            <Link
+              to={`/kanban/${selectedProject?._id}/board`}
+              className="nav-link active"
+              aria-current="page"
+            >
+              <i className="bi bi-kanban"></i>
+              <span className="ms-2">Tablero</span>
+            </Link>
+          </li>
+          {selectedProject?.type === "SCRUM" && (
+            <li>
+              <Link
+                to={`/kanban/${selectedProject?._id}/backlog`}
+                className="nav-link link-dark"
+              >
+                <i className="bi bi-list-columns-reverse"></i>
+                <span className="ms-2">Backlog</span>
+              </Link>
+            </li>
+          )}
+        </ul>
+      </div>
       <div className="col py-3 h-100">
         <Outlet />
       </div>

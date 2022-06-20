@@ -10,6 +10,10 @@ export class UsersService {
     return this.client.send('findAllUsers', {});
   }
 
+  findUsersById(usersId: string[]): Observable<any> {
+    return this.client.send('findUsersById', usersId);
+  }
+
   findUserById(userId: string): Observable<any> {
     return this.client.send('findOneUser', userId);
   }

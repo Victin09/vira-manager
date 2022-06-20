@@ -51,38 +51,25 @@ export class UserService {
     }
   }
 
-  async create(createUserDto: CreateUserDto): Promise<Response<UserDto>> {
+  async findAll(): Promise<Response<User[]>> {
     try {
-      const user = await this.userModel.findOne({ email: createUserDto.email });
-      if (user) {
-        return {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'User already exists',
-        };
-      }
-      const newUser = new this.userModel({
-        ...createUserDto,
-        role: 'USER',
-        status: 'ACTIVE',
-      });
-      const { _id, email, fullname, role, createdAt, updatedAt } =
-        await newUser.save();
+      const users = await this.userModel.find();
       return {
         status: HttpStatus.OK,
-        message: 'User created',
-        data: { id: _id, email, fullname, role, createdAt, updatedAt },
+        message: 'Users found',
+        data: users,
       };
     } catch (error) {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Error: Cannot create user',
+        message: 'Error: Cannot find users',
       };
     }
   }
 
-  async findAll(): Promise<Response<User[]>> {
+  async findUsersById(usersId: string[]): Promise<Response<User[]>> {
     try {
-      const users = await this.userModel.find();
+      const users = await this.userModel.find({ _id: { $in: usersId } });
       return {
         status: HttpStatus.OK,
         message: 'Users found',
@@ -109,6 +96,35 @@ export class UserService {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Error: Cannot find user',
+      };
+    }
+  }
+
+  async create(createUserDto: CreateUserDto): Promise<Response<UserDto>> {
+    try {
+      const user = await this.userModel.findOne({ email: createUserDto.email });
+      if (user) {
+        return {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'User already exists',
+        };
+      }
+      const newUser = new this.userModel({
+        ...createUserDto,
+        role: 'USER',
+        status: 'ACTIVE',
+      });
+      const { _id, email, fullname, role, createdAt, updatedAt } =
+        await newUser.save();
+      return {
+        status: HttpStatus.OK,
+        message: 'User created',
+        data: { id: _id, email, fullname, role, createdAt, updatedAt },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error: Cannot create user',
       };
     }
   }

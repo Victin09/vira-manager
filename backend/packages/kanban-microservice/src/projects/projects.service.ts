@@ -19,7 +19,6 @@ export class ProjectsService {
   constructor(
     @InjectModel(Project.name)
     private readonly projectModel: Model<ProjectDocument>,
-    private readonly listService: ListsService,
   ) {}
 
   async create(

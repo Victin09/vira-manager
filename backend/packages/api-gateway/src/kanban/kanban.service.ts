@@ -22,6 +22,10 @@ export class KanbanService {
     });
   }
 
+  findCardById(cardId: string) {
+    return this.client.send('findCardById', cardId);
+  }
+
   createProject(createProjectDto: CreateProjectDto) {
     return this.client.send('createProject', createProjectDto);
   }

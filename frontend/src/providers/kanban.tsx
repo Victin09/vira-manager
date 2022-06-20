@@ -1,27 +1,20 @@
 import { createContext, useContext, useState } from "react";
+import { CardType, ProjectType } from "../types/kanban";
 
 export interface KanbanContextProps {
-  projects: any[];
-  setProjects: (projects: any) => void;
-  displayCreateProjectModal: boolean;
-  setDisplayCreateProjectModal: (displayCreateProjectModal: boolean) => void;
-  displayProjectModal: boolean;
-  setDisplayProjectModal: (displayProjectModal: boolean) => void;
-  displayCardModal: boolean;
-  setDisplayCardModal: (displayCardModal: boolean) => void;
-  selectedCard: any;
-  setSelectedCard: (card: any) => void;
+  projects: ProjectType[];
+  setProjects: (projects: ProjectType[]) => void;
+  selectedProject: ProjectType | null;
+  setSelectedProject: (project: ProjectType) => void;
+  selectedCard: CardType | null;
+  setSelectedCard: (card: CardType) => void;
 }
 
 const defaultState: KanbanContextProps = {
   projects: [],
   setProjects: () => [],
-  displayCreateProjectModal: false,
-  setDisplayCreateProjectModal: () => false,
-  displayProjectModal: false,
-  setDisplayProjectModal: () => false,
-  displayCardModal: false,
-  setDisplayCardModal: () => false,
+  selectedProject: null,
+  setSelectedProject: () => null,
   selectedCard: null,
   setSelectedCard: () => null,
 };
@@ -29,26 +22,33 @@ const defaultState: KanbanContextProps = {
 const KanbanContext = createContext<KanbanContextProps>(defaultState);
 
 export const KanbanProvider = ({ children }: any) => {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [displayCreateProjectModal, setDisplayCreateProjectModal] =
-    useState<boolean>(false);
-  const [displayProjectModal, setDisplayProjectModal] =
-    useState<boolean>(false);
-  const [displayCardModal, setDisplayCardModal] = useState<boolean>(false);
-  const [selectedCard, setSelectedCard] = useState<any>(null);
+  const [projectsState, setProjectsState] = useState<ProjectType[]>([]);
+  const [selectedProjectState, setSelectedProjectState] =
+    useState<ProjectType | null>(null);
+  const [selectedCardState, setSelectedCardState] = useState<CardType | null>(
+    null
+  );
+
+  const setProjects = (projects: ProjectType[]) => {
+    setProjectsState(projects);
+  };
+
+  const setSelectedProject = (project: ProjectType) => {
+    setSelectedProjectState(project);
+  };
+
+  const setSelectedCard = (card: CardType) => {
+    setSelectedCardState(card);
+  };
 
   return (
     <KanbanContext.Provider
       value={{
-        projects,
+        projects: projectsState,
         setProjects,
-        displayCreateProjectModal,
-        setDisplayCreateProjectModal,
-        displayProjectModal,
-        setDisplayProjectModal,
-        displayCardModal,
-        setDisplayCardModal,
-        selectedCard,
+        selectedProject: selectedProjectState,
+        setSelectedProject,
+        selectedCard: selectedCardState,
         setSelectedCard,
       }}
     >

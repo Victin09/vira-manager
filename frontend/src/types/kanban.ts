@@ -4,15 +4,21 @@ export type TagType = {
   color: string;
 };
 
+export type PriorityType = {
+  name: string;
+  color: string;
+};
+
 export type CardType = {
   _id: string;
   name: string;
   description: string;
+  priority: string;
   users: string[];
   comments: string[];
   tags: TagType[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ListType = {
@@ -26,11 +32,13 @@ export type ListType = {
 export type ProjectType = {
   _id: string;
   name: string;
+  code: string;
+  type: string;
   lists: ListType[];
   description: string;
   users: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type CreateProjectType = {

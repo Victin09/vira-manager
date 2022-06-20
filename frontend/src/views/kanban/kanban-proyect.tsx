@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "@react-forked/dnd";
 import { useAuth } from "../../providers/auth";
 import { useParams } from "react-router-dom";
-import { useKanban } from "../../providers/kanban";
 import { useForm } from "../../hooks/use-form";
 import { ListType, ProjectType } from "../../types/kanban";
 import { getApiUrl } from "../../utils/api";
@@ -18,7 +17,6 @@ import { ViewCardModal } from "../../components/kanban/view-card";
 
 const KanbanProjectView = () => {
   const { getUser } = useAuth();
-  const { displayCardModal } = useKanban();
   const { handleSubmit, register, values, errors } = useForm<{
     name: string;
   }>();
@@ -239,7 +237,9 @@ const KanbanProjectView = () => {
         <div className="d-flex flex-column p-2 h-100">
           <div className="mx-2 mb-2 d-flex align-items-center justify-between">
             <h2 className="d-flex align-items-center fs-3 fw-bold">
-              {project!.name}
+              {project?.type === "KANBAN"
+                ? `Tablero ${project?.code}`
+                : "Sprint name"}
             </h2>
           </div>
           <div

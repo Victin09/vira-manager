@@ -18,6 +18,12 @@ export class Card {
   @Prop({ required: true, default: 1 })
   order: number;
 
+  @Prop({ required: true, default: 'LOW' })
+  priority: string;
+
+  @Prop()
+  comments: [{ user: string; comment: string }];
+
   @Prop()
   users: string[];
 

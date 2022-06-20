@@ -5,22 +5,29 @@ import { useKanban } from "../../providers/kanban";
 import { ApiResponse } from "../../types/api-response";
 import { CreateProjectType, ProjectType } from "../../types/kanban";
 import { getApiUrl } from "../../utils/api";
+import Select from "../select";
 
 export const CreateKanbanProjectModal = (): React.ReactElement => {
   const { getUser } = useAuth();
   const { setProjects, projects } = useKanban();
   const { register, values, errors, handleSubmit } =
     useForm<CreateProjectType>();
+  const [selectedOption, setSelectedOption] = useState<string>("Kanban");
   const [projectCreated, setProjectCreated] = useState<boolean>(false);
 
   const sendForm = async () => {
+    console.log("selectedOption", selectedOption);
     const response = await fetch(`${getApiUrl()}/kanban/projects`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
-      body: JSON.stringify({ ...values, users: [getUser()!.id] }),
+      body: JSON.stringify({
+        ...values,
+        type: selectedOption.toUpperCase(),
+        users: [getUser()!.id],
+      }),
     });
     const result: ApiResponse<ProjectType> = await response.json();
     if (result.status === 201) {
@@ -28,6 +35,10 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
       setProjects([...projects, result.data]);
       setProjectCreated(true);
     }
+  };
+
+  const handleSelectOption = (selectedOption: string) => {
+    setSelectedOption(selectedOption);
   };
 
   return (
@@ -80,6 +91,17 @@ export const CreateKanbanProjectModal = (): React.ReactElement => {
                     <span className="fw-semibold">Opps!</span> {errors.name}
                   </div>
                 )}
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="type" className="form-label">
+                  Tipo del proyecto
+                </label>
+                <Select
+                  type="PROJECT"
+                  selectedOption={selectedOption}
+                  setSelectedOption={(option) => setSelectedOption(option)}
+                />
               </div>
 
               <div className="mb-3">

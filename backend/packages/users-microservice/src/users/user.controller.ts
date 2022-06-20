@@ -19,19 +19,24 @@ export class UserController {
     return this.userService.findUserByEmail(email);
   }
 
-  @MessagePattern('createUser')
-  create(@Payload() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
   @MessagePattern('findAllUsers')
   findAll() {
     return this.userService.findAll();
   }
 
+  @MessagePattern('findUsersById')
+  findUsersByIds(@Payload() usersId: string[]) {
+    return this.userService.findUsersById(usersId);
+  }
+
   @MessagePattern('findOneUser')
-  findOne(@Payload() id: string) {
+  findUserById(@Payload() id: string) {
     return this.userService.findOne(id);
+  }
+
+  @MessagePattern('createUser')
+  create(@Payload() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
   }
 
   @MessagePattern('updateUser')

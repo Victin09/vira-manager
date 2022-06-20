@@ -98,3 +98,16 @@ export const moveBetween = (
     },
   };
 };
+
+export const renderPriorityStyle = (priority: string): string => {
+  switch (priority) {
+    case "HIGH":
+      return "bg-danger";
+    case "MEDIUM":
+      return "bg-warning";
+    case "LOW":
+      return "bg-info";
+    default:
+      return "bg-primary";
+  }
+};

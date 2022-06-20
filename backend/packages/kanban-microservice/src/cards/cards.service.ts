@@ -36,7 +36,7 @@ export class CardsService {
     }
   }
 
-  async findOne(id: string): Promise<ApiResponse<Card>> {
+  async findCardById(id: string): Promise<ApiResponse<Card>> {
     try {
       const card = await this.cardModel.findById(id);
       return {
@@ -45,6 +45,7 @@ export class CardsService {
         data: card,
       };
     } catch (error) {
+      console.log('error', error);
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Error: Cannot find card',

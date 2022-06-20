@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserService } from '@vira/users/user.service';
+import { UserController } from '@vira/users/user.controller';
 import { User, UserSchema } from '@vira/users/entities/user.entity';
 
 @Module({
