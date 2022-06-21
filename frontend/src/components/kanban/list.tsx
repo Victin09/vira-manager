@@ -60,29 +60,32 @@ export const List = ({ data, index }: { data: ListType; index: number }) => {
         <div
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="me-3 rounded shadow-sm bg-light"
+          className="me-3"
         >
-          <div style={{ width: "16rem" }}>
-            <div className="d-flex align-items-center justify-content-between w-100">
-              <div
-                {...provided.dragHandleProps}
-                className="px-2 py-2 w-100 d-flex align-items-center"
-              >
-                <h2 className={"text-truncate fw-bold fs-5"}>{data.name} </h2>
-                <span className="badge bg-primary ms-2">
-                  {data.cards.length}
-                </span>
-              </div>
+          <div className="h-100" style={{ width: "16rem" }}>
+            {/* <div
+              className="d-flex align-items-center justify-content-between w-100 position-fixed bg-light"
+              style={{ zIndex: 50, width: "16rem", top: "0px" }}
+            > */}
+            <div
+              {...provided.dragHandleProps}
+              className="px-2 py-2 d-flex align-items-center position-sticky bg-light rounded"
+              style={{ zIndex: 50, width: "16rem", top: "0px" }}
+              // style={{ width: "16rem" }}
+            >
+              <h2 className={"text-truncate fw-bold fs-5"}>{data.name} </h2>
+              <span className="badge bg-primary ms-2">{data.cards.length}</span>
             </div>
+            {/* </div> */}
             <Droppable droppableId={data._id} type="task">
               {(provided, snapshot) => (
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className={`py-2 bg-gray-200 px-2 ${
-                    snapshot.isDraggingOver ? "bg-gray-400" : ""
+                  className={`p-2 ${
+                    snapshot.isDraggingOver ? "bg-gray-400" : "bg-light"
                   }`}
-                  // style={{ maxHeight: 'calc(100vh - 15em)' }}
+                  style={{ minHeight: "3em" }}
                 >
                   {cardsState.map((t, i) => (
                     <Card data={t} index={i} key={t._id} />
@@ -91,28 +94,30 @@ export const List = ({ data, index }: { data: ListType; index: number }) => {
                 </div>
               )}
             </Droppable>
-            {!addTask ? (
-              <div
-                className="d-flex justify-content-center"
-                onClick={() => setAddTask(true)}
-                style={{ cursor: "pointer" }}
-              >
-                <span className="font-bold">
-                  <i className="bi bi-plus"></i> Añadir tarea
-                </span>
-              </div>
-            ) : (
-              <textarea
-                className="form-control mx-2 mb-2"
-                style={{ width: "93%" }}
-                placeholder="¿Qué se debe hacer?"
-                required
-                autoFocus
-                rows={3}
-                onChange={(e) => setNewCardName(e.target.value)}
-                onKeyPress={(e) => handleKeyPressed(e)}
-              />
-            )}
+            <div className="bg-light mb-2">
+              {!addTask ? (
+                <div
+                  className="d-flex flex-grow-1 justify-content-center pb-2"
+                  onClick={() => setAddTask(true)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <span className="font-bold">
+                    <i className="bi bi-plus"></i> Añadir tarea
+                  </span>
+                </div>
+              ) : (
+                <textarea
+                  className="form-control mx-2 mb-2"
+                  style={{ width: "93%" }}
+                  placeholder="¿Qué se debe hacer?"
+                  required
+                  autoFocus
+                  rows={3}
+                  onChange={(e) => setNewCardName(e.target.value)}
+                  onKeyPress={(e) => handleKeyPressed(e)}
+                />
+              )}
+            </div>
           </div>
         </div>
       )}

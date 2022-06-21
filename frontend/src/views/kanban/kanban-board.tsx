@@ -67,7 +67,7 @@ const KanbanProjectView = () => {
     };
 
     fetchData();
-  }, [getUser, projectId, users]);
+  }, []);
 
   const onDragEnd = async (result: any) => {
     const { destination, source } = result;
@@ -223,6 +223,7 @@ const KanbanProjectView = () => {
       if (result.status === 201) {
         setLists([...lists, result.data]);
         setNewList(false);
+        values.name = "";
         return;
       }
       return;
@@ -240,18 +241,18 @@ const KanbanProjectView = () => {
           </div>
         </div>
       ) : (
-        <div className="d-flex flex-column p-2 h-100">
+        <div className="d-flex flex-column ms-2">
           <div className="mx-2 mb-2 d-flex align-items-center justify-between">
             <h2 className="d-flex align-items-center fs-3 fw-bold">
-              {project?.type === "KANBAN"
-                ? `Tablero ${project?.code}`
-                : "Sprint name"}
+              {`Tablero ${project?.code}`}
             </h2>
           </div>
           <div
-            className="d-flex mt-4 overflow-auto"
-            // style={{ height: 'calc(100vh - 10em)', width: 'calc(100vw - 15em)' }}
-            // style={{ width: 'calc(100vw - 15em)' }}
+            className="d-flex flex-grow-1 mt-4 overflow-auto"
+            style={{
+              height: "calc(100vh - 130px)",
+              width: "calc(100vw - 170px)",
+            }}
           >
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable
@@ -263,8 +264,7 @@ const KanbanProjectView = () => {
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className="d-flex"
-                    // style={{ height: 'calc(100vh - 10em)' }}
+                    className="d-flex w-100"
                   >
                     {lists.map((list, i) => {
                       return <List key={list._id} data={list} index={i} />;
@@ -272,22 +272,26 @@ const KanbanProjectView = () => {
                     {provided.placeholder}
                     {!newList ? (
                       <div
-                        className="d-flex align-items-center justify-content-center px-2 rounded-1 bg-light w-100"
+                        className="d-flex align-items-center justify-content-center px-2 rounded-1 bg-light w-100 position-sticky"
                         style={{
                           width: "16rem",
                           height: "4rem",
                           cursor: "pointer",
+                          top: "0px",
                         }}
                         onClick={() => setNewList(true)}
                       >
-                        <div className="d-flex align-items-center">
+                        <div
+                          className="d-flex align-items-center"
+                          style={{ width: "16em" }}
+                        >
                           <i className="bi bi-plus"></i>
                           <span className="ms-2">Añadir nueva lista</span>
                         </div>
                       </div>
                     ) : (
                       <form
-                        className="ml-2 p-2"
+                        className="ml-2 p-2 w-100"
                         onSubmit={handleSubmit(handleNewList)}
                       >
                         <input
@@ -295,7 +299,7 @@ const KanbanProjectView = () => {
                           autoFocus
                           className={`${
                             errors.name ? "is-invalid " : ""
-                          }form-control`}
+                          }form-control mt-1 me-1`}
                           placeholder="Añadir nueva columna"
                           {...register("name", {
                             required: {
@@ -303,6 +307,7 @@ const KanbanProjectView = () => {
                               message: "El nombre es obligatorio",
                             },
                           })}
+                          style={{ width: "16em" }}
                         />
                         {errors.name && (
                           <div className="invalid-feedback">

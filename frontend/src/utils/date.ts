@@ -14,5 +14,15 @@ export const getDateName = (locale: string): string => {
 
 export const formatToDate = (dateString: string): string => {
   const date = new Date(dateString);
-  return `${("0" + date.getDate()).slice(-2)}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getFullYear()}`;
+  return `${("0" + date.getDate()).slice(-2)}-${(
+    "0" +
+    (date.getMonth() + 1)
+  ).slice(-2)}-${date.getFullYear()}`;
+};
+
+export const formatToDateInput = (dateString: string): string => {
+  const date = new Date(dateString);
+  return `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${(
+    "0" + date.getDate()
+  ).slice(-2)}`;
 };

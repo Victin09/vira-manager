@@ -1,5 +1,4 @@
 import { Route, Routes, useLocation } from "react-router-dom";
-import { Main } from "./components/main";
 import { Modal } from "./components/modal";
 import Landing from "./views/landing/landing";
 import SignIn from "./views/landing/sign-in";
@@ -10,12 +9,11 @@ import "./app.css";
 import { PublicRoute } from "./routes/public";
 import { PrivateRoute } from "./routes/private";
 import { AuthProvider } from "./providers/auth";
-import KanbanProjectView from "./views/kanban/kanban-board";
-import { KanbanTemplate } from "./components/templates/kanban";
-import KanbanView from "./views/kanban/kanban";
 import { AppTemplate } from "./components/templates/app";
 import { KanbanProvider } from "./providers/kanban";
-import KanbanBacklogView from "./views/kanban/kanban-backlog";
+import { KanbanTemplate } from "./components/templates/kanban";
+import KanbanView from "./views/kanban/kanban";
+import KanbanProjectView from "./views/kanban/kanban-board";
 
 type CustomState = {
   background: Location;
@@ -52,10 +50,6 @@ function App() {
                     element={<Modal />}
                   />
                 </Route>
-                <Route
-                  path="/kanban/:projectId/backlog"
-                  element={<KanbanBacklogView />}
-                ></Route>
               </Route>
             </Route>
           </Route>

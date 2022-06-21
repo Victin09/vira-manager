@@ -33,9 +33,10 @@ export type ProjectType = {
   _id: string;
   name: string;
   code: string;
-  type: string;
   lists: ListType[];
   description: string;
+  initialDate: string;
+  endDate: string;
   users: string[];
   createdAt: string;
   updatedAt: string;
@@ -44,4 +45,6 @@ export type ProjectType = {
 export type CreateProjectType = {
   name: string;
   description: string;
+  initDate?: string;
+  endDate?: string;
 };

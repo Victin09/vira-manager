@@ -45,6 +45,7 @@ export class ListsService {
         data: list,
       };
     } catch (error) {
+      console.log(error);
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Error: Cannot create list',

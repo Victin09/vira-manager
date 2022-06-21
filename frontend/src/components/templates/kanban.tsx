@@ -5,7 +5,7 @@ export const KanbanTemplate = () => {
   const { selectedProject } = useKanban();
 
   return (
-    <div className="d-flex h-100">
+    <div className="d-flex h-100 w-100">
       <div
         className="d-flex flex-column flex-shrink-0 p-3 bg-light shadow-sm border-end"
         style={{ width: "10em" }}
@@ -29,23 +29,11 @@ export const KanbanTemplate = () => {
               <span className="ms-2">Tablero</span>
             </Link>
           </li>
-          {selectedProject?.type === "SCRUM" && (
-            <li>
-              <Link
-                to={`/kanban/${selectedProject?._id}/backlog`}
-                className="nav-link link-dark"
-              >
-                <i className="bi bi-list-columns-reverse"></i>
-                <span className="ms-2">Backlog</span>
-              </Link>
-            </li>
-          )}
         </ul>
       </div>
-      <div className="col py-3 h-100">
+      <div className="col flex-grow-1 h-100">
         <Outlet />
       </div>
-      {/* </div> */}
     </div>
   );
 };

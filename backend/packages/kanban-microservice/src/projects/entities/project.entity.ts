@@ -14,9 +14,6 @@ export class Project {
   @Prop({ required: true })
   code: string;
 
-  @Prop({ required: true })
-  type: 'KANBAN' | 'SCRUM';
-
   @Prop()
   description: string;
 
@@ -25,6 +22,12 @@ export class Project {
 
   @Prop({ required: true })
   users: string[];
+
+  @Prop()
+  initDate: Date;
+
+  @Prop()
+  endDate: Date;
 
   @Prop({ default: false })
   archived: boolean;

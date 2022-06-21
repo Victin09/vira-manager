@@ -1,6 +1,5 @@
 import { useAuth } from "../../providers/auth";
 import { Link, Outlet } from "react-router-dom";
-import { getInitials } from "../../utils/text";
 
 export const AppTemplate = () => {
   const { getUser } = useAuth();

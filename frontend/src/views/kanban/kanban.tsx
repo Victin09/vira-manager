@@ -44,7 +44,7 @@ const KanbanView = () => {
   };
 
   return (
-    <div className="d-flex flex-column flex-grow-1 p-2">
+    <div className="d-flex flex-column flex-grow-1 p-2 h-100 overflow-auto">
       {loading ? (
         <div className="d-flex align-items-center justify-content-center h-100">
           <div className="spinner-border text-primary" role="status">
@@ -82,9 +82,9 @@ const KanbanView = () => {
               </button>
             </div>
           ) : (
-            <div className="w-100">
-              <div className="row mt-5">
-                <div className="col-12 col-sm-3">
+            <div className="w-100 flex-grow-1">
+              <div className="d-flex row mt-5 w-100">
+                <div className="col-12 col-sm-4">
                   <div className="input-group mb-3">
                     <span className="input-group-text" id="search-project">
                       <i className="bi bi-search"></i>
@@ -101,9 +101,18 @@ const KanbanView = () => {
                 </div>
               </div>
 
-              <div className="table-responsive">
-                <table className="table table-hover">
-                  <thead>
+              <div
+                className="d-flex flex-grow-1 overflow-auto"
+                style={{
+                  height: "calc(100vh - 220px)",
+                  width: "calc(100vw - 10px)",
+                }}
+              >
+                <table className="table table-hover table-responsive">
+                  <thead
+                    className="bg-light position-sticky"
+                    style={{ top: "0px" }}
+                  >
                     <tr>
                       <th>Código</th>
                       <th>Nombre</th>
