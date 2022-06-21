@@ -12,7 +12,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     PassportModule,
     ClientsModule.register([
       {
-        name: 'USERS_SERVICE',
+        name: 'USERS_MICROSERVICE',
         transport: Transport.TCP,
         options: {
           host: 'localhost',
@@ -28,4 +28,4 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
 })
-export class AuthModule { }
+export class AuthModule {}

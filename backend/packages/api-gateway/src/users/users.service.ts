@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('USERS_SERVICE') private readonly client: ClientProxy) {}
+  constructor(
+    @Inject('USERS_MICROSERVICE') private readonly client: ClientProxy,
+  ) {}
 
   findAllUsers(): Observable<any> {
     return this.client.send('findAllUsers', {});

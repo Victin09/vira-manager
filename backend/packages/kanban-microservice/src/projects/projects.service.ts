@@ -107,9 +107,10 @@ export class ProjectsService {
   }
 
   async update(updateProjectDto: UpdateProjectDto): Promise<ApiResponse<any>> {
+    console.log({ ...updateProjectDto });
     try {
       const project = await this.projectModel.findOneAndUpdate(
-        { _id: updateProjectDto.id, users: updateProjectDto.users },
+        { _id: updateProjectDto.id },
         { ...updateProjectDto },
       );
       return {

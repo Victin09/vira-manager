@@ -32,55 +32,48 @@ export const SearchUsersDropdown = ({
     };
 
     fetchData();
-  }, [users]);
+  }, []);
 
   return (
-    <>
-      {!loading && (
+    <div className="d-flex">
+      <div className="dropdown">
         <div
-          className="uk-box-shadow-small uk-border-rounded"
-          style={{ zIndex: "101" }}
+          className="p-2 d-flex align-items-center justify-content-center rounded-circle bg-light"
+          role="button"
+          id="dropdownMenuLink"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
         >
-          <input
-            type="text"
-            placeholder="Search users"
-            className="uk-input uk-form-width-large uk-border-rounded uk-width-1-1"
-            onChange={(e) => {
-              const search = e.target.value;
-              users.filter((user) =>
-                user.fullname.toLowerCase().includes(search.toLowerCase())
-              );
-              console.log("users", users);
-            }}
-          />
-          <ul className="uk-list" style={{ marginTop: ".5em" }}>
-            {users
-              .filter(
-                (i) =>
-                  !selectedUsers.filter((y) => y.fullname === i.fullname).length
-              )
-              .map((user, index) => (
-                <li
-                  key={index}
-                  onClick={() => setSelectedUsers(user)}
-                  style={{ cursor: "pointer", padding: ".5em" }}
-                >
-                  <span
-                    className="uk-border-circle uk-background-primary uk-light uk-margin-small-right"
-                    style={{
-                      padding: ".30em",
-                      paddingLeft: ".5em",
-                      paddingRight: ".5em",
-                    }}
-                  >
-                    {getInitials(user.fullname)}
-                  </span>
-                  {user.fullname}
-                </li>
-              ))}
-          </ul>
+          <i className="bi bi-plus-lg"></i>
         </div>
-      )}
-    </>
+        {!loading && (
+          <div className="dropdown-menu p-2 shadow">
+            <input
+              type="text"
+              className="form-control"
+              id="exampleDropdownFormEmail2"
+              placeholder="Busca un usuario"
+            />
+            <div className="my-3">
+              {users
+                .filter(
+                  (i) => !selectedUsers.filter((y) => y.id === i.id).length
+                )
+                .map((user, index) => (
+                  <div
+                    key={index}
+                    className="d-flex flex-column px-2"
+                    onClick={() => setSelectedUsers(user)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span className="fw-semibold">{user.fullname}</span>
+                    <span className="fw-light">{user.email}</span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };

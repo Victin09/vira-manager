@@ -7,7 +7,7 @@ import { UsersController } from '@vira/users/users.controller';
   imports: [
     ClientsModule.register([
       {
-        name: 'USERS_SERVICE',
+        name: 'USERS_MICROSERVICE',
         transport: Transport.TCP,
         options: {
           host: 'localhost',
@@ -18,5 +18,6 @@ import { UsersController } from '@vira/users/users.controller';
   ],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

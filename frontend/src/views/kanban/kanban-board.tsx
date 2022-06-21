@@ -15,6 +15,8 @@ import {
 import { List } from "../../components/kanban/list";
 import { ViewCardModal } from "../../components/kanban/view-card";
 import { useKanban } from "../../providers/kanban";
+import { SearchUsersDropdown } from "../../components/search-users-dropdown";
+import { formatObjectToString, getInitials } from "../../utils/text";
 
 const KanbanProjectView = () => {
   const { getUser } = useAuth();
@@ -28,6 +30,24 @@ const KanbanProjectView = () => {
   const [lists, setLists] = useState<ListType[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [newList, setNewList] = useState<boolean>(false);
+
+  const [selectedUsersState, setSelectedUsersState] = useState<User[]>([]);
+  const handleSelectedUser = async (user: any) => {
+    console.log("test", [...users, user._id]);
+    const response = await fetch(`${getApiUrl()}/kanban/project/${projectId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ users: [...users, user._id] }),
+      credentials: "include",
+    });
+    const result: ApiResponse<ProjectType> = await response.json();
+    if (result.status === 200) {
+      console.log("response", response);
+      setSelectedUsersState([...selectedUsersState, user]);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,20 +63,21 @@ const KanbanProjectView = () => {
       );
       const result: ApiResponse<ProjectType> = await apiResult.json();
       if (result.status === 200) {
-        result.data.users!.forEach(async (userId) => {
-          const apiResponse = await fetch(`${getApiUrl()}/users/${userId}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          });
-          const response: ApiResponse<User> = await apiResponse.json();
-          if (response.status === 200) {
-            setUsers([...users, response.data]);
-          }
-        });
-
+        // result.data.users!.forEach(async (userId) => {
+        //   const apiResponse = await fetch(`${getApiUrl()}/users/${userId}`, {
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     credentials: "include",
+        //   });
+        //   const response: ApiResponse<User> = await apiResponse.json();
+        //   if (response.status === 200) {
+        //     setUsers([...users, response.data]);
+        //   }
+        // });
+        console.log("data", result.data);
+        const usersTest = await (await fetch(`${getApiUrl()}/`))
         setProject(result.data);
         setLists(result.data.lists ? result.data.lists : []);
         setLoading(false);
@@ -239,15 +260,29 @@ const KanbanProjectView = () => {
         </div>
       ) : (
         <div className="d-flex flex-column ms-2">
-          <div className="mx-2 mb-2 d-flex align-items-center justify-between">
-            <h2 className="d-flex align-items-center fs-3 fw-bold">
-              {`Tablero ${project?.code}`}
-            </h2>
+          <div className="mx-2 mt-2 mb-2 d-flex align-items-center justify-content-between">
+            <span className="fs-3 fw-bold">{`Tablero ${project?.code}`}</span>
+            <div className="d-flex">
+              {selectedUsersState.map((user, index) => (
+                <div
+                  key={index}
+                  className="p-2 d-flex align-items-center justify-content-center rounded-circle bg-primary"
+                >
+                  <span className="text-white">
+                    {getInitials(user.fullname)}
+                  </span>
+                </div>
+              ))}
+              <SearchUsersDropdown
+                selectedUsers={selectedUsersState}
+                setSelectedUsers={handleSelectedUser}
+              />
+            </div>
           </div>
           <div
             className="d-flex flex-grow-1 mt-4 overflow-auto"
             style={{
-              height: "calc(100vh - 130px)",
+              height: "calc(100vh - 140px)",
               width: "calc(100vw - 170px)",
             }}
           >

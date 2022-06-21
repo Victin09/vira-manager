@@ -9,7 +9,7 @@ import { UserDto } from '@vira/auth/dtos/user.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject('USERS_SERVICE') private readonly client: ClientProxy,
+    @Inject('USERS_MICROSERVICE') private readonly client: ClientProxy,
     private readonly jwtService: JwtService,
   ) {}
 

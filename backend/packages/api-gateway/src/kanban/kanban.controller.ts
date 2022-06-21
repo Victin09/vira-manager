@@ -5,6 +5,7 @@ import { CreateListDto } from '@vira/kanban/dtos/create-list.dto';
 import { UpdateListDto } from '@vira/kanban/dtos/update-list.dto';
 import { CreateCardDto } from './dtos/create-card.dto';
 import { UpdateCardDto } from './dtos/update-card.dto';
+import { UpdateProjectDto } from './dtos/update-project.dto';
 
 @Controller('kanban')
 export class KanbanController {
@@ -43,8 +44,16 @@ export class KanbanController {
     return this.kanbanService.createCard(createCardDto);
   }
 
+  @Put('/project/:projectId')
+  upadteProject(
+    @Param('projectId') projectId: string,
+    @Body() updateProjectDto: UpdateProjectDto,
+  ) {
+    return this.kanbanService.updateProject(projectId, updateProjectDto);
+  }
+
   @Put('/lists/:listId')
-  updpdateList(
+  updateList(
     @Param('listId') listId: string,
     @Body() updateListDto: UpdateListDto,
   ) {
