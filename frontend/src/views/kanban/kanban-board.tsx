@@ -56,10 +56,7 @@ const KanbanProjectView = () => {
             setUsers([...users, response.data]);
           }
         });
-    
-        if (project?.type === "kanban") {
-          const apiResult = await fetch(
-        }
+
         setProject(result.data);
         setLists(result.data.lists ? result.data.lists : []);
         setLoading(false);

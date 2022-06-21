@@ -95,7 +95,7 @@ export class ProjectsService {
       return {
         status: HttpStatus.OK,
         message: 'Project found',
-        data: project,
+        data: result,
       };
     } catch (error) {
       console.log('error', error);
