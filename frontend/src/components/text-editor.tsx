@@ -33,6 +33,11 @@ export const TextEditor = ({
     };
     const getHTMLValue = () => quill.root.innerHTML;
 
+    var Font = Quill.import("formats/font");
+    // We do not add Aref Ruqaa since it is the default
+    Font.whitelist = ["mirza", "roboto"];
+    Quill.register(Font, true);
+
     quill.on("text-change", handleContentsChange);
     return () => {
       quill.off("text-change", handleContentsChange);
@@ -44,11 +49,9 @@ export const TextEditor = ({
       <div id="toolbar-container" className="rounded-top">
         <span className="ql-formats">
           <select className="ql-font">
-            <option selected>Sans Serif</option>
-            <option value="inconsolata">Inconsolata</option>
-            <option value="roboto">Roboto</option>
+            <option selected>Aref Ruqaa</option>
             <option value="mirza">Mirza</option>
-            <option value="arial">Arial</option>
+            <option value="roboto">Roboto</option>
           </select>
           {/* <select className="ql-font"></select> */}
           <select className="ql-size"></select>
