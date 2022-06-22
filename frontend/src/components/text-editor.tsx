@@ -49,9 +49,10 @@ export const TextEditor = ({
       <div id="toolbar-container" className="rounded-top">
         <span className="ql-formats">
           <select className="ql-font">
-            <option selected>Aref Ruqaa</option>
+            <option value="roboto" selected>
+              Roboto
+            </option>
             <option value="mirza">Mirza</option>
-            <option value="roboto">Roboto</option>
           </select>
           {/* <select className="ql-font"></select> */}
           <select className="ql-size"></select>
@@ -83,7 +84,7 @@ export const TextEditor = ({
           <button className="ql-indent" value="+1"></button>
         </span>
         <span className="ql-formats">
-          <button className="ql-direction" value="rtl"></button>
+          {/* <button className="ql-direction" value="rtl"></button> */}
           <select className="ql-align"></select>
         </span>
         <span className="ql-formats">

@@ -60,11 +60,12 @@ html, body > #root {
   background: transparent;
 }
 
+/* Set default font-family */
+#editor-container {
+  font-family: "Roboto";
+}
 
 /* Set dropdown font-families */
-#toolbar-container .ql-font span[data-label="Aref Ruqaa"]::before {
-  font-family: "Aref Ruqaa";
-}
 #toolbar-container .ql-font span[data-label="Mirza"]::before {
   font-family: "Mirza";
 }
