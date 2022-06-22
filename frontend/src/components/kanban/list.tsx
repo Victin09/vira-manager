@@ -20,7 +20,6 @@ export const List = ({ data, index }: { data: ListType; index: number }) => {
   const handleKeyPressed = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     console.log("e", e.key);
     if (e.key === "Enter") {
-      console.log("ENTER");
       setAddTask(false);
       createNewCard();
     }
@@ -69,12 +68,21 @@ export const List = ({ data, index }: { data: ListType; index: number }) => {
             > */}
             <div
               {...provided.dragHandleProps}
-              className="px-2 py-2 d-flex align-items-center position-sticky bg-light rounded"
+              className="px-2 py-2 d-flex position-sticky bg-light rounded"
               style={{ zIndex: 50, width: "16rem", top: "0px" }}
               // style={{ width: "16rem" }}
             >
-              <h2 className={"text-truncate fw-bold fs-5"}>{data.name} </h2>
-              <span className="badge bg-primary ms-2">{data.cards.length}</span>
+              <div className="d-flex align-items-center">
+                <span className="text-truncate fs-6">
+                  {`${data.name} ${data.cards.length} ${
+                    data.cards.length > 1 ? "Incidencia" : "Incidencias"
+                  }`.toUpperCase()}
+                </span>
+                {/* <span className="ms-2">
+                  {data.cards.length}
+                  {` ${data.cards.length > 1 ? "Incidencia" : "Incidencias"}`}
+                </span> */}
+              </div>
             </div>
             {/* </div> */}
             <Droppable droppableId={data._id} type="task">

@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export type TagType = {
   _id: string;
   name: string;
@@ -37,7 +39,7 @@ export type ProjectType = {
   description: string;
   initialDate: string;
   endDate: string;
-  users: string[];
+  users: User[];
   createdAt: string;
   updatedAt: string;
 };

@@ -12,7 +12,7 @@ export const getDateName = (locale: string): string => {
   )}`;
 };
 
-export const formatToDate = (dateString: string): string => {
+export const formatToDate = (dateString: string = ""): string => {
   const date = new Date(dateString);
   return `${("0" + date.getDate()).slice(-2)}-${(
     "0" +

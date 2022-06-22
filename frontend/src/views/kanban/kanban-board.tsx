@@ -16,7 +16,7 @@ import { List } from "../../components/kanban/list";
 import { ViewCardModal } from "../../components/kanban/view-card";
 import { useKanban } from "../../providers/kanban";
 import { SearchUsersDropdown } from "../../components/search-users-dropdown";
-import { formatObjectToString, getInitials } from "../../utils/text";
+import { getInitials } from "../../utils/text";
 
 const KanbanProjectView = () => {
   const { getUser } = useAuth();
@@ -28,26 +28,8 @@ const KanbanProjectView = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [project, setProject] = useState<ProjectType>();
   const [lists, setLists] = useState<ListType[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
   const [newList, setNewList] = useState<boolean>(false);
-
   const [selectedUsersState, setSelectedUsersState] = useState<User[]>([]);
-  const handleSelectedUser = async (user: any) => {
-    console.log("test", [...users, user._id]);
-    const response = await fetch(`${getApiUrl()}/kanban/project/${projectId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ users: [...users, user._id] }),
-      credentials: "include",
-    });
-    const result: ApiResponse<ProjectType> = await response.json();
-    if (result.status === 200) {
-      console.log("response", response);
-      setSelectedUsersState([...selectedUsersState, user]);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,22 +45,8 @@ const KanbanProjectView = () => {
       );
       const result: ApiResponse<ProjectType> = await apiResult.json();
       if (result.status === 200) {
-        // result.data.users!.forEach(async (userId) => {
-        //   const apiResponse = await fetch(`${getApiUrl()}/users/${userId}`, {
-        //     method: "GET",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     credentials: "include",
-        //   });
-        //   const response: ApiResponse<User> = await apiResponse.json();
-        //   if (response.status === 200) {
-        //     setUsers([...users, response.data]);
-        //   }
-        // });
-        console.log("data", result.data);
-        const usersTest = await (await fetch(`${getApiUrl()}/`))
         setProject(result.data);
+        setSelectedUsersState(result.data.users);
         setLists(result.data.lists ? result.data.lists : []);
         setLoading(false);
       }
@@ -247,6 +215,22 @@ const KanbanProjectView = () => {
       return;
     } catch (error) {
       console.log("error", error);
+    }
+  };
+
+  const handleSelectedUser = async (user: any) => {
+    const response = await fetch(`${getApiUrl()}/kanban/project/${projectId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ users: [...selectedUsersState, user._id] }),
+      credentials: "include",
+    });
+    const result: ApiResponse<ProjectType> = await response.json();
+    if (result.status === 200) {
+      console.log("response", response);
+      setSelectedUsersState([...selectedUsersState, user]);
     }
   };
 

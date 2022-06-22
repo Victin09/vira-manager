@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { map, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { CreateProjectDto } from '@vira/kanban/dtos/create-project.dto';
 import { CreateListDto } from '@vira/kanban/dtos/create-list.dto';
 import { UpdateListDto } from './dtos/update-list.dto';
@@ -20,31 +20,27 @@ export class KanbanService {
     return this.kanbanClient.send('findAllProjects', userId);
   }
 
-  findProjectById(userId: string, projectId: string) {
-    return this.kanbanClient
-      .send('findProjectById', {
-        userId,
-        projectId,
-      })
-      .pipe(
-        map((response) => {
-          response.data.users = this.usersClient
-            .send('findUsersById', response.data.users)
-            .pipe(
-              map((users) => {
-                return users;
-              }),
-            );
-          // .pipe(
-          //   map((usersResponse) => {
-          //     console.log({ usersResponse });
-          //     return usersResponse;
-          //   }),
-          // );
-          // console.log('data', response.data);
-          return response;
+  async findProjectById(userId: string, projectId: string) {
+    const project = await firstValueFrom(
+      this.kanbanClient
+        .send('findProjectById', {
+          userId,
+          projectId,
+        })
+        .pipe(
+          map((response) => {
+            return response;
+          }),
+        ),
+    );
+    await firstValueFrom(
+      this.usersClient.send('findUsersById', project.data.users).pipe(
+        map((users) => {
+          project.data.users = users.data;
         }),
-      );
+      ),
+    );
+    return project;
   }
 
   findCardById(cardId: string) {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuill } from "../../hooks/use-quill";
 import { useKanban } from "../../providers/kanban";
 import { ApiResponse } from "../../types/api-response";
 import { CardType } from "../../types/kanban";
@@ -6,8 +7,12 @@ import { getApiUrl } from "../../utils/api";
 import { formatToDate } from "../../utils/date";
 import { renderPriorityStyle } from "../../utils/kanban";
 
+import "quill/dist/quill.snow.css";
+import { TextEditor } from "../text-editor";
+
 export const ViewCardModal = () => {
   const { selectedCard } = useKanban();
+  const { quill, quillRef } = useQuill();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<CardType>();
@@ -33,8 +38,19 @@ export const ViewCardModal = () => {
       }
     };
 
-    if (selectedCard) fetchData();
-  }, [selectedCard]);
+    console.log({ selectedCard });
+    // if (selectedCard) fetchData();
+
+    if (quill) {
+      quill.on("text-change", (delta, oldDelta, source) => {
+        console.log("Text change!");
+        console.log(quill.getText()); // Get text only
+        console.log(quill.getContents()); // Get delta contents
+        console.log(quill.root.innerHTML); // Get innerHTML using quill
+        console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
+      });
+    }
+  }, [selectedCard, quill]);
 
   const handleKeyPressedDescription = (
     e: React.KeyboardEvent<HTMLTextAreaElement>
@@ -50,7 +66,7 @@ export const ViewCardModal = () => {
   const updateCard = async () => {
     try {
       const apiResponse = await fetch(
-        `${getApiUrl()}/kanban/cards/${data!._id}`,
+        `${getApiUrl()}/kanban/cards/${selectedCard?._id}`,
         {
           method: "PUT",
           headers: {
@@ -79,12 +95,12 @@ export const ViewCardModal = () => {
       aria-labelledby="cardModal"
       aria-hidden="true"
     >
-      <div className="modal-dialog modal-dialog-centered modal-lg">
+      <div className="modal-dialog modal-dialog-centered modal-xl">
         <div className="modal-content">
           <div className="modal-header">
-            {!loading && (
+            {selectedCard && (
               <h5 className="modal-title" id="cardModal">
-                {data!.name}
+                {selectedCard?.name}
               </h5>
             )}
             <button
@@ -95,141 +111,15 @@ export const ViewCardModal = () => {
             ></button>
           </div>
           <div className="modal-body">
-            {loading ? (
-              <span></span>
-            ) : (
-              <>
-                <div className="row">
-                  <div className="col-12">
-                    <span className="fw-semibold">Descripción:</span>
-                    {!data!.description ? (
-                      <>
-                        {!editDescription ? (
-                          <p
-                            className="bg-light p-2"
-                            onClick={() => setEditDescription(true)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            No hay descripción para este card.
-                          </p>
-                        ) : (
-                          <div className="mt-1">
-                            <textarea
-                              className="form-control mt-1"
-                              rows={3}
-                              autoFocus
-                              value={data?.description}
-                              onChange={(e) =>
-                                setData({
-                                  ...data!,
-                                  description: e.target.value,
-                                })
-                              }
-                              onKeyPress={(e) => handleKeyPressedDescription(e)}
-                            />
-                            <div className="mt-2">
-                              <button
-                                className="btn btn-primary"
-                                onClick={updateCard}
-                              >
-                                Guardar
-                              </button>
-                              <button
-                                className="btn btn-secondary ms-1"
-                                onClick={() => setEditDescription(false)}
-                              >
-                                Cancelar
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {!editDescription ? (
-                          <p
-                            className=""
-                            onClick={() => setEditDescription(true)}
-                          >
-                            {data!.description}
-                          </p>
-                        ) : (
-                          <div className="mt-1">
-                            <textarea
-                              className="form-control mt-1"
-                              rows={3}
-                              autoFocus
-                              value={data?.description}
-                              onChange={(e) =>
-                                setData({
-                                  ...data!,
-                                  description: e.target.value,
-                                })
-                              }
-                              onKeyPress={(e) => handleKeyPressedDescription(e)}
-                            />
-                            <div className="mt-2">
-                              <button
-                                className="btn btn-primary"
-                                onClick={updateCard}
-                              >
-                                Guardar
-                              </button>
-                              <button
-                                className="btn btn-secondary ms-1"
-                                onClick={() => setEditDescription(false)}
-                              >
-                                Cancelar
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
+            <div className="row">
+              <div className="col-8">
+                <div className="border-rounded">
+                  {/* <div ref={quillRef} /> */}
+                  <TextEditor />
                 </div>
-                <div className="row">
-                  <div className="col-4 d-flex flex-column">
-                    <span className="fw-semibold">Prioridad:</span>
-                    <select
-                      className="form-select"
-                      aria-label="Priority select"
-                    >
-                      {priorities.map((priority, index) => (
-                        <option
-                          className={renderPriorityStyle(priority)}
-                          value={priority}
-                          key={index}
-                        >
-                          {priority}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-4 d-flex flex-column">
-                    <span className="fw-semibold">Fecha de actualización:</span>
-                    <span>{formatToDate(data!.updatedAt)}</span>
-                  </div>
-                  <div className="col-4 d-flex flex-column">
-                    <span className="fw-semibold">Usuarios:</span>
-                  </div>
-                </div>
-                <div className="row mt-5">
-                  <div className="col-12 d-flex flex-column">
-                    <div className="">
-                      <textarea
-                        className="form-control"
-                        rows={3}
-                        placeholder="Añade un nuevo comentario"
-                      />
-                    </div>
-                    {data!.comments.map((comment, index) => (
-                      <span key={index}>{comment}</span>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
+              </div>
+              <div className="col-4"></div>
+            </div>
           </div>
         </div>
       </div>
