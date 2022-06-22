@@ -1,47 +1,99 @@
-// import { useLayoutEffect } from "react";
-// import suneditor from "suneditor";
-// import plugins from "suneditor/src/plugins";
-// import { es } from "suneditor/src/lang";
+import React, { useLayoutEffect, useRef } from "react";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 
-// import "suneditor/dist/css/suneditor.min.css";
+type TextEditorProps = {
+  placeholder?: string;
+  defaultValue?: string;
+  value?: string;
+  onChange: (text: string) => void;
+};
 
-// export const TextEditor = () => {
-//   useLayoutEffect(() => {
-//     const editor = suneditor.create("editor", {
-//       plugins: plugins,
-//       buttonList: [
-//         [
-//           ":p-More Paragraph-default.more_paragraph",
-//           // "font",
-//           "fontSize",
-//           "formatBlock",
-//         ],
-//         // ["paragraphStyle", "blockquote"],
-//         ["bold", "underline", "italic", "strike"],
-//         ["fontColor", "hiliteColor"],
-//         // "/", // Line break
-//         ["outdent", "indent"],
-//         ["align", "horizontalRule", "list"],
-//         ["table", "link", "image", "video" /** ,'math' */], // You must add the 'katex' library at options to use the 'math' plugin.
-//         /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
-//         /** ['dir', 'dir_ltr', 'dir_rtl'] */ // "dir": Toggle text direction, "dir_ltr": Right to Left, "dir_rtl": Left to Right
-//       ],
-//       lang: es,
-//       font: ["Roboto"],
-//     });
+const quillConfig = {
+  theme: "snow",
+  modules: {
+    toolbar: "#toolbar-container",
+  },
+};
 
-//     editor.setDefaultStyle("font-family: Roboto, sans-serif;");
+export const TextEditor = ({
+  placeholder,
+  defaultValue,
+  // we're not really feeding new value to quill instance on each render because it's too
+  // expensive, but we're still accepting 'value' prop as alias for defaultValue because
+  // other components like <Form.Field> feed their children with data via the 'value' prop
+  value: alsoDefaultValue,
+  onChange,
+}: TextEditorProps) => {
+  useLayoutEffect(() => {
+    let quill = new Quill("#editor-container", { placeholder, ...quillConfig });
 
-//     editor.onChange = function (contents, core) {
-//       console.log("onChange", contents);
-//     };
-//   }, []);
+    const handleContentsChange = () => {
+      onChange(getHTMLValue());
+    };
+    const getHTMLValue = () => quill.root.innerHTML;
 
-//   return (
-//     <textarea id="editor" className="border border-primary">
-//       Hi
-//     </textarea>
-//   );
-// };
+    quill.on("text-change", handleContentsChange);
+    return () => {
+      quill.off("text-change", handleContentsChange);
+    };
+  }, []);
 
-
+  return (
+    <div id="standalone-container">
+      <div id="toolbar-container" className="rounded-top">
+        <span className="ql-formats">
+          <select className="ql-font">
+            <option selected>Sans Serif</option>
+            <option value="inconsolata">Inconsolata</option>
+            <option value="roboto">Roboto</option>
+            <option value="mirza">Mirza</option>
+            <option value="arial">Arial</option>
+          </select>
+          {/* <select className="ql-font"></select> */}
+          <select className="ql-size"></select>
+        </span>
+        <span className="ql-formats">
+          <button className="ql-bold"></button>
+          <button className="ql-italic"></button>
+          <button className="ql-underline"></button>
+          <button className="ql-strike"></button>
+        </span>
+        <span className="ql-formats">
+          <select className="ql-color"></select>
+          <select className="ql-background"></select>
+        </span>
+        {/* <span className="ql-formats">
+          <button className="ql-script" value="sub"></button>
+          <button className="ql-script" value="super"></button>
+        </span> */}
+        <span className="ql-formats">
+          <button className="ql-header" value="1"></button>
+          <button className="ql-header" value="2"></button>
+          <button className="ql-blockquote"></button>
+          <button className="ql-code-block"></button>
+        </span>
+        <span className="ql-formats">
+          <button className="ql-list" value="ordered"></button>
+          <button className="ql-list" value="bullet"></button>
+          <button className="ql-indent" value="-1"></button>
+          <button className="ql-indent" value="+1"></button>
+        </span>
+        <span className="ql-formats">
+          <button className="ql-direction" value="rtl"></button>
+          <select className="ql-align"></select>
+        </span>
+        <span className="ql-formats">
+          <button className="ql-link"></button>
+          <button className="ql-image"></button>
+          <button className="ql-video"></button>
+          {/* <button className="ql-formula"></button> */}
+        </span>
+        <span className="ql-formats">
+          <button className="ql-clean"></button>
+        </span>
+      </div>
+      <div id="editor-container" className="rounded-bottom"></div>
+    </div>
+  );
+};

@@ -87,6 +87,10 @@ export const ViewCardModal = () => {
     }
   };
 
+  const handleText = (text: string) => {
+    console.log("text", text);
+  };
+
   return (
     <div
       className="modal fade"
@@ -94,6 +98,8 @@ export const ViewCardModal = () => {
       tabIndex={-1}
       aria-labelledby="cardModal"
       aria-hidden="true"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
     >
       <div className="modal-dialog modal-dialog-centered modal-xl">
         <div className="modal-content">
@@ -113,10 +119,7 @@ export const ViewCardModal = () => {
           <div className="modal-body">
             <div className="row">
               <div className="col-8">
-                <div className="border-rounded">
-                  {/* <div ref={quillRef} /> */}
-                  <TextEditor />
-                </div>
+                <TextEditor onChange={handleText} />
               </div>
               <div className="col-4"></div>
             </div>
