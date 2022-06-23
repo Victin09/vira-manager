@@ -23,11 +23,7 @@ export const ViewCardModal = () => {
   const [newDescription, setNewDescription] = useState<string>();
   const [addComment, setAddComment] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<string>();
-  const [priorities, setPriorities] = useState<string[]>([
-    "LOW",
-    "MEDIUM",
-    "HIGH",
-  ]);
+  const [newPriority, setNewPriority] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +41,9 @@ export const ViewCardModal = () => {
     };
 
     console.log({ selectedCard });
+    if (selectedCard) {
+      setNewPriority(selectedCard!.priority);
+    }
     // if (selectedCard) fetchData();
   }, [selectedCard]);
 
@@ -61,6 +60,7 @@ export const ViewCardModal = () => {
 
   const updateCard = async () => {
     try {
+      console.log("newPriorityFromFetch", newPriority);
       const apiResponse = await fetch(
         `${getApiUrl()}/kanban/cards/${selectedCard?._id}`,
         {
@@ -71,6 +71,7 @@ export const ViewCardModal = () => {
           body: JSON.stringify({
             description: newDescription,
             comments: [...selectedCard!.comments, newComment],
+            priority: newPriority,
           }),
           credentials: "include",
         }
@@ -88,6 +89,12 @@ export const ViewCardModal = () => {
 
   const handleText = (text: string) => {
     setNewDescription(text);
+  };
+
+  const handlePriorityChange = (priority: string) => {
+    console.log({ priority });
+    setNewPriority(priority);
+    updateCard();
   };
 
   return (
@@ -217,10 +224,13 @@ export const ViewCardModal = () => {
                 </div>
               </div>
               <div className="col-4">
-                {/* <div className="d-flex flex-column">
+                <div className="d-flex flex-column">
                   <span className="fw-semibold">Prioridad:</span>
-                  <Select  />
-                </div> */}
+                  <Select
+                    selectedOption={newPriority}
+                    setSelectedOption={handlePriorityChange}
+                  />
+                </div>
               </div>
             </div>
           </div>
