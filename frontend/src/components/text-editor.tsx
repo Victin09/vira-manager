@@ -1,10 +1,9 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
 type TextEditorProps = {
   placeholder?: string;
-  defaultValue?: string;
   value?: string;
   onChange: (text: string) => void;
 };
@@ -18,22 +17,29 @@ const quillConfig = {
 
 export const TextEditor = ({
   placeholder,
-  defaultValue,
   // we're not really feeding new value to quill instance on each render because it's too
   // expensive, but we're still accepting 'value' prop as alias for defaultValue because
   // other components like <Form.Field> feed their children with data via the 'value' prop
-  value: alsoDefaultValue,
+  value,
   onChange,
 }: TextEditorProps) => {
   useLayoutEffect(() => {
-    let quill = new Quill("#editor-container", { placeholder, ...quillConfig });
+    const quill = new Quill("#editor-container", {
+      placeholder,
+      ...quillConfig,
+    });
+
+    if (value) {
+      // const delta = quill.clipboard.convert(value);
+      quill.clipboard.dangerouslyPasteHTML(value);
+    }
 
     const handleContentsChange = () => {
       onChange(getHTMLValue());
     };
     const getHTMLValue = () => quill.root.innerHTML;
 
-    var Font = Quill.import("formats/font");
+    const Font = Quill.import("formats/font");
     // We do not add Aref Ruqaa since it is the default
     Font.whitelist = ["mirza", "roboto"];
     Quill.register(Font, true);
@@ -49,7 +55,7 @@ export const TextEditor = ({
       <div id="toolbar-container" className="rounded-top">
         <span className="ql-formats">
           <select className="ql-font">
-            <option value="roboto" selected>
+            <option value="roboto" defaultValue="roboto">
               Roboto
             </option>
             <option value="mirza">Mirza</option>
